@@ -1450,13 +1450,13 @@ const DEFAULT_TEMPLATES = [
     id: 'tpl_standar_resmi',
     nama: 'Template Standar Resmi (Surat Pengantar PKL)',
     html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT PENGANTAR</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 14px;">Nomor: {noSurat}</p>\n\n<table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">\n  <tr>\n    <td style="width: 70px; vertical-align: top;">Kepada:</td>\n    <td></td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Yth.</td>\n    <td>\n      <div style="font-weight: bold;">{tempatPkl}</div>\n      <div style="font-size: 10.5pt; color: #333;">{alamatPkl}</div>\n      <div>di -</div>\n      <div style="text-indent: 20px;">Tempat</div>\n    </td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan hormat,</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Dalam rangka pelaksanaan kegiatan Praktek Kerja Lapangan (PKL) bagi siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran}, bersama ini kami menugaskan guru pembimbing untuk menyerahkan sekaligus mengantarkan siswa/siswi kami melaksanakan PKL di perusahaan/instansi yang Bapak/Ibu pimpin.\n</p>\n<p style="margin-bottom: 4px;">Adapun identitas Guru Pembimbing yang ditugaskan adalah sebagai berikut:</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 10px;">\n  <tr>\n    <td style="width: 130px; vertical-align: top;">Nama</td>\n    <td style="width: 20px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Tempat PKL</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{tempatPkl}</td>\n  </tr>\n</table>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Siswa yang diserahkan berjumlah sebagaimana terlampir, dan kegiatan PKL akan dilaksanakan terhitung mulai tanggal {periodePkl}.\n</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Demikian surat pengantar ini kami sampaikan, atas bantuan dan kerja sama yang baik kami ucapkan terima kasih.\n</p>',
-    is_default: 1
+    is_default: 0
   },
   {
     id: 'tpl_berita_acara',
     nama: 'Redaksi Surat (Editor Teks / WYSIWYG)',
     html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">BERITA ACARA SERAH TERIMA SISWA PRAKTEK KERJA LAPANGAN (PKL)</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 16px;">Nomor: {noSurat}</p>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Pada hari ini, tanggal <strong>{tglPelepasan}</strong>, bertempat di <strong>{tempatPkl}</strong>, kami yang bertanda tangan di bawah ini:</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Guru Pembimbing</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Unit Kerja</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{namaSekolah}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak atas nama Kepala {namaSekolah}, selanjutnya disebut sebagai <strong>PIHAK PERTAMA</strong>.</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Pimpinan / DU-DI</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">Pimpinan {tempatPkl}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Alamat Perusahaan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{alamatPkl}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak sebagai perwakilan industri/dunia kerja, selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.</p>\n\n<p style="text-indent: 30px; margin-bottom: 10px; text-align: justify; line-height: 1.5;">\n  PIHAK PERTAMA secara resmi menyerahkan siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran} kepada PIHAK KEDUA untuk melaksanakan kegiatan Praktek Kerja Lapangan (PKL) terhitung mulai tanggal {periodePkl}.\n</p>\n\n<p style="margin-bottom: 6px;">Adapun daftar siswa yang diserahkan adalah sebagai berikut:</p>\n{tabelSiswaPermohonan}\n\n<p style="text-indent: 30px; margin-top: 10px; margin-bottom: 8px; text-align: justify; line-height: 1.5;">\n  Demikian Berita Acara ini dibuat dalam rangkap 2 (dua) yang masing-masing mempunyai kekuatan hukum yang sama, untuk dipergunakan sebagaimana mestinya.\n</p>',
-    is_default: 0
+    is_default: 1
   },
   {
     id: 'tpl_surat_permohonan_pkl_murid',
@@ -1622,6 +1622,27 @@ document.addEventListener('DOMContentLoaded', function() {
   initApp();
 });
 
+// Sinkronisasi data template ke localStorage
+function syncTemplatesCache(templates) {
+  try {
+    const cached = localStorage.getItem('surat_pkl_cached_data');
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      parsed.templates = templates;
+      localStorage.setItem('surat_pkl_cached_data', JSON.stringify(parsed));
+    }
+    localStorage.setItem('surat_pkl_saved_templates', JSON.stringify(templates));
+  } catch(e) {}
+}
+
+// Menetapkan template aktif dan menyimpannya di localStorage
+function setActiveTemplate(tplId) {
+  AppState.activeTemplateId = tplId;
+  try {
+    localStorage.setItem('surat_pkl_active_template_id', tplId);
+  } catch(e) {}
+}
+
 function initApp() {
   if (window.lucide) lucide.createIcons();
 
@@ -1660,19 +1681,17 @@ function onInitialDataLoaded(res, fromCache = false) {
     AppState.records = res.students || [];
     AppState.settings = res.settings || {};
     
-    // Pastikan seluruh template bawaan dari referensi + berita acara selalu lengkap
+    // Pastikan template dari database selalu dipertahankan
     const loadedTemplates = res.templates || [];
-    const existingIds = loadedTemplates.map(t => t.id);
-    const missingTemplates = DEFAULT_TEMPLATES.filter(dt => !existingIds.includes(dt.id));
-    AppState.templates = [...loadedTemplates, ...missingTemplates];
+    if (loadedTemplates.length > 0) {
+      const existingIds = loadedTemplates.map(t => t.id);
+      const missingTemplates = DEFAULT_TEMPLATES.filter(dt => !existingIds.includes(dt.id));
+      AppState.templates = [...loadedTemplates, ...missingTemplates];
+    } else {
+      AppState.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+    }
 
-    // Jika ada template bawaan yang belum memiliki {noSurat}, otomatis perbarui agar judul & nomor surat selalu dapat diedit
-    AppState.templates.forEach(t => {
-      const defMatch = DEFAULT_TEMPLATES.find(dt => dt.id === t.id);
-      if (defMatch && !t.html_content.includes('{noSurat}')) {
-        t.html_content = defMatch.html_content;
-      }
-    });
+    syncTemplatesCache(AppState.templates);
 
     // Pastikan default URL selalu terisi
     if (!AppState.settings.kopUrl || !AppState.settings.kopUrl.trim()) {
@@ -1688,8 +1707,12 @@ function onInitialDataLoaded(res, fromCache = false) {
       AppState.settings.logoWebUrl = DEFAULT_ASSET_URLS.logo;
     }
 
-    // Pilih default template
-    if (AppState.templates.length > 0) {
+    // Pilih template: prioritaskan template yang sebelumnya aktif / dipilih pengguna
+    const savedActiveId = localStorage.getItem('surat_pkl_active_template_id');
+    if (savedActiveId && AppState.templates.some(t => t.id === savedActiveId)) {
+      AppState.activeTemplateId = savedActiveId;
+      AppState.editingTemplateId = savedActiveId;
+    } else if (AppState.templates.length > 0) {
       const def = AppState.templates.find(t => t.is_default == 1) || AppState.templates[0];
       AppState.activeTemplateId = def.id;
       AppState.editingTemplateId = def.id;
@@ -1742,7 +1765,27 @@ function loadFallbackData() {
     logoWebUrl: DEFAULT_ASSET_URLS.logo
   };
 
-  AppState.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+  try {
+    const localSaved = localStorage.getItem('surat_pkl_saved_templates');
+    if (localSaved) {
+      const parsed = JSON.parse(localSaved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        AppState.templates = parsed;
+      } else {
+        AppState.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+      }
+    } else {
+      AppState.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+    }
+  } catch(e) {
+    AppState.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+  }
+
+  const savedActiveId = localStorage.getItem('surat_pkl_active_template_id');
+  if (savedActiveId && AppState.templates.some(t => t.id === savedActiveId)) {
+    AppState.activeTemplateId = savedActiveId;
+    AppState.editingTemplateId = savedActiveId;
+  }
 
   processDataset();
   populateSettingsInputs();
@@ -2218,7 +2261,8 @@ function onSiswaFilterChange(context) {
 }
 
 function onSidebarTemplateChange() {
-  AppState.activeTemplateId = document.getElementById('sidebarTemplateSelect').value;
+  const selVal = document.getElementById('sidebarTemplateSelect').value;
+  setActiveTemplate(selVal);
   renderDocumentPreview();
 }
 
@@ -2526,7 +2570,8 @@ function saveCurrentTemplateChanges() {
 
     AppState.templates.push(newTpl);
     AppState.editingTemplateId = newId;
-    AppState.activeTemplateId = newId;
+    setActiveTemplate(newId);
+    syncTemplatesCache(AppState.templates);
 
     const badgeNew = document.getElementById('badgeNewRedaksi');
     if (badgeNew) badgeNew.classList.add('hidden');
@@ -2536,7 +2581,11 @@ function saveCurrentTemplateChanges() {
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       showToast('Menyimpan redaksi baru ke Google Sheets...', 'info');
       google.script.run
-        .withSuccessHandler(function() {
+        .withSuccessHandler(function(res) {
+          if (res && res.templates) {
+            AppState.templates = res.templates;
+          }
+          syncTemplatesCache(AppState.templates);
           showToast('Redaksi surat baru berhasil disimpan dan siap digunakan!', 'success');
           populateEditorTemplateSelect();
           renderTemplateTableList();
@@ -2560,11 +2609,17 @@ function saveCurrentTemplateChanges() {
   if (targetTpl) {
     targetTpl.nama = name;
     targetTpl.html_content = content;
+    setActiveTemplate(targetTpl.id);
+    syncTemplatesCache(AppState.templates);
 
     if (typeof google !== 'undefined' && google.script && google.script.run) {
-      showToast('Menyimpan perubahan template...', 'info');
+      showToast('Menyimpan perubahan template ke Google Sheets...', 'info');
       google.script.run
-        .withSuccessHandler(function() {
+        .withSuccessHandler(function(res) {
+          if (res && res.templates) {
+            AppState.templates = res.templates;
+          }
+          syncTemplatesCache(AppState.templates);
           showToast('Template berhasil diperbarui di Google Sheets!', 'success');
           populateEditorTemplateSelect();
           renderTemplateTableList();
@@ -2603,7 +2658,8 @@ function saveAsNewTemplateDirect() {
 
   AppState.templates.push(newTpl);
   AppState.editingTemplateId = newId;
-  AppState.activeTemplateId = newId;
+  setActiveTemplate(newId);
+  syncTemplatesCache(AppState.templates);
 
   const nameEl = document.getElementById('inputTemplateName');
   if (nameEl) nameEl.value = newName;
@@ -2615,7 +2671,11 @@ function saveAsNewTemplateDirect() {
   if (typeof google !== 'undefined' && google.script && google.script.run) {
     showToast('Menyimpan salinan template ke Google Sheets...', 'info');
     google.script.run
-      .withSuccessHandler(function() {
+      .withSuccessHandler(function(res) {
+        if (res && res.templates) {
+          AppState.templates = res.templates;
+        }
+        syncTemplatesCache(AppState.templates);
         showToast('Template baru berhasil diduplikasi dan disimpan!', 'success');
         populateEditorTemplateSelect();
         renderTemplateTableList();
@@ -2689,17 +2749,22 @@ function deleteTemplateFromList(tplId) {
     onConfirm: function() {
       AppState.templates = AppState.templates.filter(t => t.id !== tplId);
       if (AppState.activeTemplateId === tplId) {
-        AppState.activeTemplateId = AppState.templates[0] ? AppState.templates[0].id : 'tpl_berita_acara';
+        setActiveTemplate(AppState.templates[0] ? AppState.templates[0].id : 'tpl_berita_acara');
       }
       if (AppState.editingTemplateId === tplId) {
         AppState.editingTemplateId = AppState.activeTemplateId;
         loadTemplateToEditor(AppState.activeTemplateId);
       }
+      syncTemplatesCache(AppState.templates);
       
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         showToast('Menghapus template dari Google Sheets...', 'info');
         google.script.run
-          .withSuccessHandler(function() {
+          .withSuccessHandler(function(res) {
+            if (res && res.templates) {
+              AppState.templates = res.templates;
+            }
+            syncTemplatesCache(AppState.templates);
             showToast('Template berhasil dihapus!', 'success');
             populateEditorTemplateSelect();
             renderTemplateTableList();
@@ -2720,7 +2785,7 @@ function deleteTemplateFromList(tplId) {
 }
 
 function useTemplate(tplId) {
-  AppState.activeTemplateId = tplId;
+  setActiveTemplate(tplId);
   closeTemplateModal();
   renderAll();
   showToast('Template surat berhasil diaktifkan!', 'success');

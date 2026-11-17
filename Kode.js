@@ -198,17 +198,20 @@ function initDatabaseIfEmpty() {
   });
 
   // 3. Sheet: template_surat
-  let sheetTemplate = ss.getSheetByName(CONFIG.SHEET_TEMPLATE);
-  if (!sheetTemplate) {
-    sheetTemplate = ss.insertSheet(CONFIG.SHEET_TEMPLATE);
-  }
+  getOrCreateTemplateSheet(ss);
 
-  if (sheetTemplate.getLastRow() === 0) {
-    const tplHeaders = ['id', 'nama', 'html_content', 'is_default', 'status'];
-    sheetTemplate.appendRow(tplHeaders);
-    sheetTemplate.getRange(1, 1, 1, tplHeaders.length).setFontWeight('bold').setBackground('#dcfce7');
+  // Hapus Sheet default 'Sheet1' jika ada dan sheet lain sudah terisi
+  const defaultSheet = ss.getSheetByName('Sheet1');
+  if (defaultSheet && ss.getSheets().length > 1) {
+    try {
+      ss.deleteSheet(defaultSheet);
+    } catch (e) {}
   }
+}
 
+/**
+ * Daftar Template Surat Bawaan
+ */
 function getDefaultTemplatesList() {
   return [
     [
@@ -249,43 +252,78 @@ function getDefaultTemplatesList() {
   ];
 }
 
+/**
+ * Peta objek template bawaan berdasarkan ID
+ */
 function getDefaultTemplatesMap() {
   const map = {};
   getDefaultTemplatesList().forEach(row => { map[row[0]] = row; });
   return map;
 }
 
-  const defaultTemplates = getDefaultTemplatesList();
-  const defaultTplMap = getDefaultTemplatesMap();
-
-  const existingTplData = sheetTemplate.getDataRange().getValues();
-  const existingTplKeys = {};
-  for (let i = 1; i < existingTplData.length; i++) {
-    const k = String(existingTplData[i][0]).trim();
-    if (k) {
-      existingTplKeys[k] = true;
-      const curContent = String(existingTplData[i][2]);
-      // Jika template bawaan di sheet belum memiliki {noSurat}, otomatis perbarui agar judul & nomor dapat diedit
-      if (defaultTplMap[k] && !curContent.includes('{noSurat}')) {
-        try {
-          sheetTemplate.getRange(i + 1, 3).setValue(defaultTplMap[k][2]);
-        } catch (e) {}
-      }
-    }
+/**
+ * Helper untuk memastikan sheet template_surat selalu ada dan terisi
+ */
+function getOrCreateTemplateSheet(ss) {
+  if (!ss) ss = getSpreadsheet();
+  let sheetTemplate = ss.getSheetByName(CONFIG.SHEET_TEMPLATE);
+  if (!sheetTemplate) {
+    sheetTemplate = ss.insertSheet(CONFIG.SHEET_TEMPLATE);
   }
-  defaultTemplates.forEach(row => {
-    if (!existingTplKeys[row[0]]) {
+
+  if (sheetTemplate.getLastRow() === 0) {
+    const tplHeaders = ['id', 'nama', 'html_content', 'is_default', 'status'];
+    sheetTemplate.appendRow(tplHeaders);
+    sheetTemplate.getRange(1, 1, 1, tplHeaders.length).setFontWeight('bold').setBackground('#dcfce7');
+    
+    const defaultTemplates = getDefaultTemplatesList();
+    defaultTemplates.forEach(row => {
       sheetTemplate.appendRow(row);
+    });
+    SpreadsheetApp.flush();
+  } else {
+    // Pastikan jika ada template default yang belum terdaftar, tambahkan
+    const existingTplData = sheetTemplate.getDataRange().getValues();
+    const existingTplKeys = {};
+    for (let i = 1; i < existingTplData.length; i++) {
+      const k = String(existingTplData[i][0]).trim();
+      if (k) existingTplKeys[k] = true;
     }
-  });
-
-  // Hapus Sheet default 'Sheet1' jika ada dan sheet lain sudah terisi
-  const defaultSheet = ss.getSheetByName('Sheet1');
-  if (defaultSheet && ss.getSheets().length > 1) {
-    try {
-      ss.deleteSheet(defaultSheet);
-    } catch (e) {}
+    const defaultTemplates = getDefaultTemplatesList();
+    let added = false;
+    defaultTemplates.forEach(row => {
+      if (!existingTplKeys[row[0]]) {
+        sheetTemplate.appendRow(row);
+        added = true;
+      }
+    });
+    if (added) SpreadsheetApp.flush();
   }
+
+  return sheetTemplate;
+}
+
+/**
+ * Membaca seluruh data template surat dari sheet template_surat
+ */
+function getTemplatesFromSheet(ss) {
+  const sheetTemplate = getOrCreateTemplateSheet(ss);
+  const tplData = sheetTemplate.getDataRange().getValues();
+  const templates = [];
+  if (tplData.length > 1) {
+    for (let i = 1; i < tplData.length; i++) {
+      const tId = String(tplData[i][0]).trim();
+      if (!tId) continue;
+      templates.push({
+        id: tId,
+        nama: String(tplData[i][1] || ''),
+        html_content: String(tplData[i][2] || ''),
+        is_default: Number(tplData[i][3]) || 0,
+        status: String(tplData[i][4] || 'active')
+      });
+    }
+  }
+  return templates;
 }
 
 /**
@@ -375,30 +413,7 @@ function getInitialData(forceRefresh) {
   }
 
   // 3. Data Template
-  const defaultTplMap = getDefaultTemplatesMap();
-  const sheetTemplate = ss.getSheetByName(CONFIG.SHEET_TEMPLATE);
-  const tplData = sheetTemplate ? sheetTemplate.getDataRange().getValues() : [];
-  const templates = [];
-  if (tplData.length > 1) {
-    for (let i = 1; i < tplData.length; i++) {
-      const tId = String(tplData[i][0]).trim();
-      let content = String(tplData[i][2]);
-      // Jika template bawaan di database sheets belum ada {noSurat}, otomatis gunakan template dengan judul & nomor
-      if (defaultTplMap && defaultTplMap[tId] && !content.includes('{noSurat}')) {
-        content = defaultTplMap[tId][2];
-        try {
-          sheetTemplate.getRange(i + 1, 3).setValue(content);
-        } catch (e) {}
-      }
-      templates.push({
-        id: tId,
-        nama: String(tplData[i][1]),
-        html_content: content,
-        is_default: Number(tplData[i][3]) || 0,
-        status: String(tplData[i][4] || 'active')
-      });
-    }
-  }
+  const templates = getTemplatesFromSheet(ss);
 
   const result = {
     success: true,
@@ -607,6 +622,7 @@ function saveSettings(settingsObj) {
     }
   }
 
+  SpreadsheetApp.flush();
   clearInitialDataCache();
   return { success: true };
 }
@@ -615,8 +631,12 @@ function saveSettings(settingsObj) {
  * Simpan atau Perbarui Template Surat
  */
 function saveTemplate(tplObj) {
+  if (!tplObj || !tplObj.id) {
+    return { success: false, message: 'Data template tidak valid' };
+  }
+
   const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName(CONFIG.SHEET_TEMPLATE);
+  const sheet = getOrCreateTemplateSheet(ss);
   const data = sheet.getDataRange().getValues();
   let targetRow = -1;
 
@@ -627,38 +647,58 @@ function saveTemplate(tplObj) {
     }
   }
 
-  clearInitialDataCache();
+  // Jika template ini dijadikan default, reset template lain
+  if (tplObj.is_default == 1) {
+    for (let i = 1; i < data.length; i++) {
+      sheet.getRange(i + 1, 4).setValue(0);
+    }
+  }
+
+  let mode = 'updated';
   if (targetRow > 0) {
-    sheet.getRange(targetRow, 2).setValue(tplObj.nama);
-    sheet.getRange(targetRow, 3).setValue(tplObj.html_content);
-    if (tplObj.is_default !== undefined) sheet.getRange(targetRow, 4).setValue(tplObj.is_default);
+    sheet.getRange(targetRow, 2).setValue(tplObj.nama || 'Template Tanpa Nama');
+    sheet.getRange(targetRow, 3).setValue(tplObj.html_content || '');
+    if (tplObj.is_default !== undefined) sheet.getRange(targetRow, 4).setValue(Number(tplObj.is_default) || 0);
     if (tplObj.status) sheet.getRange(targetRow, 5).setValue(tplObj.status);
-    return { success: true, mode: 'updated' };
   } else {
+    mode = 'inserted';
     sheet.appendRow([
       tplObj.id,
-      tplObj.nama,
-      tplObj.html_content,
-      tplObj.is_default || 0,
+      tplObj.nama || 'Template Baru',
+      tplObj.html_content || '',
+      Number(tplObj.is_default) || 0,
       tplObj.status || 'active'
     ]);
-    return { success: true, mode: 'inserted' };
   }
+
+  SpreadsheetApp.flush();
+  clearInitialDataCache();
+
+  const allTemplates = getTemplatesFromSheet(ss);
+  return {
+    success: true,
+    mode: mode,
+    template: tplObj,
+    templates: allTemplates
+  };
 }
 
 /**
  * Hapus Template Surat
  */
 function deleteTemplate(tplId) {
+  if (!tplId) return { success: false, message: 'ID template tidak valid' };
   const ss = getSpreadsheet();
-  const sheet = ss.getSheetByName(CONFIG.SHEET_TEMPLATE);
+  const sheet = getOrCreateTemplateSheet(ss);
   const data = sheet.getDataRange().getValues();
 
   for (let i = 1; i < data.length; i++) {
     if (String(data[i][0]).trim() === String(tplId).trim()) {
       sheet.deleteRow(i + 1);
+      SpreadsheetApp.flush();
       clearInitialDataCache();
-      return { success: true };
+      const allTemplates = getTemplatesFromSheet(ss);
+      return { success: true, templates: allTemplates };
     }
   }
   return { success: false, message: 'Template tidak ditemukan' };
