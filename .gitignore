@@ -1,0 +1,7 @@
+# Folder referensi yang dikecualikan sesuai instruksi
+referensi/
+
+# System and logs
+.DS_Store
+Thumbs.db
+*.log
