@@ -400,6 +400,22 @@ function clearInitialDataCache() {
 }
 
 /**
+ * Helper memformat objek Date Google Sheets menjadi format tanggal Indonesia 'dd MMMM yyyy'
+ */
+function formatAppDate(val) {
+  if (!val) return '';
+  if (val instanceof Date) {
+    const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    const tz = 'Asia/Makassar';
+    const day = Utilities.formatDate(val, tz, 'dd');
+    const monthIdx = parseInt(Utilities.formatDate(val, tz, 'MM'), 10) - 1;
+    const year = Utilities.formatDate(val, tz, 'yyyy');
+    return day + ' ' + months[monthIdx] + ' ' + year;
+  }
+  return String(val);
+}
+
+/**
  * Mengambil seluruh data awal untuk aplikasi (Siswa, Pengaturan, Template) dalam 1 kali panggil
  * Dilengkapi caching server berkecepatan tinggi
  */
@@ -429,7 +445,11 @@ function getInitialData(forceRefresh) {
       const row = siswaData[i];
       const item = {};
       headers.forEach((h, idx) => {
-        item[h] = row[idx];
+        let cellVal = row[idx];
+        if (cellVal instanceof Date) {
+          cellVal = formatAppDate(cellVal);
+        }
+        item[h] = cellVal;
       });
       students.push(item);
     }
@@ -442,7 +462,10 @@ function getInitialData(forceRefresh) {
   if (pengData.length > 1) {
     for (let i = 1; i < pengData.length; i++) {
       const key = String(pengData[i][0]).trim();
-      const val = pengData[i][1];
+      let val = pengData[i][1];
+      if (val instanceof Date) {
+        val = formatAppDate(val);
+      }
       if (key) {
         settings[key] = val;
       }

@@ -87,6 +87,42 @@ function getDirectImageUrl(url, fallback) {
   return trimmed;
 }
 
+// ================= FORMAT TANGGAL INDONESIA (dd MMMM yyyy) =================
+const INDONESIA_MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+function formatIndonesianDate(val) {
+  if (!val) return '';
+  if (typeof val === 'string') {
+    val = val.trim();
+    // Jika sudah berupa dd MMMM yyyy (misal "13 November 2026" atau "06 Oktober 2026")
+    const idRegex = /^\d{1,2}\s+(Januari|Februari|Maret|April|Mei|Juni|Juli|Agustus|September|Oktober|November|Desember)\s+\d{4}$/i;
+    if (idRegex.test(val)) return val;
+    // Jika berupa rentang teks (misal "13 November 2026 sampai dengan 30 April 2027")
+    if (val.toLowerCase().includes('sampai') || val.includes(' s/d ') || val.includes(' - ')) return val;
+  }
+
+  let d;
+  if (val instanceof Date) {
+    d = val;
+  } else if (typeof val === 'string') {
+    if (val.match(/^\d{4}-\d{2}-\d{2}/)) {
+      d = new Date(val);
+    } else {
+      const parsed = Date.parse(val);
+      if (!isNaN(parsed)) d = new Date(parsed);
+      else return val;
+    }
+  } else {
+    return String(val);
+  }
+
+  if (isNaN(d.getTime())) return String(val);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = INDONESIA_MONTHS[d.getMonth()];
+  const year = d.getFullYear();
+  return `${day} ${month} ${year}`;
+}
+
 // ================= MODERN MINIMALIST NOTIFICATION & POPUP SYSTEM =================
 function showToast(msg, type = 'info', title = '', duration = 3200) {
   const container = document.getElementById('toastContainer');
@@ -303,6 +339,10 @@ function onInitialDataLoaded(res, fromCache = false) {
       AppState.settings.logoWebUrl = DEFAULT_ASSET_URLS.logo;
     }
 
+    if (AppState.settings.tglSurat) AppState.settings.tglSurat = formatIndonesianDate(AppState.settings.tglSurat);
+    if (AppState.settings.tglPelepasan) AppState.settings.tglPelepasan = formatIndonesianDate(AppState.settings.tglPelepasan);
+    if (AppState.settings.tglPenarikan) AppState.settings.tglPenarikan = formatIndonesianDate(AppState.settings.tglPenarikan);
+
     // Pilih template: prioritaskan template yang sebelumnya aktif / dipilih pengguna
     const savedActiveId = localStorage.getItem('surat_pkl_active_template_id');
     if (savedActiveId && AppState.templates.some(t => t.id === savedActiveId)) {
@@ -431,11 +471,11 @@ function populateSettingsInputs() {
   if (!s.ttdBasahUrl || !s.ttdBasahUrl.trim()) s.ttdBasahUrl = DEFAULT_ASSET_URLS.ttd_basah;
 
   if (document.getElementById('inputNoSurat')) document.getElementById('inputNoSurat').value = s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA';
-  if (document.getElementById('inputTglSurat')) document.getElementById('inputTglSurat').value = s.tglSurat || '06 Oktober 2026';
+  if (document.getElementById('inputTglSurat')) document.getElementById('inputTglSurat').value = formatIndonesianDate(s.tglSurat || '06 Oktober 2026');
   if (document.getElementById('inputTahunAjaran')) document.getElementById('inputTahunAjaran').value = s.tahunAjaran || '2026/2027';
-  if (document.getElementById('inputTglPelepasan')) document.getElementById('inputTglPelepasan').value = s.tglPelepasan || '13 November 2026';
+  if (document.getElementById('inputTglPelepasan')) document.getElementById('inputTglPelepasan').value = formatIndonesianDate(s.tglPelepasan || '13 November 2026');
   if (document.getElementById('inputPeriodePkl')) document.getElementById('inputPeriodePkl').value = s.periodePkl || '13 November 2026 sampai dengan 30 April 2027';
-  if (document.getElementById('inputTglPenarikan')) document.getElementById('inputTglPenarikan').value = s.tglPenarikan || '30 April 2027';
+  if (document.getElementById('inputTglPenarikan')) document.getElementById('inputTglPenarikan').value = formatIndonesianDate(s.tglPenarikan || '30 April 2027');
 
   // Input Pengaturan Aset Gambar & Drive
   if (document.getElementById('settingKopUrl')) document.getElementById('settingKopUrl').value = s.kopUrl || '';
@@ -720,10 +760,10 @@ function renderDocumentPreview() {
   const varMap = {
     '{namaSekolah}': s.namaSekolah || 'SMKN 1 FYJ Channel',
     '{tahunAjaran}': s.tahunAjaran || '2026/2027',
-    '{tglPelepasan}': s.tglPelepasan || '13 November 2026',
+    '{tglPelepasan}': formatIndonesianDate(firstStudent.tgl_pelepasan || s.tglPelepasan || '13 November 2026'),
     '{periodePkl}': s.periodePkl || '13 November 2026 sampai dengan 30 April 2027',
-    '{tglPenarikan}': s.tglPenarikan || '30 April 2027',
-    '{tglSurat}': s.tglSurat || '06 Oktober 2026',
+    '{tglPenarikan}': formatIndonesianDate(firstStudent.tgl_penarikan || s.tglPenarikan || '30 April 2027'),
+    '{tglSurat}': formatIndonesianDate(s.tglSurat || '06 Oktober 2026'),
     '{noSurat}': s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA',
     '{guruNama}': firstStudent.guru || '-',
     '{guruNip}': firstStudent.nip || '-',
@@ -752,7 +792,7 @@ function renderDocumentPreview() {
   if (docTitimangsaHeader) {
     docTitimangsaHeader.innerHTML = `
       <div>Dikeluarkan di ${s.titimangsaTempat || 'Klungkung'}</div>
-      <div>Pada Tanggal, <span id="docTglSurat">${s.tglSurat || '12 November 2026'}</span></div>
+      <div>Pada Tanggal, <span id="docTglSurat">${formatIndonesianDate(s.tglSurat) || '12 November 2026'}</span></div>
     `;
   }
   
@@ -789,8 +829,9 @@ function renderDocumentPreview() {
   const pageDivider = document.getElementById('pageDividerLampiran');
   const tbodySiswa = document.getElementById('docTbodySiswa');
 
-  // Lampiran hanya untuk template surat pengantar / fleksibel yang memiliki lebih dari 1 siswa
-  if (activeStudents.length > 1 && !isBeritaAcara && !isPermohonanMurid && !isKeterangan) {
+  // Lampiran hanya untuk template surat pengantar / fleksibel yang memiliki lebih dari 1 siswa dan belum memiliki tabel di badan surat
+  const hasEmbeddedTable = rawHtml.includes('Konsentrasi Keahlian') || rawHtml.includes('Konsentrasi') || rawHtml.includes('NIS/NISN') || isBeritaAcara || isPermohonanMurid || isKeterangan;
+  if (activeStudents.length > 1 && !hasEmbeddedTable) {
     if (pageLampiran) pageLampiran.style.display = 'block';
     if (pageDivider) pageDivider.style.display = 'block';
 
@@ -2181,8 +2222,507 @@ function printCurrentDoc() {
   window.print();
 }
 
+/**
+ * Helper menghasilkan HTML Dokumen Lengkap (bersih tanpa tombol/kontrol) untuk Cetak Massal
+ */
+function buildDocumentHtml(studentList, activeTemplate, s) {
+  const firstStudent = studentList[0] || {};
+  const isBeritaAcara = (activeTemplate.id === 'tpl_berita_acara' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('berita acara')));
+  const isPermohonanMurid = (activeTemplate.id === 'tpl_surat_permohonan_pkl_murid' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('permohonan')));
+  const isKeterangan = (activeTemplate.id === 'tpl_surat_keterangan_pkl' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('keterangan')));
+
+  let rawHtml = activeTemplate.html_content || '<p>Redaksi template belum disetel.</p>';
+
+  rawHtml = rawHtml.replace(/font-size:\s*13pt;\s*margin-bottom:\s*4px;\s*text-decoration:\s*underline;/gi, 'font-size: 13pt; margin-bottom: 4px;');
+  rawHtml = rawHtml.replace(/text-decoration:\s*underline;\s*font-size:\s*13pt;/gi, 'font-size: 13pt;');
+  rawHtml = rawHtml.replace(/(<p[^>]*font-size:\s*13pt[^>]*)text-decoration:\s*underline;?([^>]*>)/gi, '$1$2');
+
+  const hasEmbeddedHeader = rawHtml.includes('{noSurat}') || rawHtml.includes('Nomor:') || rawHtml.includes('Perihal:');
+  const hasEmbeddedTujuan = rawHtml.includes('Kepada') || rawHtml.includes('{tempatPkl}');
+  const hasEmbeddedTable = rawHtml.includes('Konsentrasi Keahlian') || rawHtml.includes('Konsentrasi') || rawHtml.includes('NIS/NISN') || isBeritaAcara || isPermohonanMurid || isKeterangan;
+
+  // 1. Kop Surat
+  let kopHtml = '';
+  if (AppState.showKop) {
+    const rawKop = s.kopUrl || DEFAULT_ASSET_URLS.kop;
+    const kopSrc = getDirectImageUrl(rawKop, typeof ASSETS !== 'undefined' ? ASSETS.kopFyj : '');
+    if (kopSrc) {
+      kopHtml = `<div style="margin-bottom: 8px;"><img src="${kopSrc}" alt="Kop Surat" style="width: 100%; max-height: 120px; object-fit: contain;"></div>`;
+    }
+  }
+
+  // 2. Judul Surat Luar
+  let judulHtml = '';
+  if (!hasEmbeddedHeader) {
+    const judulText = isKeterangan ? 'SURAT KETERANGAN' : 'SURAT PENGANTAR';
+    const noSuratText = s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA';
+    judulHtml = `
+      <div style="text-align: center; margin-top: 10px; margin-bottom: 14px;">
+        <div style="font-size: 13pt; font-weight: bold; letter-spacing: 1px;">${judulText}</div>
+        <div style="font-size: 11pt; margin-top: 2px;">Nomor: ${noSuratText}</div>
+      </div>
+    `;
+  }
+
+  // 3. Tujuan Surat Luar
+  let tujuanHtml = '';
+  if (!hasEmbeddedTujuan) {
+    const targetTempat = firstStudent.tempat || 'Pimpinan DU/DI';
+    const alamatText = (AppState.showAlamat && firstStudent.alamat) ? `<div style="font-size: 10.5pt; color: #333;">${firstStudent.alamat}</div>` : '';
+    tujuanHtml = `
+      <div style="margin-bottom: 14px;">
+        <table style="width: 100%; border: none;">
+          <tr>
+            <td style="width: 10%; vertical-align: top; border: none;">Kepada:</td>
+            <td style="border: none;"></td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; border: none;">Yth.</td>
+            <td style="border: none;">
+              <div style="font-weight: bold;">${targetTempat}</div>
+              ${alamatText}
+              <div>di -</div>
+              <div style="text-indent: 20px;">Tempat</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    `;
+  }
+
+  // 4. Tabel Siswa
+  const tabelSiswaHtml = `
+    <table style="width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 8px; font-size: 11pt;" border="1">
+      <thead>
+        <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
+          <th style="padding: 5px; width: 35px; border: 1px solid #000;">No</th>
+          <th style="padding: 5px; border: 1px solid #000;">Nama Siswa</th>
+          <th style="padding: 5px; width: 90px; border: 1px solid #000;">NIS/NISN</th>
+          <th style="padding: 5px; width: 85px; border: 1px solid #000;">Kelas</th>
+          <th style="padding: 5px; border: 1px solid #000;">Konsentrasi Keahlian</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${studentList.map((st, i) => `
+          <tr>
+            <td style="padding: 4px; text-align: center; border: 1px solid #000;">${i + 1}</td>
+            <td style="padding: 4px 8px; border: 1px solid #000; font-weight: 500;">${st.siswa}</td>
+            <td style="padding: 4px; text-align: center; border: 1px solid #000;">${st.nis || '-'}/${st.nisn || '-'}</td>
+            <td style="padding: 4px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
+            <td style="padding: 4px 8px; border: 1px solid #000;">${st.jurusan || '-'}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  // 5. Substitusi Variabel dengan formatIndonesianDate
+  const varMap = {
+    '{namaSekolah}': s.namaSekolah || 'SMKN 1 FYJ Channel',
+    '{tahunAjaran}': s.tahunAjaran || '2026/2027',
+    '{tglPelepasan}': formatIndonesianDate(firstStudent.tgl_pelepasan || s.tglPelepasan || '13 November 2026'),
+    '{periodePkl}': s.periodePkl || '13 November 2026 sampai dengan 30 April 2027',
+    '{tglPenarikan}': formatIndonesianDate(firstStudent.tgl_penarikan || s.tglPenarikan || '30 April 2027'),
+    '{tglSurat}': formatIndonesianDate(s.tglSurat || '06 Oktober 2026'),
+    '{noSurat}': s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA',
+    '{guruNama}': firstStudent.guru || '-',
+    '{guruNip}': firstStudent.nip || '-',
+    '{tempatPkl}': firstStudent.tempat || 'Dunia Usaha / Dunia Industri',
+    '{alamatPkl}': firstStudent.alamat || '-',
+    '{siswaNama}': firstStudent.siswa || '-',
+    '{siswaNisNisn}': `${firstStudent.nis || '-'}/${firstStudent.nisn || '-'}`,
+    '{tingkatKelas}': firstStudent.kelas ? firstStudent.kelas.split(' ')[0] : 'XII',
+    '{jurusanPkl}': firstStudent.jurusan || '-',
+    '{siswaJurusan}': firstStudent.jurusan || '-',
+    '{kepsekNama}': s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.',
+    '{kepsekPangkat}': s.kepsekPangkat || 'Pembina (IV/a)',
+    '{kepsekNip}': s.kepsekNip || '19770309 200903 2 010',
+    '{tabelSiswaPermohonan}': tabelSiswaHtml
+  };
+
+  for (const k in varMap) {
+    rawHtml = rawHtml.split(k).join(varMap[k]);
+  }
+
+  // 6. Area Tanda Tangan
+  let ttdMediaHtml = '';
+  if (AppState.showTtd) {
+    const rawTtd = s.ttdUrl || DEFAULT_ASSET_URLS.ttd;
+    const ttdSrc = getDirectImageUrl(rawTtd, typeof ASSETS !== 'undefined' ? (ASSETS.ttd || ASSETS.ttdElektronik) : '');
+    ttdMediaHtml = `
+      <div style="margin: 8px 0 4px 0;">
+        ${ttdSrc ? `<img src="${ttdSrc}" alt="TTD Barcode" style="height: 70px; object-fit: contain;">` : '<div style="height: 70px;"></div>'}
+      </div>
+    `;
+  } else {
+    const rawTtdBasah = s.ttdBasahUrl || DEFAULT_ASSET_URLS.ttd_basah;
+    const ttdBasahSrc = getDirectImageUrl(rawTtdBasah, typeof ASSETS !== 'undefined' ? ASSETS.ttdBasah : '');
+    ttdMediaHtml = `
+      <div style="position: relative; height: 75px; margin: 0;">
+        ${ttdBasahSrc ? `<img src="${ttdBasahSrc}" alt="TTD Basah" style="position: absolute; left: -75px; top: -52px; height: 140px; max-width: 250px; object-fit: contain; pointer-events: none; z-index: 2;">` : ''}
+      </div>
+    `;
+  }
+
+  const ttdBlockHtml = `
+    <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px; page-break-inside: avoid;">
+      <div style="width: 280px; text-align: left; position: relative;">
+        <div>
+          <div>Dikeluarkan di ${s.titimangsaTempat || 'Klungkung'}</div>
+          <div>Pada Tanggal, ${formatIndonesianDate(s.tglSurat) || '12 November 2026'}</div>
+        </div>
+        <div><div>Kepala ${s.namaSekolah || 'SMK Negeri 1 Klungkung'}</div></div>
+        ${ttdMediaHtml}
+        ${AppState.showTtd ? '' : `
+          <div style="font-weight: bold; text-decoration: underline; margin-top: 2px; position: relative; z-index: 3;">${s.kepsekNama || 'Sri Rejeki, S.Pd.,M.Pd.'}</div>
+          <div style="font-size: 10pt; position: relative; z-index: 3;">${s.kepsekPangkat ? `<div>${s.kepsekPangkat}</div>` : ''}NIP. ${s.kepsekNip || '19770309 200903 2 010'}</div>
+        `}
+      </div>
+    </div>
+  `;
+
+  // 7. Lampiran jika perlu
+  let lampiranHtml = '';
+  if (studentList.length > 1 && !hasEmbeddedTable) {
+    lampiranHtml = `
+      <div class="lampiran-page print-page-break" style="page-break-before: always; margin-top: 20px;">
+        <div style="font-weight: bold; margin-bottom: 12px; font-size: 11pt;">
+          Lampiran : <br>
+          Daftar Nama Siswa Peserta PKL
+        </div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt;" border="1">
+          <thead>
+            <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
+              <td style="padding: 6px; width: 40px; border: 1px solid #000;">No</td>
+              <td style="padding: 6px; border: 1px solid #000;">Nama Siswa</td>
+              <td style="padding: 6px; width: 95px; border: 1px solid #000;">Kelas</td>
+              <td style="padding: 6px; border: 1px solid #000;">Tempat PKL</td>
+            </tr>
+          </thead>
+          <tbody>
+            ${studentList.map((st, i) => `
+              <tr>
+                <td style="padding: 6px; text-align: center; border: 1px solid #000;">${i + 1}</td>
+                <td style="padding: 6px 10px; border: 1px solid #000; font-weight: 500;">${st.siswa}</td>
+                <td style="padding: 6px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
+                <td style="padding: 6px 10px; border: 1px solid #000;">${st.tempat || '-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="surat-page">
+      ${kopHtml}
+      ${judulHtml}
+      ${tujuanHtml}
+      <div style="text-align: justify; line-height: 1.35; font-size: 11pt;">${rawHtml}</div>
+      ${ttdBlockHtml}
+    </div>
+    ${lampiranHtml}
+  `;
+}
+
+/**
+ * Helper menghasilkan HTML kompatibel Microsoft Word (dengan layout MSO & tabel presisi)
+ */
+function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL') {
+  const firstStudent = studentList[0] || {};
+  const isBeritaAcara = (activeTemplate.id === 'tpl_berita_acara' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('berita acara')));
+  const isPermohonanMurid = (activeTemplate.id === 'tpl_surat_permohonan_pkl_murid' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('permohonan')));
+  const isKeterangan = (activeTemplate.id === 'tpl_surat_keterangan_pkl' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('keterangan')));
+
+  let rawHtml = activeTemplate.html_content || '<p>Redaksi template belum disetel.</p>';
+
+  rawHtml = rawHtml.replace(/font-size:\s*13pt;\s*margin-bottom:\s*4px;\s*text-decoration:\s*underline;/gi, 'font-size: 13pt; margin-bottom: 4px;');
+  rawHtml = rawHtml.replace(/text-decoration:\s*underline;\s*font-size:\s*13pt;/gi, 'font-size: 13pt;');
+  rawHtml = rawHtml.replace(/(<p[^>]*font-size:\s*13pt[^>]*)text-decoration:\s*underline;?([^>]*>)/gi, '$1$2');
+
+  const hasEmbeddedHeader = rawHtml.includes('{noSurat}') || rawHtml.includes('Nomor:') || rawHtml.includes('Perihal:');
+  const hasEmbeddedTujuan = rawHtml.includes('Kepada') || rawHtml.includes('{tempatPkl}');
+  const hasEmbeddedTable = rawHtml.includes('Konsentrasi Keahlian') || rawHtml.includes('Konsentrasi') || rawHtml.includes('NIS/NISN') || isBeritaAcara || isPermohonanMurid || isKeterangan;
+
+  // 1. Kop Surat
+  let kopHtml = '';
+  if (AppState.showKop) {
+    const rawKop = s.kopUrl || DEFAULT_ASSET_URLS.kop;
+    const kopSrc = getDirectImageUrl(rawKop, typeof ASSETS !== 'undefined' ? ASSETS.kopFyj : '');
+    if (kopSrc) {
+      kopHtml = `<div style="text-align: center; margin-bottom: 12pt;"><img src="${kopSrc}" alt="Kop Surat" width="650" style="width: 100%; max-width: 650px; height: auto;"></div>`;
+    }
+  }
+
+  // 2. Judul Surat Luar
+  let judulHtml = '';
+  if (!hasEmbeddedHeader) {
+    const judulText = isKeterangan ? 'SURAT KETERANGAN' : 'SURAT PENGANTAR';
+    const noSuratText = s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA';
+    judulHtml = `
+      <div style="text-align: center; margin-top: 10pt; margin-bottom: 14pt;">
+        <div style="font-size: 13pt; font-weight: bold; letter-spacing: 1px;">${judulText}</div>
+        <div style="font-size: 11pt; margin-top: 2pt;">Nomor: ${noSuratText}</div>
+      </div>
+    `;
+  }
+
+  // 3. Tujuan Surat Luar
+  let tujuanHtml = '';
+  if (!hasEmbeddedTujuan) {
+    const targetTempat = firstStudent.tempat || 'Pimpinan DU/DI';
+    const alamatText = (AppState.showAlamat && firstStudent.alamat) ? `<div style="font-size: 10.5pt; color: #333;">${firstStudent.alamat}</div>` : '';
+    tujuanHtml = `
+      <table style="width: 100%; border: none; margin-bottom: 14pt;" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="width: 10%; vertical-align: top; border: none;">Kepada:</td>
+          <td style="border: none;"></td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; border: none;">Yth.</td>
+          <td style="border: none;">
+            <div style="font-weight: bold;">${targetTempat}</div>
+            ${alamatText}
+            <div>di -</div>
+            <div style="text-indent: 20px;">Tempat</div>
+          </td>
+        </tr>
+      </table>
+    `;
+  }
+
+  // 4. Tabel Siswa
+  const tabelSiswaHtml = `
+    <table style="width: 100%; border-collapse: collapse; margin-top: 8pt; margin-bottom: 8pt; font-size: 11pt;" border="1" cellpadding="5" cellspacing="0">
+      <thead>
+        <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
+          <th style="padding: 5px; width: 35px; border: 1px solid #000;">No</th>
+          <th style="padding: 5px; border: 1px solid #000;">Nama Siswa</th>
+          <th style="padding: 5px; width: 90px; border: 1px solid #000;">NIS/NISN</th>
+          <th style="padding: 5px; width: 85px; border: 1px solid #000;">Kelas</th>
+          <th style="padding: 5px; border: 1px solid #000;">Konsentrasi Keahlian</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${studentList.map((st, i) => `
+          <tr>
+            <td style="padding: 4px; text-align: center; border: 1px solid #000;">${i + 1}</td>
+            <td style="padding: 4px 8px; border: 1px solid #000; font-weight: bold;">${st.siswa}</td>
+            <td style="padding: 4px; text-align: center; border: 1px solid #000;">${st.nis || '-'}/${st.nisn || '-'}</td>
+            <td style="padding: 4px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
+            <td style="padding: 4px 8px; border: 1px solid #000;">${st.jurusan || '-'}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  // 5. Substitusi Variabel dengan formatIndonesianDate
+  const varMap = {
+    '{namaSekolah}': s.namaSekolah || 'SMKN 1 FYJ Channel',
+    '{tahunAjaran}': s.tahunAjaran || '2026/2027',
+    '{tglPelepasan}': formatIndonesianDate(firstStudent.tgl_pelepasan || s.tglPelepasan || '13 November 2026'),
+    '{periodePkl}': s.periodePkl || '13 November 2026 sampai dengan 30 April 2027',
+    '{tglPenarikan}': formatIndonesianDate(firstStudent.tgl_penarikan || s.tglPenarikan || '30 April 2027'),
+    '{tglSurat}': formatIndonesianDate(s.tglSurat || '06 Oktober 2026'),
+    '{noSurat}': s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA',
+    '{guruNama}': firstStudent.guru || '-',
+    '{guruNip}': firstStudent.nip || '-',
+    '{tempatPkl}': firstStudent.tempat || 'Dunia Usaha / Dunia Industri',
+    '{alamatPkl}': firstStudent.alamat || '-',
+    '{siswaNama}': firstStudent.siswa || '-',
+    '{siswaNisNisn}': `${firstStudent.nis || '-'}/${firstStudent.nisn || '-'}`,
+    '{tingkatKelas}': firstStudent.kelas ? firstStudent.kelas.split(' ')[0] : 'XII',
+    '{jurusanPkl}': firstStudent.jurusan || '-',
+    '{siswaJurusan}': firstStudent.jurusan || '-',
+    '{kepsekNama}': s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.',
+    '{kepsekPangkat}': s.kepsekPangkat || 'Pembina (IV/a)',
+    '{kepsekNip}': s.kepsekNip || '19770309 200903 2 010',
+    '{tabelSiswaPermohonan}': tabelSiswaHtml
+  };
+
+  for (const k in varMap) {
+    rawHtml = rawHtml.split(k).join(varMap[k]);
+  }
+
+  // 6. Area Tanda Tangan Khusus Word (Tabel 2 Kolom untuk memastikan rata kanan di Word)
+  let ttdMediaWord = '';
+  if (AppState.showTtd) {
+    const rawTtd = s.ttdUrl || DEFAULT_ASSET_URLS.ttd;
+    const ttdSrc = getDirectImageUrl(rawTtd, typeof ASSETS !== 'undefined' ? (ASSETS.ttd || ASSETS.ttdElektronik) : '');
+    ttdMediaWord = ttdSrc ? `<img src="${ttdSrc}" alt="TTD Barcode" height="70" style="height: 70px; width: auto; margin: 6pt 0;">` : '<div style="height: 70px;"></div>';
+  } else {
+    const rawTtdBasah = s.ttdBasahUrl || DEFAULT_ASSET_URLS.ttd_basah;
+    const ttdBasahSrc = getDirectImageUrl(rawTtdBasah, typeof ASSETS !== 'undefined' ? ASSETS.ttdBasah : '');
+    ttdMediaWord = ttdBasahSrc ? `<img src="${ttdBasahSrc}" alt="TTD Basah" height="95" style="height: 95px; width: auto; margin: 6pt 0;">` : '<div style="height: 70px;"></div>';
+  }
+
+  const ttdWordTable = `
+    <table style="width: 100%; border: none; margin-top: 16pt; page-break-inside: avoid;" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="width: 55%; border: none;"></td>
+        <td style="width: 45%; border: none; text-align: left; vertical-align: top;">
+          <div>Dikeluarkan di ${s.titimangsaTempat || 'Klungkung'}</div>
+          <div>Pada Tanggal, ${formatIndonesianDate(s.tglSurat) || '12 November 2026'}</div>
+          <div style="margin-top: 2pt;">Kepala ${s.namaSekolah || 'SMK Negeri 1 Klungkung'}</div>
+          <div style="margin: 6pt 0;">${ttdMediaWord}</div>
+          ${AppState.showTtd ? '' : `
+            <div style="font-weight: bold; text-decoration: underline;">${s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.'}</div>
+            <div>${s.kepsekPangkat ? `<div>${s.kepsekPangkat}</div>` : ''}</div>
+            <div>NIP. ${s.kepsekNip || '19770309 200903 2 010'}</div>
+          `}
+        </td>
+      </tr>
+    </table>
+  `;
+
+  // 7. Lampiran jika perlu
+  let lampiranWordHtml = '';
+  if (studentList.length > 1 && !hasEmbeddedTable) {
+    lampiranWordHtml = `
+      <br clear="all" style="page-break-before: always; mso-break-type: section-break;">
+      <div style="font-weight: bold; margin-bottom: 12pt; font-size: 11pt;">
+        Lampiran : <br>
+        Daftar Nama Siswa Peserta PKL
+      </div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt;" border="1" cellpadding="5" cellspacing="0">
+        <thead>
+          <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
+            <th style="padding: 5px; width: 40px; border: 1px solid #000;">No</th>
+            <th style="padding: 5px; border: 1px solid #000;">Nama Siswa</th>
+            <th style="padding: 5px; width: 95px; border: 1px solid #000;">Kelas</th>
+            <th style="padding: 5px; border: 1px solid #000;">Tempat PKL</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${studentList.map((st, i) => `
+            <tr>
+              <td style="padding: 5px; text-align: center; border: 1px solid #000;">${i + 1}</td>
+              <td style="padding: 5px 8px; border: 1px solid #000; font-weight: bold;">${st.siswa}</td>
+              <td style="padding: 5px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
+              <td style="padding: 5px 8px; border: 1px solid #000;">${st.tempat || '-'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  return `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office'
+          xmlns:w='urn:schemas-microsoft-com:office:word'
+          xmlns='http://www.w3.org/TR/REC-html40'>
+    <head>
+      <meta charset='utf-8'>
+      <title>${filename}</title>
+      <!--[if gte mso 9]>
+      <xml>
+        <w:WordDocument>
+          <w:View>Print</w:View>
+          <w:Zoom>100</w:Zoom>
+          <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+      </xml>
+      <![endif]-->
+      <style>
+        @page WordSection1 {
+          size: 215.9mm 330.2mm; /* F4 / Folio */
+          margin: 15.0mm 20.0mm 15.0mm 20.0mm;
+          mso-header-margin: 10.0mm;
+          mso-footer-margin: 10.0mm;
+          mso-paper-source: 0;
+        }
+        div.WordSection1 {
+          page: WordSection1;
+        }
+        body {
+          font-family: 'Bookman Old Style', 'Times New Roman', serif;
+          font-size: 11pt;
+          line-height: 1.35;
+          color: #000000;
+        }
+        p {
+          margin: 0 0 6pt 0;
+          line-height: 1.35;
+          text-align: justify;
+        }
+        table {
+          border-collapse: collapse;
+          mso-table-lspace: 0pt;
+          mso-table-rspace: 0pt;
+          font-family: 'Bookman Old Style', 'Times New Roman', serif;
+          font-size: 11pt;
+        }
+        td, th {
+          vertical-align: top;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="WordSection1">
+        ${kopHtml}
+        ${judulHtml}
+        ${tujuanHtml}
+        <div style="text-align: justify; line-height: 1.35; font-size: 11pt;">${rawHtml}</div>
+        ${ttdWordTable}
+        ${lampiranWordHtml}
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+// ================= PENGELOMPOKAN & EKSEKUSI CETAK MASSAL =================
+function getBatchPrintGroups(scope) {
+  const records = AppState.records || [];
+  if (records.length === 0) return [];
+
+  const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0] || {};
+  const isIndividual = (activeTemplate.id === 'tpl_surat_keterangan_pkl' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('keterangan')));
+
+  if (scope === 'siswa' || isIndividual) {
+    // 1 Berkas per Siswa
+    return records.map(st => [st]);
+  } else if (scope === 'current_filter') {
+    // Sesuai filter layar aktif
+    const active = getActiveFilteredStudents();
+    return active.length > 0 ? [active] : [];
+  } else {
+    // Default / 'group': Kelompokkan per (Guru Pembimbing + Tempat DU/DI)
+    const groups = {};
+    records.forEach(r => {
+      const g = (r.guru || 'Tanpa_Pembimbing').trim();
+      const t = (r.tempat || 'Umum').trim();
+      const key = g + '___' + t;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(r);
+    });
+    return Object.values(groups);
+  }
+}
+
+function updateBatchPrintModalInfo() {
+  const el = document.querySelector('input[name="batchScope"]:checked');
+  const scope = el ? el.value : 'group';
+  const groups = getBatchPrintGroups(scope);
+  const badge = document.getElementById('batchPrintDocCount');
+  if (badge) {
+    const totalSiswa = groups.reduce((acc, curr) => acc + curr.length, 0);
+    badge.textContent = `${groups.length} Dokumen (${totalSiswa} Siswa)`;
+  }
+}
+
 function openBatchPrintModal() {
+  if (typeof closeDatabaseModal === 'function') closeDatabaseModal();
+  if (typeof closeSettingsModal === 'function') closeSettingsModal();
+  if (typeof closeTemplateModal === 'function') closeTemplateModal();
+  if (typeof closeDriveSuccessModal === 'function') closeDriveSuccessModal();
+  if (typeof closeAllDropdowns === 'function') closeAllDropdowns();
+
   document.getElementById('batchPrintModal').classList.remove('hidden');
+  updateBatchPrintModalInfo();
+  if (window.lucide) lucide.createIcons();
 }
 
 function closeBatchPrintModal() {
@@ -2190,67 +2730,52 @@ function closeBatchPrintModal() {
 }
 
 function executeBatchPrint() {
+  const el = document.querySelector('input[name="batchScope"]:checked');
+  const scope = el ? el.value : 'group';
+  const groups = getBatchPrintGroups(scope);
+
+  if (groups.length === 0) {
+    showToast('Tidak ada data siswa untuk dicetak.', 'warning');
+    return;
+  }
+
   closeBatchPrintModal();
   const batchContainer = document.getElementById('batchPrintContainer');
   batchContainer.innerHTML = '';
   document.body.classList.add('batch-print-active');
 
-  const oldMode = AppState.selectedMode;
-  const oldGuruIdx = AppState.selectedGuruIdx;
-  const oldTempat = AppState.selectedTempatFilter;
-  const oldSiswa = AppState.selectedSiswaFilterPerGuru;
+  const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0] || {};
 
-  // Render semua guru
-  AppState.gurus.forEach((g, gIdx) => {
-    AppState.selectedMode = 'per-guru';
-    AppState.selectedGuruIdx = gIdx;
-    AppState.selectedTempatFilter = 'all';
-    AppState.selectedSiswaFilterPerGuru = 'all';
-    
-    renderDocumentPreview();
-    const docHtml = document.getElementById('documentTemplate').innerHTML;
-    
+  groups.forEach((groupStudents) => {
     const pageDiv = document.createElement('div');
     pageDiv.className = `doc-page paper-${AppState.paperSize} batch-doc-page`;
-    pageDiv.innerHTML = docHtml;
+    pageDiv.innerHTML = buildDocumentHtml(groupStudents, activeTemplate, AppState.settings);
     batchContainer.appendChild(pageDiv);
   });
-
-  // Restore state
-  AppState.selectedMode = oldMode;
-  AppState.selectedGuruIdx = oldGuruIdx;
-  AppState.selectedTempatFilter = oldTempat;
-  AppState.selectedSiswaFilterPerGuru = oldSiswa;
-  renderDocumentPreview();
 
   setTimeout(() => {
     window.print();
     setTimeout(() => {
       document.body.classList.remove('batch-print-active');
       batchContainer.innerHTML = '';
-    }, 1000);
-  }, 300);
+    }, 1500);
+  }, 400);
 }
 
+// ================= UNDUH MICROSOFT WORD (.DOC / .ZIP) =================
 function downloadDocxClient() {
-  const docContainer = document.getElementById('documentTemplate');
-  if (!docContainer) return;
-
   const activeStudents = getActiveFilteredStudents();
+  if (!activeStudents || activeStudents.length === 0) {
+    showToast('Tidak ada data siswa untuk diunduh.', 'warning');
+    return;
+  }
   const firstStudent = activeStudents[0] || {};
+  const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0] || {};
   const safeName = (firstStudent.guru || firstStudent.siswa || 'Dokumen').replace(/[^a-zA-Z0-9]/g, '_');
   const filename = `Surat_PKL_${safeName}.doc`;
 
-  const htmlContent = `
-    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-    <head><meta charset='utf-8'><title>${filename}</title></head>
-    <body style="font-family: 'Bookman Old Style', serif;">
-      ${docContainer.innerHTML}
-    </body>
-    </html>
-  `;
-
-  const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+  const wordHtml = buildWordHtml(activeStudents, activeTemplate, AppState.settings, filename);
+  const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword' });
   if (typeof saveAs !== 'undefined') {
     saveAs(blob, filename);
   } else {
@@ -2262,6 +2787,79 @@ function downloadDocxClient() {
     a.click();
     document.body.removeChild(a);
   }
+  showToast(`Berkas Word "${filename}" berhasil diunduh!`, 'success');
+}
+
+function downloadAllWordZip() {
+  if (typeof JSZip === 'undefined') {
+    showToast('Library JSZip belum siap, silakan coba beberapa saat lagi.', 'warning');
+    return;
+  }
+  const records = AppState.records || [];
+  if (records.length === 0) {
+    showToast('Tidak ada data siswa di database untuk diunduh.', 'warning');
+    return;
+  }
+
+  const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0] || {};
+  const isIndividual = (activeTemplate.id === 'tpl_surat_keterangan_pkl' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('keterangan')));
+
+  showToast('Menyiapkan berkas Word ke dalam arsip ZIP...', 'info');
+
+  const zip = new JSZip();
+  let count = 0;
+
+  if (isIndividual) {
+    // 1 Berkas per Siswa
+    records.forEach((st, idx) => {
+      const safeSiswa = (st.siswa || `Siswa_${idx + 1}`).replace(/[^a-zA-Z0-9]/g, '_');
+      const filename = `${String(idx + 1).padStart(2, '0')}_Surat_PKL_${safeSiswa}.doc`;
+      const wordHtml = buildWordHtml([st], activeTemplate, AppState.settings, filename);
+      zip.file(filename, '\ufeff' + wordHtml);
+      count++;
+    });
+  } else {
+    // Kelompokkan per (Guru Pembimbing + Tempat DU/DI)
+    const groups = {};
+    records.forEach(r => {
+      const g = (r.guru || 'Tanpa_Pembimbing').trim();
+      const t = (r.tempat || 'Umum').trim();
+      const key = g + '___' + t;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(r);
+    });
+
+    let gIdx = 1;
+    for (const key in groups) {
+      const groupStudents = groups[key];
+      const first = groupStudents[0];
+      const safeGuru = (first.guru || 'Guru').replace(/[^a-zA-Z0-9]/g, '_');
+      const safeTempat = (first.tempat || 'DUDI').replace(/[^a-zA-Z0-9]/g, '_');
+      const filename = `${String(gIdx).padStart(2, '0')}_Surat_PKL_${safeGuru}_${safeTempat}.doc`;
+      const wordHtml = buildWordHtml(groupStudents, activeTemplate, AppState.settings, filename);
+      zip.file(filename, '\ufeff' + wordHtml);
+      count++;
+      gIdx++;
+    }
+  }
+
+  zip.generateAsync({ type: 'blob' }).then(function(content) {
+    const zipName = `Semua_Surat_PKL_Word_${Date.now()}.zip`;
+    if (typeof saveAs !== 'undefined') {
+      saveAs(content, zipName);
+    } else {
+      const url = URL.createObjectURL(content);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = zipName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+    showToast(`Berhasil mengunduh ${count} berkas Word dalam arsip ZIP!`, 'success');
+  }).catch(function(err) {
+    showToast('Gagal membuat berkas ZIP: ' + err.message, 'error');
+  });
 }
 
 // Tautan Langsung ke Spreadsheet & Google Drive
