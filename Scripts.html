@@ -2551,27 +2551,33 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
   if (AppState.showTtd) {
     const rawTtd = s.ttdUrl || DEFAULT_ASSET_URLS.ttd;
     const ttdSrc = getDirectImageUrl(rawTtd, typeof ASSETS !== 'undefined' ? (ASSETS.ttd || ASSETS.ttdElektronik) : '');
-    ttdMediaWord = ttdSrc ? `<img src="${ttdSrc}" alt="TTD Barcode" height="70" style="height: 70px; width: auto; margin: 6pt 0;">` : '<div style="height: 70px;"></div>';
+    ttdMediaWord = ttdSrc ? `<img src="${ttdSrc}" alt="TTD Barcode" width="210" height="70" style="width: 210px; height: 70px; max-width: 210px; display: block; margin: 6pt 0;">` : '<div style="height: 70px;"></div>';
   } else {
     const rawTtdBasah = s.ttdBasahUrl || DEFAULT_ASSET_URLS.ttd_basah;
     const ttdBasahSrc = getDirectImageUrl(rawTtdBasah, typeof ASSETS !== 'undefined' ? ASSETS.ttdBasah : '');
-    ttdMediaWord = ttdBasahSrc ? `<img src="${ttdBasahSrc}" alt="TTD Basah" height="95" style="height: 95px; width: auto; margin: 6pt 0;">` : '<div style="height: 70px;"></div>';
+    ttdMediaWord = ttdBasahSrc ? `<img src="${ttdBasahSrc}" alt="TTD Basah" width="220" height="95" style="width: 220px; height: 95px; max-width: 220px; display: block; margin: 4pt 0;">` : '<div style="height: 70px;"></div>';
   }
 
   const ttdWordTable = `
-    <table style="width: 100%; border: none; margin-top: 16pt; page-break-inside: avoid;" border="0" cellpadding="0" cellspacing="0">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width: 100%; border: none; margin-top: 18pt; border-collapse: collapse; page-break-inside: avoid;">
       <tr>
-        <td style="width: 55%; border: none;"></td>
-        <td style="width: 45%; border: none; text-align: left; vertical-align: top;">
-          <div>Dikeluarkan di ${s.titimangsaTempat || 'Klungkung'}</div>
-          <div>Pada Tanggal, ${formatIndonesianDate(s.tglSurat) || '12 November 2026'}</div>
-          <div style="margin-top: 2pt;">Kepala ${s.namaSekolah || 'SMK Negeri 1 Klungkung'}</div>
-          <div style="margin: 6pt 0;">${ttdMediaWord}</div>
-          ${AppState.showTtd ? '' : `
-            <div style="font-weight: bold; text-decoration: underline;">${s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.'}</div>
-            <div>${s.kepsekPangkat ? `<div>${s.kepsekPangkat}</div>` : ''}</div>
-            <div>NIP. ${s.kepsekNip || '19770309 200903 2 010'}</div>
-          `}
+        <td width="55%" style="width: 55%; border: none; font-size: 1pt; line-height: 1pt;">&nbsp;</td>
+        <td width="45%" align="left" style="width: 45%; border: none; text-align: left; vertical-align: top;">
+          <table width="260" border="0" cellpadding="0" cellspacing="0" style="width: 260px; border: none; text-align: left;">
+            <tr>
+              <td style="border: none; text-align: left; font-family: 'Bookman Old Style', 'Times New Roman', serif; font-size: 11pt; line-height: 1.35;">
+                <div>Dikeluarkan di ${s.titimangsaTempat || 'Klungkung'}</div>
+                <div>Pada Tanggal, ${formatIndonesianDate(s.tglSurat) || '12 November 2026'}</div>
+                <div style="margin-top: 2pt;">Kepala ${s.namaSekolah || 'SMK Negeri 1 Klungkung'}</div>
+                <div style="margin: 6pt 0;">${ttdMediaWord}</div>
+                ${AppState.showTtd ? '' : `
+                  <div style="font-weight: bold; text-decoration: underline; margin-top: 2pt;">${s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.'}</div>
+                  <div>${s.kepsekPangkat ? `<div>${s.kepsekPangkat}</div>` : ''}</div>
+                  <div>NIP. ${s.kepsekNip || '19770309 200903 2 010'}</div>
+                `}
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
     </table>
