@@ -123,6 +123,29 @@ function formatIndonesianDate(val) {
   return `${day} ${month} ${year}`;
 }
 
+// Helper mendeteksi apakah template menggunakan Lembar ke-2 (Lampiran)
+function isTemplateUsingLampiran(activeTemplate, studentList) {
+  if (!studentList || studentList.length === 0) return false;
+  if (!activeTemplate) return false;
+
+  const tplId = activeTemplate.id || '';
+  const tplName = (activeTemplate.nama || '').toLowerCase();
+  const rawHtml = activeTemplate.html_content || '';
+
+  // Surat Keterangan PKL tidak menggunakan lampiran (dokumen individual 1 lembar)
+  if (tplId === 'tpl_surat_keterangan_pkl' || tplName.includes('keterangan')) {
+    return false;
+  }
+
+  // Jika badan surat sudah mengandung placeholder tabel siswa, tabel dicetak langsung di Lembar 1
+  if (rawHtml.includes('{tabelSiswaPermohonan}')) {
+    return false;
+  }
+
+  // Template lainnya (Surat Pengantar, PKL Terpadu, atau template kustom) mencantumkan rincian siswa di Lembar 2 (Lampiran)
+  return true;
+}
+
 // ================= MODERN MINIMALIST NOTIFICATION & POPUP SYSTEM =================
 function showToast(msg, type = 'info', title = '', duration = 3200) {
   const container = document.getElementById('toastContainer');
@@ -829,9 +852,8 @@ function renderDocumentPreview() {
   const pageDivider = document.getElementById('pageDividerLampiran');
   const tbodySiswa = document.getElementById('docTbodySiswa');
 
-  // Lampiran hanya untuk template surat pengantar / fleksibel yang memiliki lebih dari 1 siswa dan belum memiliki tabel di badan surat
-  const hasEmbeddedTable = rawHtml.includes('Konsentrasi Keahlian') || rawHtml.includes('Konsentrasi') || rawHtml.includes('NIS/NISN') || isBeritaAcara || isPermohonanMurid || isKeterangan;
-  if (activeStudents.length > 1 && !hasEmbeddedTable) {
+  // Tampilkan Lampiran Halaman 2 jika template menggunakan lampiran
+  if (isTemplateUsingLampiran(activeTemplate, activeStudents)) {
     if (pageLampiran) pageLampiran.style.display = 'block';
     if (pageDivider) pageDivider.style.display = 'block';
 
@@ -2223,9 +2245,9 @@ function printCurrentDoc() {
 }
 
 /**
- * Helper menghasilkan HTML Dokumen Lengkap (bersih tanpa tombol/kontrol) untuk Cetak Massal
+ * Helper menghasilkan HTML Halaman 1 (Surat)
  */
-function buildDocumentHtml(studentList, activeTemplate, s) {
+function buildSingleSuratHtml(studentList, activeTemplate, s) {
   const firstStudent = studentList[0] || {};
   const isBeritaAcara = (activeTemplate.id === 'tpl_berita_acara' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('berita acara')));
   const isPermohonanMurid = (activeTemplate.id === 'tpl_surat_permohonan_pkl_murid' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('permohonan')));
@@ -2239,7 +2261,6 @@ function buildDocumentHtml(studentList, activeTemplate, s) {
 
   const hasEmbeddedHeader = rawHtml.includes('{noSurat}') || rawHtml.includes('Nomor:') || rawHtml.includes('Perihal:');
   const hasEmbeddedTujuan = rawHtml.includes('Kepada') || rawHtml.includes('{tempatPkl}');
-  const hasEmbeddedTable = rawHtml.includes('Konsentrasi Keahlian') || rawHtml.includes('Konsentrasi') || rawHtml.includes('NIS/NISN') || isBeritaAcara || isPermohonanMurid || isKeterangan;
 
   // 1. Kop Surat
   let kopHtml = '';
@@ -2290,7 +2311,7 @@ function buildDocumentHtml(studentList, activeTemplate, s) {
     `;
   }
 
-  // 4. Tabel Siswa
+  // 4. Tabel Siswa (untuk placeholder {tabelSiswaPermohonan} jika ada di badan surat)
   const tabelSiswaHtml = `
     <table style="width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 8px; font-size: 11pt;" border="1">
       <thead>
@@ -2381,39 +2402,6 @@ function buildDocumentHtml(studentList, activeTemplate, s) {
     </div>
   `;
 
-  // 7. Lampiran jika perlu
-  let lampiranHtml = '';
-  if (studentList.length > 1 && !hasEmbeddedTable) {
-    lampiranHtml = `
-      <div class="lampiran-page print-page-break" style="page-break-before: always; margin-top: 20px;">
-        <div style="font-weight: bold; margin-bottom: 12px; font-size: 11pt;">
-          Lampiran : <br>
-          Daftar Nama Siswa Peserta PKL
-        </div>
-        <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt;" border="1">
-          <thead>
-            <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
-              <td style="padding: 6px; width: 40px; border: 1px solid #000;">No</td>
-              <td style="padding: 6px; border: 1px solid #000;">Nama Siswa</td>
-              <td style="padding: 6px; width: 95px; border: 1px solid #000;">Kelas</td>
-              <td style="padding: 6px; border: 1px solid #000;">Tempat PKL</td>
-            </tr>
-          </thead>
-          <tbody>
-            ${studentList.map((st, i) => `
-              <tr>
-                <td style="padding: 6px; text-align: center; border: 1px solid #000;">${i + 1}</td>
-                <td style="padding: 6px 10px; border: 1px solid #000; font-weight: 500;">${st.siswa}</td>
-                <td style="padding: 6px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
-                <td style="padding: 6px 10px; border: 1px solid #000;">${st.tempat || '-'}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
-  }
-
   return `
     <div class="surat-page">
       ${kopHtml}
@@ -2422,8 +2410,57 @@ function buildDocumentHtml(studentList, activeTemplate, s) {
       <div style="text-align: justify; line-height: 1.35; font-size: 11pt;">${rawHtml}</div>
       ${ttdBlockHtml}
     </div>
-    ${lampiranHtml}
   `;
+}
+
+/**
+ * Helper menghasilkan HTML Halaman 2 (Lampiran Daftar Siswa)
+ */
+function buildSingleLampiranHtml(studentList) {
+  return `
+    <div class="lampiran-page">
+      <div style="font-weight: bold; margin-bottom: 12px; font-size: 11pt;">
+        Lampiran : <br>
+        Daftar Nama Siswa Peserta PKL
+      </div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt;" border="1">
+        <thead>
+          <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
+            <td style="padding: 6px; width: 40px; border: 1px solid #000; text-align: center;">No</td>
+            <td style="padding: 6px; border: 1px solid #000; text-align: left;">Nama Siswa</td>
+            <td style="padding: 6px; width: 95px; border: 1px solid #000; text-align: center;">Kelas</td>
+            <td style="padding: 6px; border: 1px solid #000; text-align: left;">Tempat PKL</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${studentList.map((st, i) => `
+            <tr>
+              <td style="padding: 6px; text-align: center; border: 1px solid #000;">${i + 1}</td>
+              <td style="padding: 6px 10px; border: 1px solid #000; font-weight: 500;">${st.siswa}</td>
+              <td style="padding: 6px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
+              <td style="padding: 6px 10px; border: 1px solid #000;">${st.tempat || '-'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+/**
+ * Helper menghasilkan HTML Dokumen Lengkap (Surat + Lampiran jika ada)
+ */
+function buildDocumentHtml(studentList, activeTemplate, s) {
+  const suratHtml = buildSingleSuratHtml(studentList, activeTemplate, s);
+  if (isTemplateUsingLampiran(activeTemplate, studentList)) {
+    const lampiranHtml = `
+      <div class="lampiran-page print-page-break" style="page-break-before: always; margin-top: 20px;">
+        ${buildSingleLampiranHtml(studentList)}
+      </div>
+    `;
+    return suratHtml + lampiranHtml;
+  }
+  return suratHtml;
 }
 
 /**
@@ -2585,7 +2622,7 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
 
   // 7. Lampiran jika perlu
   let lampiranWordHtml = '';
-  if (studentList.length > 1 && !hasEmbeddedTable) {
+  if (isTemplateUsingLampiran(activeTemplate, studentList)) {
     lampiranWordHtml = `
       <br clear="all" style="page-break-before: always; mso-break-type: section-break;">
       <div style="font-weight: bold; margin-bottom: 12pt; font-size: 11pt;">
@@ -2595,10 +2632,10 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
       <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt;" border="1" cellpadding="5" cellspacing="0">
         <thead>
           <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
-            <th style="padding: 5px; width: 40px; border: 1px solid #000;">No</th>
-            <th style="padding: 5px; border: 1px solid #000;">Nama Siswa</th>
-            <th style="padding: 5px; width: 95px; border: 1px solid #000;">Kelas</th>
-            <th style="padding: 5px; border: 1px solid #000;">Tempat PKL</th>
+            <th style="padding: 5px; width: 40px; border: 1px solid #000; text-align: center;">No</th>
+            <th style="padding: 5px; border: 1px solid #000; text-align: left;">Nama Siswa</th>
+            <th style="padding: 5px; width: 95px; border: 1px solid #000; text-align: center;">Kelas</th>
+            <th style="padding: 5px; border: 1px solid #000; text-align: left;">Tempat PKL</th>
           </tr>
         </thead>
         <tbody>
@@ -2715,7 +2752,10 @@ function updateBatchPrintModalInfo() {
   const badge = document.getElementById('batchPrintDocCount');
   if (badge) {
     const totalSiswa = groups.reduce((acc, curr) => acc + curr.length, 0);
-    badge.textContent = `${groups.length} Dokumen (${totalSiswa} Siswa)`;
+    const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0] || {};
+    const useLampiran = isTemplateUsingLampiran(activeTemplate, groups[0] || []);
+    const totalLembar = useLampiran ? groups.length * 2 : groups.length;
+    badge.textContent = `${groups.length} Dokumen / ${totalLembar} Lembar (${totalSiswa} Siswa)`;
   }
 }
 
@@ -2753,10 +2793,19 @@ function executeBatchPrint() {
   const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0] || {};
 
   groups.forEach((groupStudents) => {
-    const pageDiv = document.createElement('div');
-    pageDiv.className = `doc-page paper-${AppState.paperSize} batch-doc-page`;
-    pageDiv.innerHTML = buildDocumentHtml(groupStudents, activeTemplate, AppState.settings);
-    batchContainer.appendChild(pageDiv);
+    // Lembar 1: Halaman Surat Utama
+    const pageSuratDiv = document.createElement('div');
+    pageSuratDiv.className = `doc-page paper-${AppState.paperSize} batch-doc-page`;
+    pageSuratDiv.innerHTML = buildSingleSuratHtml(groupStudents, activeTemplate, AppState.settings);
+    batchContainer.appendChild(pageSuratDiv);
+
+    // Lembar 2: Halaman Lampiran Daftar Siswa (jika template menggunakan lampiran)
+    if (isTemplateUsingLampiran(activeTemplate, groupStudents)) {
+      const pageLampiranDiv = document.createElement('div');
+      pageLampiranDiv.className = `doc-page paper-${AppState.paperSize} batch-doc-page`;
+      pageLampiranDiv.innerHTML = buildSingleLampiranHtml(groupStudents);
+      batchContainer.appendChild(pageLampiranDiv);
+    }
   });
 
   setTimeout(() => {
