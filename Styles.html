@@ -195,6 +195,40 @@
     }
     body.batch-print-active #batchPrintContainer {
       display: block !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    /* Mencegah tabel terpotong atau kehilangan border kanan saat dicetak */
+    .lampiran-page, .surat-page {
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .lampiran-table,
+    .lampiran-page table,
+    .batch-doc-page table {
+      width: 99.6% !important;
+      max-width: 99.6% !important;
+      table-layout: fixed !important;
+      border-collapse: collapse !important;
+      box-sizing: border-box !important;
+      margin-left: 0 !important;
+      margin-right: auto !important;
+    }
+    .lampiran-page table th,
+    .lampiran-page table td,
+    .batch-doc-page table th,
+    .batch-doc-page table td {
+      border: 1px solid #000000 !important;
+      box-sizing: border-box !important;
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+    }
+    .lampiran-page table th:last-child,
+    .lampiran-page table td:last-child,
+    .batch-doc-page table th:last-child,
+    .batch-doc-page table td:last-child {
+      border-right: 1.5px solid #000000 !important;
     }
   }
 

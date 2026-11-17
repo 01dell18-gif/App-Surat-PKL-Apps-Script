@@ -860,10 +860,10 @@ function renderDocumentPreview() {
     if (tbodySiswa) {
       tbodySiswa.innerHTML = activeStudents.map((st, i) => `
         <tr>
-          <td style="padding: 6px; text-align: center; border: 1px solid #000;">${i + 1}</td>
-          <td style="padding: 6px 10px; border: 1px solid #000; font-weight: 500;">${st.siswa}</td>
-          <td style="padding: 6px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
-          <td style="padding: 6px 10px; border: 1px solid #000;">${st.tempat || '-'}</td>
+          <td style="padding: 6px 8px; text-align: center; border: 1px solid #000; box-sizing: border-box;">${i + 1}</td>
+          <td style="padding: 6px 8px; border: 1px solid #000; font-weight: 500; text-align: left; word-break: break-word; box-sizing: border-box;">${st.siswa}</td>
+          <td style="padding: 6px 8px; text-align: center; border: 1px solid #000; box-sizing: border-box;">${st.kelas || '-'}</td>
+          <td style="padding: 6px 8px; border: 1px solid #000; text-align: left; word-break: break-word; box-sizing: border-box;">${st.tempat || '-'}</td>
         </tr>
       `).join('');
     }
@@ -2313,24 +2313,24 @@ function buildSingleSuratHtml(studentList, activeTemplate, s) {
 
   // 4. Tabel Siswa (untuk placeholder {tabelSiswaPermohonan} jika ada di badan surat)
   const tabelSiswaHtml = `
-    <table style="width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 8px; font-size: 11pt;" border="1">
+    <table class="lampiran-table" style="width: 99.6%; max-width: 99.6%; border-collapse: collapse; margin-top: 8px; margin-bottom: 8px; font-size: 11pt; table-layout: fixed; box-sizing: border-box;" border="1">
       <thead>
         <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
-          <th style="padding: 5px; width: 35px; border: 1px solid #000;">No</th>
-          <th style="padding: 5px; border: 1px solid #000;">Nama Siswa</th>
-          <th style="padding: 5px; width: 90px; border: 1px solid #000;">NIS/NISN</th>
-          <th style="padding: 5px; width: 85px; border: 1px solid #000;">Kelas</th>
-          <th style="padding: 5px; border: 1px solid #000;">Konsentrasi Keahlian</th>
+          <th style="padding: 5px; width: 6%; border: 1px solid #000; text-align: center; box-sizing: border-box;">No</th>
+          <th style="padding: 5px 8px; width: 28%; border: 1px solid #000; text-align: left; box-sizing: border-box;">Nama Siswa</th>
+          <th style="padding: 5px; width: 24%; border: 1px solid #000; text-align: center; box-sizing: border-box;">NIS/NISN</th>
+          <th style="padding: 5px; width: 14%; border: 1px solid #000; text-align: center; box-sizing: border-box;">Kelas</th>
+          <th style="padding: 5px 8px; width: 28%; border: 1px solid #000; text-align: left; box-sizing: border-box;">Konsentrasi Keahlian</th>
         </tr>
       </thead>
       <tbody>
         ${studentList.map((st, i) => `
           <tr>
-            <td style="padding: 4px; text-align: center; border: 1px solid #000;">${i + 1}</td>
-            <td style="padding: 4px 8px; border: 1px solid #000; font-weight: 500;">${st.siswa}</td>
-            <td style="padding: 4px; text-align: center; border: 1px solid #000;">${st.nis || '-'}/${st.nisn || '-'}</td>
-            <td style="padding: 4px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
-            <td style="padding: 4px 8px; border: 1px solid #000;">${st.jurusan || '-'}</td>
+            <td style="padding: 5px; text-align: center; border: 1px solid #000; box-sizing: border-box;">${i + 1}</td>
+            <td style="padding: 5px 8px; border: 1px solid #000; font-weight: 500; text-align: left; word-break: break-word; box-sizing: border-box;">${st.siswa}</td>
+            <td style="padding: 5px; text-align: center; border: 1px solid #000; box-sizing: border-box;">${st.nis || '-'}/${st.nisn || '-'}</td>
+            <td style="padding: 5px; text-align: center; border: 1px solid #000; box-sizing: border-box;">${st.kelas || '-'}</td>
+            <td style="padding: 5px 8px; border: 1px solid #000; text-align: left; word-break: break-word; box-sizing: border-box;">${st.jurusan || '-'}</td>
           </tr>
         `).join('')}
       </tbody>
@@ -2423,22 +2423,22 @@ function buildSingleLampiranHtml(studentList) {
         Lampiran : <br>
         Daftar Nama Siswa Peserta PKL
       </div>
-      <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt;" border="1">
+      <table class="lampiran-table" style="width: 99.6%; max-width: 99.6%; border-collapse: collapse; table-layout: fixed; font-size: 10.5pt; border: 1px solid #000; margin-left: 0; margin-right: auto; box-sizing: border-box;" border="1">
         <thead>
           <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
-            <td style="padding: 6px; width: 40px; border: 1px solid #000; text-align: center;">No</td>
-            <td style="padding: 6px; border: 1px solid #000; text-align: left;">Nama Siswa</td>
-            <td style="padding: 6px; width: 95px; border: 1px solid #000; text-align: center;">Kelas</td>
-            <td style="padding: 6px; border: 1px solid #000; text-align: left;">Tempat PKL</td>
+            <th style="padding: 6px 8px; width: 6%; border: 1px solid #000; text-align: center; box-sizing: border-box;">No</th>
+            <th style="padding: 6px 8px; width: 34%; border: 1px solid #000; text-align: left; box-sizing: border-box;">Nama Siswa</th>
+            <th style="padding: 6px 8px; width: 18%; border: 1px solid #000; text-align: center; box-sizing: border-box;">Kelas</th>
+            <th style="padding: 6px 8px; width: 42%; border: 1px solid #000; text-align: left; box-sizing: border-box;">Tempat PKL</th>
           </tr>
         </thead>
         <tbody>
           ${studentList.map((st, i) => `
             <tr>
-              <td style="padding: 6px; text-align: center; border: 1px solid #000;">${i + 1}</td>
-              <td style="padding: 6px 10px; border: 1px solid #000; font-weight: 500;">${st.siswa}</td>
-              <td style="padding: 6px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
-              <td style="padding: 6px 10px; border: 1px solid #000;">${st.tempat || '-'}</td>
+              <td style="padding: 6px 8px; text-align: center; border: 1px solid #000; box-sizing: border-box;">${i + 1}</td>
+              <td style="padding: 6px 8px; border: 1px solid #000; font-weight: 500; text-align: left; word-break: break-word; box-sizing: border-box;">${st.siswa}</td>
+              <td style="padding: 6px 8px; text-align: center; border: 1px solid #000; box-sizing: border-box;">${st.kelas || '-'}</td>
+              <td style="padding: 6px 8px; border: 1px solid #000; text-align: left; word-break: break-word; box-sizing: border-box;">${st.tempat || '-'}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -2629,22 +2629,22 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
         Lampiran : <br>
         Daftar Nama Siswa Peserta PKL
       </div>
-      <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt;" border="1" cellpadding="5" cellspacing="0">
+      <table style="width: 100%; border-collapse: collapse; font-size: 10.5pt; table-layout: fixed;" border="1" cellpadding="5" cellspacing="0">
         <thead>
           <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
-            <th style="padding: 5px; width: 40px; border: 1px solid #000; text-align: center;">No</th>
-            <th style="padding: 5px; border: 1px solid #000; text-align: left;">Nama Siswa</th>
-            <th style="padding: 5px; width: 95px; border: 1px solid #000; text-align: center;">Kelas</th>
-            <th style="padding: 5px; border: 1px solid #000; text-align: left;">Tempat PKL</th>
+            <th style="padding: 5px; width: 6%; border: 1px solid #000; text-align: center;">No</th>
+            <th style="padding: 5px; width: 34%; border: 1px solid #000; text-align: left;">Nama Siswa</th>
+            <th style="padding: 5px; width: 18%; border: 1px solid #000; text-align: center;">Kelas</th>
+            <th style="padding: 5px; width: 42%; border: 1px solid #000; text-align: left;">Tempat PKL</th>
           </tr>
         </thead>
         <tbody>
           ${studentList.map((st, i) => `
             <tr>
               <td style="padding: 5px; text-align: center; border: 1px solid #000;">${i + 1}</td>
-              <td style="padding: 5px 8px; border: 1px solid #000; font-weight: bold;">${st.siswa}</td>
+              <td style="padding: 5px 8px; border: 1px solid #000; font-weight: bold; text-align: left;">${st.siswa}</td>
               <td style="padding: 5px; text-align: center; border: 1px solid #000;">${st.kelas || '-'}</td>
-              <td style="padding: 5px 8px; border: 1px solid #000;">${st.tempat || '-'}</td>
+              <td style="padding: 5px 8px; border: 1px solid #000; text-align: left;">${st.tempat || '-'}</td>
             </tr>
           `).join('')}
         </tbody>
