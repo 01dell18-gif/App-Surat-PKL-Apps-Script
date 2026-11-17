@@ -199,14 +199,13 @@
       margin: 0 !important;
       padding: 0 !important;
     }
-    /* Mencegah tabel terpotong atau kehilangan border kanan saat dicetak */
-    .lampiran-page, .surat-page {
+    /* Khusus tabel Lampiran Daftar Siswa agar tidak terpotong border kanannya */
+    .lampiran-page {
       width: 100% !important;
       box-sizing: border-box !important;
     }
     .lampiran-table,
-    .lampiran-page table,
-    .batch-doc-page table {
+    .lampiran-page table {
       width: 99.6% !important;
       max-width: 99.6% !important;
       table-layout: fixed !important;
@@ -217,8 +216,8 @@
     }
     .lampiran-page table th,
     .lampiran-page table td,
-    .batch-doc-page table th,
-    .batch-doc-page table td {
+    .lampiran-table th,
+    .lampiran-table td {
       border: 1px solid #000000 !important;
       box-sizing: border-box !important;
       word-wrap: break-word !important;
@@ -226,8 +225,8 @@
     }
     .lampiran-page table th:last-child,
     .lampiran-page table td:last-child,
-    .batch-doc-page table th:last-child,
-    .batch-doc-page table td:last-child {
+    .lampiran-table th:last-child,
+    .lampiran-table td:last-child {
       border-right: 1.5px solid #000000 !important;
     }
   }
