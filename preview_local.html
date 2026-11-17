@@ -44,6 +44,7 @@
       display: none !important;
     }
   }
+
   @media (min-width: 768px) {
     .desktop-hide {
       display: none !important;
@@ -87,6 +88,7 @@
     border-top: 2px dashed #94a3b8;
     text-align: center;
   }
+
   .page-break-divider::after {
     content: '— BATAS HALAMAN 1 (SURAT) DAN HALAMAN 2 (LAMPIRAN) —';
     position: absolute;
@@ -109,16 +111,21 @@
     color: #000000;
     outline: none;
   }
+
   #wysiwygEditor p {
     margin-bottom: 8px;
   }
-  #wysiwygEditor ol, #wysiwygEditor ul {
+
+  #wysiwygEditor ol,
+  #wysiwygEditor ul {
     margin-left: 20px;
     margin-bottom: 10px;
   }
+
   #wysiwygEditor ol {
     list-style-type: decimal;
   }
+
   #wysiwygEditor ul {
     list-style-type: disc;
   }
@@ -129,7 +136,9 @@
       size: 215mm 330mm;
       margin: 12mm 15mm 15mm 20mm;
     }
-    html, body {
+
+    html,
+    body {
       background: #ffffff !important;
       color: #000000 !important;
       padding: 0 !important;
@@ -137,25 +146,33 @@
       overflow: visible !important;
       height: auto !important;
     }
+
     /* Sembunyikan navigator scroll bar browser saat cetak */
     * {
       overflow: visible !important;
       -ms-overflow-style: none !important;
       scrollbar-width: none !important;
     }
+
     *::-webkit-scrollbar {
       display: none !important;
       width: 0 !important;
       height: 0 !important;
     }
-    .overflow-x-auto, .overflow-y-auto, .overflow-auto {
+
+    .overflow-x-auto,
+    .overflow-y-auto,
+    .overflow-auto {
       overflow: visible !important;
     }
+
+    main,
     #mainLayoutContainer {
       display: block !important;
       padding: 0 !important;
       margin: 0 !important;
     }
+
     #mainDocumentPreviewArea {
       display: block !important;
       overflow: visible !important;
@@ -163,17 +180,19 @@
       margin: 0 !important;
       width: 100% !important;
     }
-    #mainDocumentPreviewArea > div:not(.no-print) {
+
+    #mainDocumentPreviewArea>div:not(.no-print) {
       display: block !important;
       overflow: visible !important;
       padding: 0 !important;
       margin: 0 !important;
       width: 100% !important;
     }
+
     .no-print,
     .no-print *,
     #docPreviewToolbar,
-    #mainDocumentPreviewArea > .no-print,
+    #mainDocumentPreviewArea>.no-print,
     #mainDocumentPreviewArea .no-print,
     header,
     nav,
@@ -186,6 +205,7 @@
       padding: 0 !important;
       overflow: hidden !important;
     }
+
     .doc-page {
       box-shadow: none !important;
       margin: 0 !important;
@@ -194,13 +214,16 @@
       min-height: auto !important;
       border: none !important;
     }
+
     .page-break-divider {
       display: none !important;
     }
+
     .print-page-break {
       page-break-before: always !important;
       break-before: page !important;
     }
+
     .batch-doc-page {
       page-break-after: always !important;
       break-after: page !important;
@@ -209,24 +232,41 @@
       height: auto !important;
       min-height: auto !important;
     }
+
     .batch-doc-page:last-child {
       page-break-after: auto !important;
       break-after: auto !important;
     }
+
+    body.batch-print-active main,
     body.batch-print-active #mainDocumentPreviewArea {
       display: none !important;
+      height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
+
+    body.batch-print-active > *:not(#batchPrintContainer) {
+      display: none !important;
+      height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
     body.batch-print-active #batchPrintContainer {
       display: block !important;
       width: 100% !important;
       margin: 0 !important;
       padding: 0 !important;
     }
+
     /* Khusus tabel Lampiran Daftar Siswa agar tidak terpotong border kanannya */
     .lampiran-page {
       width: 100% !important;
       box-sizing: border-box !important;
     }
+
     .lampiran-table,
     .lampiran-page table {
       width: 99.6% !important;
@@ -237,6 +277,7 @@
       margin-left: 0 !important;
       margin-right: auto !important;
     }
+
     .lampiran-page table th,
     .lampiran-page table td,
     .lampiran-table th,
@@ -246,6 +287,7 @@
       word-wrap: break-word !important;
       overflow-wrap: break-word !important;
     }
+
     .lampiran-page table th:last-child,
     .lampiran-page table td:last-child,
     .lampiran-table th:last-child,
@@ -262,6 +304,7 @@
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
+
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -275,7 +318,6 @@
     }
   }
 </style>
-
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col overflow-x-hidden">
 
