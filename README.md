@@ -118,7 +118,13 @@ const CONFIG = {
 };
 ```
 
-#### Cara Mengambil ID Spreadsheet:
+> [!TIP]
+> **Zero-Config (Jika skrip dibuat dari dalam Spreadsheet):**
+> Jika Anda membuka Apps Script langsung dari spreadsheet melalui menu **Extensions (Ekstensi)** > **Apps Script**, Anda bahkan **tidak perlu mengisi SPREADSHEET_ID** (boleh dibiarkan kosong `''`). Sistem akan otomatis mendeteksi spreadsheet aktif tersebut!
+>
+> Selain itu, URL Spreadsheet, Folder Drive, dan Aset Kop/TTD/Logo sekarang **diambil secara dinamis langsung dari database (sheet `pengaturan`) dan runtime Apps Script**, sehingga Anda dapat mengubah folder penyimpanan Google Drive kapan saja langsung melalui menu **Pengaturan** di aplikasi web tanpa perlu mengedit kode skrip!
+
+#### Cara Mengambil ID Spreadsheet (Untuk Standalone Script):
 Buka Google Spreadsheet baru Anda di tab browser, perhatikan tautan pada address bar:
 ```text
 https://docs.google.com/spreadsheets/d/19d_Drmf6XlNXZSW9zfO2E7FUGxNHBkumdHRUs1b4yz8/edit#gid=0

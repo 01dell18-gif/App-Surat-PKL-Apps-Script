@@ -23,10 +23,13 @@ const AppState = {
   showKop: true,
   showTtd: true,
   showAlamat: true,
-  isHtmlMode: false
+  isHtmlMode: false,
+  spreadsheetUrl: '',
+  driveFolderUrl: '',
+  webAppUrl: ''
 };
 
-// URL Aset Gambar Bawaan (Google Drive)
+// URL Aset Gambar Bawaan (Google Drive) sebagai fallback jika belum disetel di database
 const DEFAULT_ASSET_URLS = {
   kop: 'https://drive.google.com/file/d/1QXtnYwIrCc-pihDUoidjkRW5UVWykOn-/view?usp=drive_link',
   ttd: 'https://drive.google.com/file/d/1fVDtzPKSHqga0Qz9YxnOzGaUHg7K4roR/view?usp=drive_link',
@@ -270,6 +273,9 @@ function onInitialDataLoaded(res, fromCache = false) {
     }
     AppState.records = res.students || [];
     AppState.settings = res.settings || {};
+    AppState.spreadsheetUrl = res.spreadsheetUrl || (res.settings && res.settings.spreadsheetUrl) || '';
+    AppState.driveFolderUrl = res.driveFolderUrl || (res.settings && res.settings.driveFolderUrl) || '';
+    AppState.webAppUrl = res.webAppUrl || (res.settings && res.settings.webAppUrl) || '';
     
     // Pastikan template dari database selalu dipertahankan
     const loadedTemplates = res.templates || [];
@@ -352,8 +358,13 @@ function loadFallbackData() {
     kopUrl: DEFAULT_ASSET_URLS.kop,
     ttdUrl: DEFAULT_ASSET_URLS.ttd,
     ttdBasahUrl: DEFAULT_ASSET_URLS.ttd_basah,
-    logoWebUrl: DEFAULT_ASSET_URLS.logo
+    logoWebUrl: DEFAULT_ASSET_URLS.logo,
+    driveFolderUrl: 'https://drive.google.com/drive/folders/1Y765r1Qq9m753GHCSNjxCw7D-hEUuHDF',
+    spreadsheetUrl: 'https://docs.google.com/spreadsheets/d/19d_Drmf6XlNXZSW9zfO2E7FUGxNHBkumdHRUs1b4yz8/edit'
   };
+
+  AppState.spreadsheetUrl = AppState.settings.spreadsheetUrl;
+  AppState.driveFolderUrl = AppState.settings.driveFolderUrl;
 
   try {
     const localSaved = localStorage.getItem('surat_pkl_saved_templates');
@@ -426,10 +437,19 @@ function populateSettingsInputs() {
   if (document.getElementById('inputPeriodePkl')) document.getElementById('inputPeriodePkl').value = s.periodePkl || '13 November 2026 sampai dengan 30 April 2027';
   if (document.getElementById('inputTglPenarikan')) document.getElementById('inputTglPenarikan').value = s.tglPenarikan || '30 April 2027';
 
-  // Input Pengaturan Aset Gambar
-  if (document.getElementById('settingKopUrl')) document.getElementById('settingKopUrl').value = s.kopUrl;
-  if (document.getElementById('settingTtdUrl')) document.getElementById('settingTtdUrl').value = s.ttdUrl;
-  if (document.getElementById('settingTtdBasahUrl')) document.getElementById('settingTtdBasahUrl').value = s.ttdBasahUrl;
+  // Input Pengaturan Aset Gambar & Drive
+  if (document.getElementById('settingKopUrl')) document.getElementById('settingKopUrl').value = s.kopUrl || '';
+  if (document.getElementById('settingTtdUrl')) document.getElementById('settingTtdUrl').value = s.ttdUrl || '';
+  if (document.getElementById('settingTtdBasahUrl')) document.getElementById('settingTtdBasahUrl').value = s.ttdBasahUrl || '';
+  if (document.getElementById('settingLogoWebUrl')) document.getElementById('settingLogoWebUrl').value = s.logoWebUrl || '';
+  if (document.getElementById('settingDriveFolderUrl')) document.getElementById('settingDriveFolderUrl').value = s.driveFolderUrl || AppState.driveFolderUrl || '';
+
+  const sheetLinkEl = document.getElementById('displayActiveSpreadsheetUrl');
+  if (sheetLinkEl) {
+    const sUrl = AppState.spreadsheetUrl || s.spreadsheetUrl || '';
+    sheetLinkEl.textContent = sUrl || 'Tersambung ke Google Spreadsheet database';
+    sheetLinkEl.href = sUrl || '#';
+  }
 
   // Pratinjau Pengaturan Aset Gambar
   if (document.getElementById('previewSettingsKop')) {
@@ -1561,7 +1581,7 @@ function deleteStudentById(id) {
 function exportDataToExcel() {
   const records = AppState.records || [];
   if (records.length === 0) {
-    alert('Tidak ada data siswa untuk diekspor.');
+    showToast('Tidak ada data siswa untuk diekspor.', 'warning');
     return;
   }
 
@@ -1639,19 +1659,19 @@ function handleExcelImportFile(event) {
         const worksheet = workbook.Sheets[firstSheetName];
         rawJsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
       } else {
-        alert('Library SheetJS belum siap, silakan coba beberapa saat lagi.');
+        showToast('Library SheetJS belum siap, silakan coba beberapa saat lagi.', 'warning');
         return;
       }
 
       if (!rawJsonRows || rawJsonRows.length === 0) {
-        alert('Berkas Excel kosong atau format tabel tidak dikenali.');
+        showToast('Berkas Excel kosong atau format tabel tidak dikenali.', 'warning');
         return;
       }
 
       const parsedList = rawJsonRows.map(normalizeImportedRow).filter(r => r.siswa && r.siswa.trim() !== '');
 
       if (parsedList.length === 0) {
-        alert('Tidak ditemukan data dengan kolom "Nama Siswa" yang valid pada berkas Excel.');
+        showToast('Tidak ditemukan data dengan kolom "Nama Siswa" yang valid pada berkas Excel.', 'warning');
         return;
       }
 
@@ -1663,6 +1683,7 @@ function handleExcelImportFile(event) {
       const mode = choice ? 'replace' : 'append';
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
+        showToast('Mengimpor data siswa ke Google Sheets...', 'info');
         google.script.run
           .withSuccessHandler(function(res) {
             if (res && res.success) {
@@ -1670,13 +1691,13 @@ function handleExcelImportFile(event) {
               processDataset();
               renderDbTable();
               renderAll();
-              alert(`Berhasil mengimpor ${res.count} data siswa (${mode === 'replace' ? 'Ganti Baru' : 'Ditambahkan'}) ke Google Sheets!`);
+              showToast(`Berhasil mengimpor ${res.count} data siswa (${mode === 'replace' ? 'Ganti Baru' : 'Ditambahkan'})!`, 'success');
             } else {
-              alert('Gagal impor: ' + (res ? res.message : 'Terjadi kesalahan'));
+              showToast('Gagal impor: ' + (res ? res.message : 'Terjadi kesalahan'), 'error');
             }
           })
           .withFailureHandler(function(err) {
-            alert('Error saat mengirim data impor ke Google Sheets: ' + err);
+            showToast('Error saat mengirim data impor ke Google Sheets: ' + err, 'error');
           })
           .importStudents(parsedList, mode);
       } else {
@@ -1692,17 +1713,17 @@ function handleExcelImportFile(event) {
         processDataset();
         renderDbTable();
         renderAll();
-        alert(`Berhasil mengimpor ${parsedList.length} data siswa ke database lokal!`);
+        showToast(`Berhasil mengimpor ${parsedList.length} data siswa ke database lokal!`, 'success');
       }
     } catch (err) {
-      alert('Gagal memproses berkas Excel: ' + err.message);
+      showToast('Gagal memproses berkas Excel: ' + err.message, 'error');
     } finally {
       event.target.value = '';
     }
   };
 
   reader.onerror = function() {
-    alert('Gagal membaca berkas Excel.');
+    showToast('Gagal membaca berkas Excel.', 'error');
     event.target.value = '';
   };
 
@@ -1859,7 +1880,7 @@ function applyAssetUrl(type) {
     onAssetUrlChange(type);
     renderDocumentPreview();
     renderSidebarControls();
-    alert('Tautan ' + type.toUpperCase() + ' berhasil diterapkan!');
+    showToast('Tautan ' + type.toUpperCase() + ' berhasil diterapkan!', 'success');
   }
 }
 
@@ -1941,14 +1962,14 @@ function handleAssetFileUpload(event, type) {
             if (inputEl) inputEl.value = uploadedUrl;
             renderDocumentPreview();
             renderSidebarControls();
-            alert('Berkas ' + file.name + ' berhasil diunggah ke Google Drive dan dijadikan aset aktif!');
+            showToast('Berkas ' + file.name + ' berhasil diunggah ke Google Drive dan dijadikan aset aktif!', 'success');
           } else {
-            alert('Gagal mengunggah berkas ke Drive: ' + (res ? res.error : 'Terjadi kesalahan'));
+            showToast('Gagal mengunggah berkas ke Drive: ' + (res ? res.error : 'Terjadi kesalahan'), 'error');
           }
         })
         .withFailureHandler(function(err) {
           if (labelEl) labelEl.textContent = origLabel;
-          alert('Error unggah ke Google Drive: ' + err);
+          showToast('Error unggah ke Google Drive: ' + err, 'error');
         })
         .uploadAssetToDrive({
           name: file.name,
@@ -1964,12 +1985,12 @@ function handleAssetFileUpload(event, type) {
       renderDocumentPreview();
       renderSidebarControls();
       if (labelEl) labelEl.textContent = origLabel;
-      alert('Berkas ' + file.name + ' berhasil dimuat ke aplikasi lokal!');
+      showToast('Berkas ' + file.name + ' berhasil dimuat ke aplikasi lokal!', 'success');
     }
   };
   reader.onerror = function() {
     if (labelEl) labelEl.textContent = origLabel;
-    alert('Gagal membaca berkas gambar.');
+    showToast('Gagal membaca berkas gambar.', 'error');
   };
   reader.readAsDataURL(file);
 }
@@ -1996,6 +2017,14 @@ function openSettingsModal() {
     setVal('settingTtdUrl', ttdVal);
     setVal('settingTtdBasahUrl', ttdBasahVal);
     setVal('settingLogoWebUrl', logoVal);
+    setVal('settingDriveFolderUrl', s.driveFolderUrl || AppState.driveFolderUrl || '');
+
+    const sheetLinkEl = document.getElementById('displayActiveSpreadsheetUrl');
+    if (sheetLinkEl) {
+      const sUrl = AppState.spreadsheetUrl || s.spreadsheetUrl || '';
+      sheetLinkEl.textContent = sUrl || 'Tersambung ke Google Spreadsheet database';
+      sheetLinkEl.href = sUrl || '#';
+    }
 
     // Perbarui gambar pratinjau di dalam modal pengaturan
     const kopPreview = document.getElementById('previewSettingsKop');
@@ -2044,6 +2073,7 @@ function saveApplicationSettings() {
   s.ttdUrl = getVal('settingTtdUrl', DEFAULT_ASSET_URLS.ttd);
   s.ttdBasahUrl = getVal('settingTtdBasahUrl', DEFAULT_ASSET_URLS.ttd_basah);
   s.logoWebUrl = getVal('settingLogoWebUrl', DEFAULT_ASSET_URLS.logo);
+  s.driveFolderUrl = getVal('settingDriveFolderUrl', AppState.driveFolderUrl || '');
 
   s.namaSekolah = getVal('settingNamaSekolah', 'SMK Negeri 1 Klungkung');
   s.subJudulSekolah = getVal('settingSubJudulSekolah', '');
@@ -2053,19 +2083,23 @@ function saveApplicationSettings() {
   s.kepsekNip = getVal('settingKepsekNip', '');
   s.tahunAjaran = getVal('settingTahunAjaran', '');
 
+  AppState.driveFolderUrl = s.driveFolderUrl;
+
   if (typeof google !== 'undefined' && google.script && google.script.run) {
+    showToast('Menyimpan pengaturan ke database...', 'info');
     google.script.run
       .withSuccessHandler(function() {
-        alert('Pengaturan berhasil disimpan ke Google Sheets!');
+        showToast('Pengaturan berhasil disimpan ke Google Sheets!', 'success');
         closeSettingsModal();
         populateSettingsInputs();
         renderAll();
       })
       .withFailureHandler(function(err) {
-        alert('Gagal menyimpan pengaturan ke Google Sheets: ' + err);
+        showToast('Gagal menyimpan pengaturan ke Google Sheets: ' + err, 'error');
       })
       .saveSettings(s);
   } else {
+    showToast('Pengaturan berhasil disimpan (mode lokal)!', 'success');
     closeSettingsModal();
     populateSettingsInputs();
     renderAll();
@@ -2113,12 +2147,12 @@ function saveCurrentDocToDrive() {
         if (res && res.success) {
           showDriveSuccessModal(res);
         } else {
-          alert('Gagal menyimpan ke Google Drive: ' + (res ? res.error : 'Unknown error'));
+          showToast('Gagal menyimpan ke Google Drive: ' + (res ? res.error : 'Unknown error'), 'error');
         }
       })
       .withFailureHandler(function(err) {
         if (btn) btn.innerHTML = origText;
-        alert('Error menyimpan ke Drive: ' + err);
+        showToast('Error menyimpan ke Drive: ' + err, 'error');
       })
       .saveFileToDrive({
         filename: filename,
@@ -2126,7 +2160,7 @@ function saveCurrentDocToDrive() {
         data: base64Data
       });
   } else {
-    alert('Fungsi penyimpanan ke Google Drive aktif saat dijalankan di lingkungan Google Apps Script.');
+    showToast('Fungsi simpan Drive aktif pada lingkungan Google Apps Script.', 'info');
   }
 }
 
@@ -2232,11 +2266,49 @@ function downloadDocxClient() {
 
 // Tautan Langsung ke Spreadsheet & Google Drive
 function openSpreadsheetDirect() {
-  window.open('https://docs.google.com/spreadsheets/d/19d_Drmf6XlNXZSW9zfO2E7FUGxNHBkumdHRUs1b4yz8/edit', '_blank');
+  const url = AppState.spreadsheetUrl || (AppState.settings && AppState.settings.spreadsheetUrl);
+  if (url) {
+    window.open(url, '_blank');
+  } else if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(function(liveUrl) {
+        if (liveUrl) {
+          AppState.spreadsheetUrl = liveUrl;
+          window.open(liveUrl, '_blank');
+        } else {
+          showToast('URL Spreadsheet tidak ditemukan di server.', 'error');
+        }
+      })
+      .withFailureHandler(function(err) {
+        showToast('Gagal membuka Spreadsheet: ' + err, 'error');
+      })
+      .getSpreadsheetUrl();
+  } else {
+    window.open('https://docs.google.com/spreadsheets/d/19d_Drmf6XlNXZSW9zfO2E7FUGxNHBkumdHRUs1b4yz8/edit', '_blank');
+  }
 }
 
 function openFolderDrive() {
-  window.open('https://drive.google.com/drive/folders/1Y765r1Qq9m753GHCSNjxCw7D-hEUuHDF', '_blank');
+  const url = AppState.driveFolderUrl || (AppState.settings && AppState.settings.driveFolderUrl);
+  if (url) {
+    window.open(url, '_blank');
+  } else if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(function(liveUrl) {
+        if (liveUrl) {
+          AppState.driveFolderUrl = liveUrl;
+          window.open(liveUrl, '_blank');
+        } else {
+          showToast('URL Google Drive belum dikonfigurasi di pengaturan.', 'warning');
+        }
+      })
+      .withFailureHandler(function(err) {
+        showToast('Gagal membuka Folder Google Drive: ' + err, 'error');
+      })
+      .getDriveFolderUrl();
+  } else {
+    window.open('https://drive.google.com/drive/folders/1Y765r1Qq9m753GHCSNjxCw7D-hEUuHDF', '_blank');
+  }
 }
 
 function refreshDataFromSheets() {

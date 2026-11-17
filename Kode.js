@@ -105,16 +105,78 @@ function include(filename) {
 
 /**
  * Mendapatkan objek Spreadsheet
+ * Mendukung konfigurasi ID manual maupun bound spreadsheet otomatis
  */
 function getSpreadsheet() {
+  if (CONFIG.SPREADSHEET_ID && String(CONFIG.SPREADSHEET_ID).trim() !== '') {
+    try {
+      return SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    } catch (e) {
+      Logger.log('Gagal membuka spreadsheet via CONFIG.SPREADSHEET_ID, mencoba active spreadsheet: ' + e);
+    }
+  }
+  try {
+    const active = SpreadsheetApp.getActiveSpreadsheet();
+    if (active) return active;
+  } catch (e) {}
   return SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
 }
 
 /**
  * Mendapatkan folder Google Drive penyimpanan file
+ * Membaca ID folder dari sheet pengaturan terlebih dahulu jika telah diubah oleh pengguna
  */
 function getDriveFolder() {
-  return DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
+  let folderId = CONFIG.DRIVE_FOLDER_ID;
+  try {
+    const ss = getSpreadsheet();
+    const sheet = ss.getSheetByName(CONFIG.SHEET_PENGATURAN);
+    if (sheet) {
+      const data = sheet.getDataRange().getValues();
+      for (let i = 1; i < data.length; i++) {
+        const k = String(data[i][0]).trim();
+        if ((k === 'driveFolderUrl' || k === 'driveFolderId') && data[i][1]) {
+          const rawVal = String(data[i][1]).trim();
+          const match = rawVal.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+          folderId = (match && match[1]) ? match[1] : rawVal;
+          break;
+        }
+      }
+    }
+  } catch (e) {}
+
+  try {
+    return DriveApp.getFolderById(folderId);
+  } catch (e) {
+    try {
+      return DriveApp.getRootFolder();
+    } catch (err) {
+      return null;
+    }
+  }
+}
+
+/**
+ * Helper untuk mengambil URL Spreadsheet database aktif
+ */
+function getSpreadsheetUrl() {
+  try {
+    return getSpreadsheet().getUrl();
+  } catch (e) {
+    return '';
+  }
+}
+
+/**
+ * Helper untuk mengambil URL Folder Google Drive aktif
+ */
+function getDriveFolderUrl() {
+  try {
+    const folder = getDriveFolder();
+    return folder ? folder.getUrl() : '';
+  } catch (e) {
+    return '';
+  }
 }
 
 /**
@@ -182,7 +244,9 @@ function initDatabaseIfEmpty() {
     ['kopUrl', 'https://drive.google.com/file/d/1QXtnYwIrCc-pihDUoidjkRW5UVWykOn-/view?usp=drive_link', 'media', 'URL Berkas Kop Surat Resmi'],
     ['ttdUrl', 'https://drive.google.com/file/d/1fVDtzPKSHqga0Qz9YxnOzGaUHg7K4roR/view?usp=drive_link', 'media', 'URL Berkas TTD Barcode Elektronik Kepsek'],
     ['ttdBasahUrl', 'https://drive.google.com/file/d/12KTwz7FbhtOq1SOkN0bJP3HEKxu_qkQS/view?usp=drive_link', 'media', 'URL Berkas TTD Manual / Basah Kepsek'],
-    ['logoWebUrl', 'https://drive.google.com/file/d/1_4m0lkw99HvxaPXvOhy0UOudoPmiIRc-/view?usp=drive_link', 'media', 'URL Berkas Logo Web Aplikasi (Bawaan)']
+    ['logoWebUrl', 'https://drive.google.com/file/d/1_4m0lkw99HvxaPXvOhy0UOudoPmiIRc-/view?usp=drive_link', 'media', 'URL Berkas Logo Web Aplikasi (Bawaan)'],
+    ['driveFolderUrl', 'https://drive.google.com/drive/folders/' + (CONFIG.DRIVE_FOLDER_ID || ''), 'media', 'URL Folder Google Drive Penyimpanan Berkas'],
+    ['spreadsheetUrl', ss.getUrl(), 'media', 'URL Google Spreadsheet Database Aktif']
   ];
 
   const existingPengData = sheetPengaturan.getDataRange().getValues();
@@ -412,6 +476,37 @@ function getInitialData(forceRefresh) {
     }
   }
 
+  // Resolusi dinamis URL Spreadsheet, Drive Folder, dan Web App langsung dari database & sistem
+  let spreadsheetUrl = '';
+  let spreadsheetId = '';
+  try {
+    spreadsheetUrl = ss.getUrl();
+    spreadsheetId = ss.getId();
+  } catch (e) {}
+
+  let driveFolderUrl = '';
+  let driveFolderId = '';
+  try {
+    const folder = getDriveFolder();
+    if (folder) {
+      driveFolderUrl = folder.getUrl();
+      driveFolderId = folder.getId();
+    }
+  } catch (e) {}
+  if (!driveFolderUrl) {
+    driveFolderUrl = 'https://drive.google.com/drive/folders/' + (CONFIG.DRIVE_FOLDER_ID || '');
+  }
+
+  let webAppUrl = '';
+  try {
+    webAppUrl = ScriptApp.getService().getUrl() || '';
+  } catch (e) {}
+
+  if (!settings.spreadsheetUrl) settings.spreadsheetUrl = spreadsheetUrl;
+  if (!settings.driveFolderUrl) settings.driveFolderUrl = driveFolderUrl;
+  if (!settings.driveFolderId) settings.driveFolderId = driveFolderId;
+  if (!settings.webAppUrl) settings.webAppUrl = webAppUrl;
+
   // 3. Data Template
   const templates = getTemplatesFromSheet(ss);
 
@@ -420,7 +515,10 @@ function getInitialData(forceRefresh) {
     students: students,
     settings: settings,
     templates: templates,
-    driveFolderUrl: 'https://drive.google.com/drive/folders/' + CONFIG.DRIVE_FOLDER_ID
+    spreadsheetUrl: spreadsheetUrl,
+    spreadsheetId: spreadsheetId,
+    driveFolderUrl: driveFolderUrl,
+    webAppUrl: webAppUrl
   };
 
   try {
@@ -736,7 +834,7 @@ function saveFileToDrive(payload) {
       fileUrl: file.getUrl(),
       viewUrl: 'https://drive.google.com/file/d/' + file.getId() + '/view',
       downloadUrl: 'https://drive.google.com/uc?export=download&id=' + file.getId(),
-      folderUrl: 'https://drive.google.com/drive/folders/' + CONFIG.DRIVE_FOLDER_ID
+      folderUrl: folder.getUrl()
     };
   } catch (err) {
     return { success: false, error: err.toString() };
