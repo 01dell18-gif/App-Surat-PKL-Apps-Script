@@ -729,17 +729,17 @@
       </div>
 
       <!-- Table Container -->
-      <div class="p-4 overflow-auto flex-1">
+      <div class="overflow-auto flex-1 border-t border-slate-200">
         <table class="w-full border-collapse text-left text-xs">
           <thead>
             <tr class="bg-slate-100 text-slate-700 font-bold sticky-th">
-              <th class="p-2.5 border-b border-slate-200 w-12 text-center">No</th>
-              <th class="p-2.5 border-b border-slate-200">Nama Siswa</th>
-              <th class="p-2.5 border-b border-slate-200 w-24">Kelas</th>
-              <th class="p-2.5 border-b border-slate-200">Jurusan</th>
-              <th class="p-2.5 border-b border-slate-200">Guru Pembimbing</th>
-              <th class="p-2.5 border-b border-slate-200">Tempat PKL</th>
-              <th class="p-2.5 border-b border-slate-200 w-20 text-center">Aksi</th>
+              <th class="p-3 border-b border-slate-200 w-12 text-center sticky-th">No</th>
+              <th class="p-3 border-b border-slate-200 sticky-th">Nama Siswa</th>
+              <th class="p-3 border-b border-slate-200 w-24 sticky-th">Kelas</th>
+              <th class="p-3 border-b border-slate-200 sticky-th">Jurusan</th>
+              <th class="p-3 border-b border-slate-200 sticky-th">Guru Pembimbing</th>
+              <th class="p-3 border-b border-slate-200 sticky-th">Tempat PKL</th>
+              <th class="p-3 border-b border-slate-200 w-20 text-center sticky-th">Aksi</th>
             </tr>
           </thead>
           <tbody id="dbTableBody" class="divide-y divide-slate-100">
@@ -799,6 +799,16 @@
         <div>
           <label class="block font-bold text-slate-600 mb-1">NIP Guru</label>
           <input type="text" id="formStudentNip" class="w-full p-2 border border-slate-300 rounded-lg">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Pangkat / Golongan Guru</label>
+            <input type="text" id="formStudentGuruPangkat" placeholder="Pembina (IV/a)" class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Jabatan Guru</label>
+            <input type="text" id="formStudentGuruJabatan" placeholder="Guru Pembimbing PKL" class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
         </div>
         <div>
           <label class="block font-bold text-slate-600 mb-1">Tempat PKL (DU/DI) *</label>
@@ -1165,6 +1175,8 @@
           </div>
           <p class="text-[11.5px] text-slate-600 leading-relaxed">Pembaruan template kedinasan baru, sistem informasi rilis interaktif, dan optimalisasi presisi margin cetak massal.</p>
           <ul class="space-y-1.5 list-disc list-inside text-slate-600 leading-relaxed text-[11px] bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            <li><strong class="text-slate-800">Data Pangkat & Jabatan Pembimbing:</strong> Penambahan atribut Pangkat/Golongan dan Jabatan Guru Pembimbing pada database siswa, form edit, template surat, ekspor-impor Excel, dan cetak massal.</li>
+            <li><strong class="text-slate-800">Perbaikan Header Tabel Database:</strong> Mengatasi space kosong dan kebocoran baris data pada sticky header tabel database siswa saat di-scroll.</li>
             <li><strong class="text-slate-800">Template Suket Monitoring PKL:</strong> Penambahan template resmi Surat Tugas Guru Pembimbing untuk monitoring berkala PKL siswa di lokasi DU/DI binaan.</li>
             <li><strong class="text-slate-800">Badge Versi & Dialog Changelog:</strong> Indikator status versi sistem interaktif di header utama lengkap dengan riwayat log rilis.</li>
             <li><strong class="text-slate-800">Presisi Margin Cetak Massal:</strong> Mengatasi jarak berlebih pada lembar pertama dokumen cetak massal dan menyelaraskan pemisahan halaman cetak.</li>

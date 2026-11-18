@@ -26,7 +26,9 @@
     display: none !important;
   }
 
-  .sticky-th {
+  .sticky-th,
+  .sticky-th th,
+  th.sticky-th {
     position: sticky !important;
     top: 0 !important;
     background-color: #f8fafc !important;
@@ -1025,17 +1027,17 @@
       </div>
 
       <!-- Table Container -->
-      <div class="p-4 overflow-auto flex-1">
+      <div class="overflow-auto flex-1 border-t border-slate-200">
         <table class="w-full border-collapse text-left text-xs">
           <thead>
             <tr class="bg-slate-100 text-slate-700 font-bold sticky-th">
-              <th class="p-2.5 border-b border-slate-200 w-12 text-center">No</th>
-              <th class="p-2.5 border-b border-slate-200">Nama Siswa</th>
-              <th class="p-2.5 border-b border-slate-200 w-24">Kelas</th>
-              <th class="p-2.5 border-b border-slate-200">Jurusan</th>
-              <th class="p-2.5 border-b border-slate-200">Guru Pembimbing</th>
-              <th class="p-2.5 border-b border-slate-200">Tempat PKL</th>
-              <th class="p-2.5 border-b border-slate-200 w-20 text-center">Aksi</th>
+              <th class="p-3 border-b border-slate-200 w-12 text-center sticky-th">No</th>
+              <th class="p-3 border-b border-slate-200 sticky-th">Nama Siswa</th>
+              <th class="p-3 border-b border-slate-200 w-24 sticky-th">Kelas</th>
+              <th class="p-3 border-b border-slate-200 sticky-th">Jurusan</th>
+              <th class="p-3 border-b border-slate-200 sticky-th">Guru Pembimbing</th>
+              <th class="p-3 border-b border-slate-200 sticky-th">Tempat PKL</th>
+              <th class="p-3 border-b border-slate-200 w-20 text-center sticky-th">Aksi</th>
             </tr>
           </thead>
           <tbody id="dbTableBody" class="divide-y divide-slate-100">
@@ -1095,6 +1097,16 @@
         <div>
           <label class="block font-bold text-slate-600 mb-1">NIP Guru</label>
           <input type="text" id="formStudentNip" class="w-full p-2 border border-slate-300 rounded-lg">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Pangkat / Golongan Guru</label>
+            <input type="text" id="formStudentGuruPangkat" placeholder="Pembina (IV/a)" class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Jabatan Guru</label>
+            <input type="text" id="formStudentGuruJabatan" placeholder="Guru Pembimbing PKL" class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
         </div>
         <div>
           <label class="block font-bold text-slate-600 mb-1">Tempat PKL (DU/DI) *</label>
@@ -1461,6 +1473,8 @@
           </div>
           <p class="text-[11.5px] text-slate-600 leading-relaxed">Pembaruan template kedinasan baru, sistem informasi rilis interaktif, dan optimalisasi presisi margin cetak massal.</p>
           <ul class="space-y-1.5 list-disc list-inside text-slate-600 leading-relaxed text-[11px] bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            <li><strong class="text-slate-800">Data Pangkat & Jabatan Pembimbing:</strong> Penambahan atribut Pangkat/Golongan dan Jabatan Guru Pembimbing pada database siswa, form edit, template surat, ekspor-impor Excel, dan cetak massal.</li>
+            <li><strong class="text-slate-800">Perbaikan Header Tabel Database:</strong> Mengatasi space kosong dan kebocoran baris data pada sticky header tabel database siswa saat di-scroll.</li>
             <li><strong class="text-slate-800">Template Suket Monitoring PKL:</strong> Penambahan template resmi Surat Tugas Guru Pembimbing untuk monitoring berkala PKL siswa di lokasi DU/DI binaan.</li>
             <li><strong class="text-slate-800">Badge Versi & Dialog Changelog:</strong> Indikator status versi sistem interaktif di header utama lengkap dengan riwayat log rilis.</li>
             <li><strong class="text-slate-800">Presisi Margin Cetak Massal:</strong> Mengatasi jarak berlebih pada lembar pertama dokumen cetak massal dan menyelaraskan pemisahan halaman cetak.</li>
@@ -1727,7 +1741,7 @@ const DEFAULT_TEMPLATES = [
   {
     id: 'tpl_suket_monitoring_pkl',
     nama: 'Suket Monitoring PKL',
-    html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT TUGAS</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 16px;">Nomor: {noSurat}</p>\n\n<p style="margin-bottom: 8px;">Yang bertandatangan dibawah ini, Kepala {namaSekolah} :</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 130px; vertical-align: top;">Nama</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{kepsekNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{kepsekNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Pangkat/Gol</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{kepsekPangkat}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Jabatan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">Kepala Sekolah</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Unit Kerja</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{namaSekolah}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan ini menugaskan Guru atas nama :</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 130px; vertical-align: top;">Nama</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Jabatan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">Guru Pembimbing PKL</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Unit Kerja</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{namaSekolah}</td>\n  </tr>\n</table>\n\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify; line-height: 1.45;">\n  Menugaskan guru pembimbing untuk melaksanakan kegiatan pembimbingan dan pemantauan (monitoring) Praktik Kerja Lapangan (PKL) Tahun Ajaran {tahunAjaran} yang berlangsung pada tanggal {periodePkl}, secara berkala setiap seminggu sekali di lokasi DUDI berikut :\n</p>\n<div style="margin-left: 20px; margin-bottom: 10px; font-weight: bold;">\n{daftarTempatPkl}\n</div>\n\n<p style="text-indent: 30px; margin-bottom: 12px; text-align: justify; line-height: 1.45;">\n  Demikian surat tugas ini dibuat untuk dilaksanakan dengan penuh rasa tanggung jawab.\n</p>',
+    html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT TUGAS</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 16px;">Nomor: {noSurat}</p>\n\n<p style="margin-bottom: 8px;">Yang bertandatangan dibawah ini, Kepala {namaSekolah} :</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 130px; vertical-align: top;">Nama</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{kepsekNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{kepsekNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Pangkat/Gol</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{kepsekPangkat}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Jabatan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">Kepala Sekolah</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Unit Kerja</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{namaSekolah}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan ini menugaskan Guru atas nama :</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 130px; vertical-align: top;">Nama</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Pangkat/Gol</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruPangkat}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Jabatan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruJabatan}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Unit Kerja</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{namaSekolah}</td>\n  </tr>\n</table>\n\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify; line-height: 1.45;">\n  Menugaskan guru pembimbing untuk melaksanakan kegiatan pembimbingan dan pemantauan (monitoring) Praktik Kerja Lapangan (PKL) Tahun Ajaran {tahunAjaran} yang berlangsung pada tanggal {periodePkl}, secara berkala setiap seminggu sekali di lokasi DUDI berikut :\n</p>\n<div style="margin-left: 20px; margin-bottom: 10px; font-weight: bold;">\n{daftarTempatPkl}\n</div>\n\n<p style="text-indent: 30px; margin-bottom: 12px; text-align: justify; line-height: 1.45;">\n  Demikian surat tugas ini dibuat untuk dilaksanakan dengan penuh rasa tanggung jawab.\n</p>',
     is_default: 0
   }
 ];
@@ -2053,16 +2067,16 @@ function onInitialDataFailed(err) {
 
 function loadFallbackData() {
   AppState.records = [
-    { id: 1, no_urut: 1, guru: 'Ida Ayu Agung Endrayani, S.Pd.', nip: '19670224 198902 2 002', siswa: 'Ni Komang Sri Damayanti', nis: '1201', nisn: '0061234501', kelas: 'XII BD 1', jurusan: 'Bisnis Digital', tempat: 'PT. Sumber Alfaria Trijaya Tbk / SEMARAPURA KLOD', alamat: 'Jl. Rama Ling. Semarapura Kelod, Kel. Semarapura Kelod, Kec. Klungkung, Kab. Klungkung' },
-    { id: 2, no_urut: 2, guru: 'Ida Ayu Agung Endrayani, S.Pd.', nip: '19670224 198902 2 002', siswa: 'Ni Made Sari Astini', nis: '1202', nisn: '0061234502', kelas: 'XII BD 1', jurusan: 'Bisnis Digital', tempat: 'PT. Sumber Alfaria Trijaya Tbk / KUSANEGARA', alamat: 'Jl. Kusanegara Banjar Dinas Bandung, Kel. Gunaksa, Kec. Dawan, Kab. Klungkung' },
-    { id: 3, no_urut: 3, guru: 'Ida Ayu Agung Endrayani, S.Pd.', nip: '19670224 198902 2 002', siswa: 'I Gede Ari Widnyana', nis: '1203', nisn: '0061234503', kelas: 'XII TSM', jurusan: 'Teknik Sepeda Motor', tempat: 'Gemilang Motor', alamat: 'Jl. Flamboyan No.53, Semarapura Kauh, Kec. Klungkung, Kab. Klungkung, Bali' },
-    { id: 4, no_urut: 4, guru: 'I Ketut Mutra, S.Pd., M.Pd.', nip: '19670521 199512 1 005', siswa: 'Ketut Ananta Wardana', nis: '1204', nisn: '0061234504', kelas: 'XII AK', jurusan: 'Akuntansi', tempat: 'LPD Desa Pekraman Gelgel', alamat: 'Jl. Watu Renggong, Gelgel, Kec. Klungkung, Kab Klungkung' },
-    { id: 5, no_urut: 5, guru: 'I Ketut Mutra, S.Pd., M.Pd.', nip: '19670521 199512 1 005', siswa: 'Anisa Safila', nis: '1205', nisn: '0061234505', kelas: 'XII BD 2', jurusan: 'Bisnis Digital', tempat: 'Toko Oneska Digital Store', alamat: 'Jl. Subali II, Br. Siku, Desa Kamasan, Klungkung' },
-    { id: 6, no_urut: 6, guru: 'I Ketut Mutra, S.Pd., M.Pd.', nip: '19670521 199512 1 005', siswa: 'Komang Ayu Seri Musthikarani', nis: '1206', nisn: '0061234506', kelas: 'XII MP 1', jurusan: 'Manajemen Perkantoran', tempat: 'PT. PLN (PERSERO) ULP KLUNGKUNG', alamat: 'JALAN NGURAH RAI NO 40 SEMARAPURA TENGAH, KLUNGKUNG' },
-    { id: 7, no_urut: 7, guru: 'I Gede Wiraguna, S.Pd.', nip: '19791024 200312 1 004', siswa: 'Ni Kadek Anggun Putri Pramesti', nis: '1207', nisn: '0061234507', kelas: 'XII AK', jurusan: 'Akuntansi', tempat: 'PT. Pegadaian Persero Cabang Klungkung', alamat: 'Jl. Gn. Batukaru No.9, Semarapura Kelod Kangin, Kec. Klungkung' },
-    { id: 8, no_urut: 8, guru: 'I Gede Wiraguna, S.Pd.', nip: '19791024 200312 1 004', siswa: 'Ni Made Ari Diana Sari', nis: '1208', nisn: '0061234508', kelas: 'XII LPB', jurusan: 'Layanan Perbankan', tempat: 'PT. BRI Persero, Tbk. Cabang Klungkung', alamat: 'Jl. Gunung Batukaru, No. 7, Semarapura Kelod Kangin, Kec. Klungkung' },
-    { id: 9, no_urut: 9, guru: 'Ni Made Ari Naswati, ST', nip: '19830802 201001 2 026', siswa: 'Ni Putu Dian Cahyani', nis: '1209', nisn: '0061234509', kelas: 'XII DKV', jurusan: 'Desain Komunikasi Visual', tempat: 'Mandala Gold', alamat: 'Jl. Kecubung, Semarapura Kelod, Kab. Klungkung' },
-    { id: 10, no_urut: 10, guru: 'Luh Desy Dianayanti, S.Pd., M.Pd', nip: '19841213 200902 2 009', siswa: 'Kadek Gita Anindita Kemulan', nis: '1210', nisn: '0061234510', kelas: 'XII DKV', jurusan: 'Desain Komunikasi Visual', tempat: 'E Sanctuary Ubud', alamat: 'Jl. Raya Br. Tunon, Singakerta, Kecamatan Ubud, Kab. Gianyar, Bali' }
+    { id: 1, no_urut: 1, guru: 'Ida Ayu Agung Endrayani, S.Pd.', nip: '19670224 198902 2 002', guru_pangkat: 'Pembina / IV/a', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'Ni Komang Sri Damayanti', nis: '1201', nisn: '0061234501', kelas: 'XII BD 1', jurusan: 'Bisnis Digital', tempat: 'PT. Sumber Alfaria Trijaya Tbk / SEMARAPURA KLOD', alamat: 'Jl. Rama Ling. Semarapura Kelod, Kel. Semarapura Kelod, Kec. Klungkung, Kab. Klungkung' },
+    { id: 2, no_urut: 2, guru: 'Ida Ayu Agung Endrayani, S.Pd.', nip: '19670224 198902 2 002', guru_pangkat: 'Pembina / IV/a', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'Ni Made Sari Astini', nis: '1202', nisn: '0061234502', kelas: 'XII BD 1', jurusan: 'Bisnis Digital', tempat: 'PT. Sumber Alfaria Trijaya Tbk / KUSANEGARA', alamat: 'Jl. Kusanegara Banjar Dinas Bandung, Kel. Gunaksa, Kec. Dawan, Kab. Klungkung' },
+    { id: 3, no_urut: 3, guru: 'Ida Ayu Agung Endrayani, S.Pd.', nip: '19670224 198902 2 002', guru_pangkat: 'Pembina / IV/a', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'I Gede Ari Widnyana', nis: '1203', nisn: '0061234503', kelas: 'XII TSM', jurusan: 'Teknik Sepeda Motor', tempat: 'Gemilang Motor', alamat: 'Jl. Flamboyan No.53, Semarapura Kauh, Kec. Klungkung, Kab. Klungkung, Bali' },
+    { id: 4, no_urut: 4, guru: 'I Ketut Mutra, S.Pd., M.Pd.', nip: '19670521 199512 1 005', guru_pangkat: 'Pembina Tk. I / IV/b', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'Ketut Ananta Wardana', nis: '1204', nisn: '0061234504', kelas: 'XII AK', jurusan: 'Akuntansi', tempat: 'LPD Desa Pekraman Gelgel', alamat: 'Jl. Watu Renggong, Gelgel, Kec. Klungkung, Kab Klungkung' },
+    { id: 5, no_urut: 5, guru: 'I Ketut Mutra, S.Pd., M.Pd.', nip: '19670521 199512 1 005', guru_pangkat: 'Pembina Tk. I / IV/b', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'Anisa Safila', nis: '1205', nisn: '0061234505', kelas: 'XII BD 2', jurusan: 'Bisnis Digital', tempat: 'Toko Oneska Digital Store', alamat: 'Jl. Subali II, Br. Siku, Desa Kamasan, Klungkung' },
+    { id: 6, no_urut: 6, guru: 'I Ketut Mutra, S.Pd., M.Pd.', nip: '19670521 199512 1 005', guru_pangkat: 'Pembina Tk. I / IV/b', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'Komang Ayu Seri Musthikarani', nis: '1206', nisn: '0061234506', kelas: 'XII MP 1', jurusan: 'Manajemen Perkantoran', tempat: 'PT. PLN (PERSERO) ULP KLUNGKUNG', alamat: 'JALAN NGURAH RAI NO 40 SEMARAPURA TENGAH, KLUNGKUNG' },
+    { id: 7, no_urut: 7, guru: 'I Gede Wiraguna, S.Pd.', nip: '19791024 200312 1 004', guru_pangkat: 'Penata Tk. I / III/d', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'Ni Kadek Anggun Putri Pramesti', nis: '1207', nisn: '0061234507', kelas: 'XII AK', jurusan: 'Akuntansi', tempat: 'PT. Pegadaian Persero Cabang Klungkung', alamat: 'Jl. Gn. Batukaru No.9, Semarapura Kelod Kangin, Kec. Klungkung' },
+    { id: 8, no_urut: 8, guru: 'I Gede Wiraguna, S.Pd.', nip: '19791024 200312 1 004', guru_pangkat: 'Penata Tk. I / III/d', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'Ni Made Ari Diana Sari', nis: '1208', nisn: '0061234508', kelas: 'XII LPB', jurusan: 'Layanan Perbankan', tempat: 'PT. BRI Persero, Tbk. Cabang Klungkung', alamat: 'Jl. Gunung Batukaru, No. 7, Semarapura Kelod Kangin, Kec. Klungkung' },
+    { id: 9, no_urut: 9, guru: 'Ni Made Ari Naswati, ST', nip: '19830802 201001 2 026', guru_pangkat: 'Penata / III/c', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'Ni Putu Dian Cahyani', nis: '1209', nisn: '0061234509', kelas: 'XII DKV', jurusan: 'Desain Komunikasi Visual', tempat: 'Mandala Gold', alamat: 'Jl. Kecubung, Semarapura Kelod, Kab. Klungkung' },
+    { id: 10, no_urut: 10, guru: 'Luh Desy Dianayanti, S.Pd., M.Pd', nip: '19841213 200902 2 009', guru_pangkat: 'Penata / III/c', guru_jabatan: 'Guru Pembimbing PKL', siswa: 'Kadek Gita Anindita Kemulan', nis: '1210', nisn: '0061234510', kelas: 'XII DKV', jurusan: 'Desain Komunikasi Visual', tempat: 'E Sanctuary Ubud', alamat: 'Jl. Raya Br. Tunon, Singakerta, Kecamatan Ubud, Kab. Gianyar, Bali' }
   ];
 
   AppState.settings = {
@@ -2458,6 +2472,8 @@ function renderDocumentPreview() {
     '{noSurat}': s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA',
     '{guruNama}': firstStudent.guru || '-',
     '{guruNip}': firstStudent.nip || '-',
+    '{guruPangkat}': firstStudent.guru_pangkat || firstStudent.pangkat || '-',
+    '{guruJabatan}': firstStudent.guru_jabatan || firstStudent.jabatan || 'Guru Pembimbing PKL',
     '{tempatPkl}': firstStudent.tempat || 'Dunia Usaha / Dunia Industri',
     '{daftarTempatPkl}': daftarTempatHtml,
     '{alamatPkl}': firstStudent.alamat || '-',
@@ -3179,23 +3195,30 @@ function renderDbTable(filterText = '') {
 
   const q = filterText.toLowerCase().trim();
   const filtered = q ? AppState.records.filter(r => 
-    r.siswa.toLowerCase().includes(q) || 
-    r.guru.toLowerCase().includes(q) || 
-    r.tempat.toLowerCase().includes(q) || 
-    r.kelas.toLowerCase().includes(q)
+    (r.siswa && r.siswa.toLowerCase().includes(q)) || 
+    (r.guru && r.guru.toLowerCase().includes(q)) || 
+    (r.tempat && r.tempat.toLowerCase().includes(q)) || 
+    (r.kelas && r.kelas.toLowerCase().includes(q)) ||
+    (r.guru_pangkat && r.guru_pangkat.toLowerCase().includes(q)) ||
+    (r.guru_jabatan && r.guru_jabatan.toLowerCase().includes(q))
   ) : AppState.records;
 
   if (countEl) countEl.textContent = filtered.length;
 
   tbody.innerHTML = filtered.map((r, i) => `
     <tr class="hover:bg-slate-50 transition">
-      <td class="p-2.5 text-center font-medium text-slate-400">${i + 1}</td>
-      <td class="p-2.5 font-bold text-slate-800">${r.siswa}</td>
-      <td class="p-2.5">${r.kelas || '-'}</td>
-      <td class="p-2.5 text-slate-500">${r.jurusan || '-'}</td>
-      <td class="p-2.5 font-medium">${r.guru || '-'}</td>
-      <td class="p-2.5 text-indigo-700 font-medium">${r.tempat || '-'}</td>
-      <td class="p-2.5 text-center">
+      <td class="p-3 text-center font-medium text-slate-400">${i + 1}</td>
+      <td class="p-3 font-bold text-slate-800">${r.siswa}</td>
+      <td class="p-3">${r.kelas || '-'}</td>
+      <td class="p-3 text-slate-500">${r.jurusan || '-'}</td>
+      <td class="p-3">
+        <div class="font-semibold text-slate-800">${r.guru || '-'}</div>
+        <div class="text-[10px] text-slate-400 font-normal leading-tight mt-0.5">
+          ${r.nip ? `NIP. ${r.nip}` : 'NIP. -'} • ${r.guru_pangkat || r.pangkat || '-'} • ${r.guru_jabatan || r.jabatan || 'Guru Pembimbing'}
+        </div>
+      </td>
+      <td class="p-3 text-indigo-700 font-medium">${r.tempat || '-'}</td>
+      <td class="p-3 text-center">
         <div class="flex items-center justify-center gap-1">
           <button onclick="openEditStudentModal(${r.id})" class="p-1 text-slate-500 hover:text-indigo-600 rounded hover:bg-indigo-50" title="Edit">
             <i data-lucide="edit-2" class="w-4 h-4"></i>
@@ -3225,6 +3248,8 @@ function openAddStudentModal() {
   document.getElementById('formStudentJurusan').value = '';
   document.getElementById('formStudentGuru').value = '';
   document.getElementById('formStudentNip').value = '';
+  document.getElementById('formStudentGuruPangkat').value = '';
+  document.getElementById('formStudentGuruJabatan').value = 'Guru Pembimbing PKL';
   document.getElementById('formStudentTempat').value = '';
   document.getElementById('formStudentAlamat').value = '';
   document.getElementById('studentFormModal').classList.remove('hidden');
@@ -3243,6 +3268,8 @@ function openEditStudentModal(id) {
   document.getElementById('formStudentJurusan').value = r.jurusan || '';
   document.getElementById('formStudentGuru').value = r.guru || '';
   document.getElementById('formStudentNip').value = r.nip || '';
+  document.getElementById('formStudentGuruPangkat').value = r.guru_pangkat || r.pangkat || '';
+  document.getElementById('formStudentGuruJabatan').value = r.guru_jabatan || r.jabatan || 'Guru Pembimbing PKL';
   document.getElementById('formStudentTempat').value = r.tempat || '';
   document.getElementById('formStudentAlamat').value = r.alamat || '';
   document.getElementById('studentFormModal').classList.remove('hidden');
@@ -3264,6 +3291,8 @@ function handleStudentFormSubmit(e) {
     jurusan: document.getElementById('formStudentJurusan').value.trim(),
     guru: document.getElementById('formStudentGuru').value.trim(),
     nip: document.getElementById('formStudentNip').value.trim(),
+    guru_pangkat: document.getElementById('formStudentGuruPangkat').value.trim(),
+    guru_jabatan: document.getElementById('formStudentGuruJabatan').value.trim(),
     tempat: document.getElementById('formStudentTempat').value.trim(),
     alamat: document.getElementById('formStudentAlamat').value.trim()
   };
@@ -3321,6 +3350,8 @@ function exportDataToExcel() {
     'No': idx + 1,
     'Guru Pembimbing': r.guru || '',
     'NIP Pembimbing': r.nip ? String(r.nip) : '',
+    'Pangkat/Gol Pembimbing': r.guru_pangkat || r.pangkat || '',
+    'Jabatan Pembimbing': r.guru_jabatan || r.jabatan || '',
     'Nama Siswa': r.siswa || '',
     'NIS': r.nis ? String(r.nis) : '',
     'NISN': r.nisn ? String(r.nisn) : '',
@@ -3345,7 +3376,7 @@ function exportDataToExcel() {
 }
 
 function exportToHtmlTableXls(rows, filename) {
-  const headers = ['No', 'Guru Pembimbing', 'NIP Pembimbing', 'Nama Siswa', 'NIS', 'NISN', 'Kelas', 'Konsentrasi Keahlian / Jurusan', 'Tempat PKL', 'Alamat Tempat PKL'];
+  const headers = ['No', 'Guru Pembimbing', 'NIP Pembimbing', 'Pangkat/Gol Pembimbing', 'Jabatan Pembimbing', 'Nama Siswa', 'NIS', 'NISN', 'Kelas', 'Konsentrasi Keahlian / Jurusan', 'Tempat PKL', 'Alamat Tempat PKL'];
   let tableHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
   <head><meta charset="utf-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Data Siswa PKL</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>
   <body><table border="1"><thead><tr style="background:#e0e7ff;font-weight:bold;">${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>`;
@@ -3355,6 +3386,8 @@ function exportToHtmlTableXls(rows, filename) {
       <td style="text-align:center;">${r['No']}</td>
       <td>${r['Guru Pembimbing']}</td>
       <td style="mso-number-format:'\\@';">${r['NIP Pembimbing']}</td>
+      <td>${r['Pangkat/Gol Pembimbing']}</td>
+      <td>${r['Jabatan Pembimbing']}</td>
       <td>${r['Nama Siswa']}</td>
       <td style="mso-number-format:'\\@';">${r['NIS']}</td>
       <td style="mso-number-format:'\\@';">${r['NISN']}</td>
@@ -3466,6 +3499,8 @@ function normalizeImportedRow(row) {
   const norm = {
     guru: '',
     nip: '',
+    guru_pangkat: '',
+    guru_jabatan: '',
     siswa: '',
     nis: '',
     nisn: '',
@@ -3488,9 +3523,21 @@ function normalizeImportedRow(row) {
     else if (k.includes('guru') || k.includes('pembimbing')) {
       if (k.includes('nip')) {
         if (!norm.nip) norm.nip = val;
+      } else if (k.includes('pangkat') || k.includes('gol')) {
+        if (!norm.guru_pangkat) norm.guru_pangkat = val;
+      } else if (k.includes('jabatan')) {
+        if (!norm.guru_jabatan) norm.guru_jabatan = val;
       } else {
         if (!norm.guru) norm.guru = val;
       }
+    }
+    // Map pangkat/gol
+    else if (k.includes('pangkat') || k.includes('gol')) {
+      if (!norm.guru_pangkat) norm.guru_pangkat = val;
+    }
+    // Map jabatan
+    else if (k.includes('jabatan')) {
+      if (!norm.guru_jabatan) norm.guru_jabatan = val;
     }
     // Map nip
     else if (k.startsWith('nip')) {
@@ -4022,6 +4069,8 @@ function buildSingleSuratHtml(studentList, activeTemplate, s) {
     '{noSurat}': s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA',
     '{guruNama}': firstStudent.guru || '-',
     '{guruNip}': firstStudent.nip || '-',
+    '{guruPangkat}': firstStudent.guru_pangkat || firstStudent.pangkat || '-',
+    '{guruJabatan}': firstStudent.guru_jabatan || firstStudent.jabatan || 'Guru Pembimbing PKL',
     '{tempatPkl}': firstStudent.tempat || 'Dunia Usaha / Dunia Industri',
     '{daftarTempatPkl}': daftarTempatHtml,
     '{alamatPkl}': firstStudent.alamat || '-',
@@ -4246,6 +4295,8 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
     '{noSurat}': s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA',
     '{guruNama}': firstStudent.guru || '-',
     '{guruNip}': firstStudent.nip || '-',
+    '{guruPangkat}': firstStudent.guru_pangkat || firstStudent.pangkat || '-',
+    '{guruJabatan}': firstStudent.guru_jabatan || firstStudent.jabatan || 'Guru Pembimbing PKL',
     '{tempatPkl}': firstStudent.tempat || 'Dunia Usaha / Dunia Industri',
     '{daftarTempatPkl}': daftarTempatHtml,
     '{alamatPkl}': firstStudent.alamat || '-',
@@ -4404,6 +4455,7 @@ function getBatchPrintGroups(scope) {
 
   const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0] || {};
   const isIndividual = (activeTemplate.id === 'tpl_surat_keterangan_pkl' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('keterangan')));
+  const isMonitoring = (activeTemplate.id === 'tpl_suket_monitoring_pkl' || (activeTemplate.nama && (activeTemplate.nama.toLowerCase().includes('monitoring') || activeTemplate.nama.toLowerCase().includes('tugas'))));
 
   if (scope === 'siswa' || isIndividual) {
     // 1 Berkas per Siswa
@@ -4412,6 +4464,15 @@ function getBatchPrintGroups(scope) {
     // Sesuai filter layar aktif
     const active = getActiveFilteredStudents();
     return active.length > 0 ? [active] : [];
+  } else if (isMonitoring) {
+    // Khusus Surat Tugas Monitoring: Kelompokkan per Guru Pembimbing (1 guru membina beberapa tempat)
+    const groups = {};
+    records.forEach(r => {
+      const g = (r.guru || 'Tanpa_Pembimbing').trim();
+      if (!groups[g]) groups[g] = [];
+      groups[g].push(r);
+    });
+    return Object.values(groups);
   } else {
     // Default / 'group': Kelompokkan per (Guru Pembimbing + Tempat DU/DI)
     const groups = {};
@@ -4559,6 +4620,7 @@ function downloadAllWordZip() {
 
   const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0] || {};
   const isIndividual = (activeTemplate.id === 'tpl_surat_keterangan_pkl' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('keterangan')));
+  const isMonitoring = (activeTemplate.id === 'tpl_suket_monitoring_pkl' || (activeTemplate.nama && (activeTemplate.nama.toLowerCase().includes('monitoring') || activeTemplate.nama.toLowerCase().includes('tugas'))));
 
   showToast('Menyiapkan berkas Word ke dalam arsip ZIP...', 'info');
 
@@ -4574,6 +4636,25 @@ function downloadAllWordZip() {
       zip.file(filename, '\ufeff' + wordHtml);
       count++;
     });
+  } else if (isMonitoring) {
+    // Kelompokkan per Guru Pembimbing (Surat Tugas Monitoring)
+    const groups = {};
+    records.forEach(r => {
+      const g = (r.guru || 'Tanpa_Pembimbing').trim();
+      if (!groups[g]) groups[g] = [];
+      groups[g].push(r);
+    });
+
+    let gIdx = 1;
+    for (const guruName in groups) {
+      const groupStudents = groups[guruName];
+      const safeGuru = guruName.replace(/[^a-zA-Z0-9]/g, '_');
+      const filename = `${String(gIdx).padStart(2, '0')}_Suket_Monitoring_${safeGuru}.doc`;
+      const wordHtml = buildWordHtml(groupStudents, activeTemplate, AppState.settings, filename);
+      zip.file(filename, '\ufeff' + wordHtml);
+      count++;
+      gIdx++;
+    }
   } else {
     // Kelompokkan per (Guru Pembimbing + Tempat DU/DI)
     const groups = {};
