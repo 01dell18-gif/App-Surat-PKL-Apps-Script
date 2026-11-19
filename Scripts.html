@@ -573,12 +573,31 @@ function populateSettingsInputs() {
   if (document.getElementById('headerSchoolSubtitle')) {
     document.getElementById('headerSchoolSubtitle').textContent = (s.namaSekolah || 'SMK Negeri 1 Klungkung') + ' • Tahun Ajaran ' + (s.tahunAjaran || '2026/2027');
   }
+
+  // Input Identitas Sekolah & Pejabat
+  if (document.getElementById('settingNamaSekolah')) document.getElementById('settingNamaSekolah').value = s.namaSekolah || 'SMK Negeri 1 Klungkung';
+  if (document.getElementById('settingSubJudulSekolah')) document.getElementById('settingSubJudulSekolah').value = s.subJudulSekolah || '';
+  if (document.getElementById('settingAlamatSekolah')) document.getElementById('settingAlamatSekolah').value = s.alamatSekolah || '';
+  if (document.getElementById('settingKepsekNama')) document.getElementById('settingKepsekNama').value = s.kepsekNama || '';
+  if (document.getElementById('settingKepsekPangkat')) document.getElementById('settingKepsekPangkat').value = s.kepsekPangkat || '';
+  if (document.getElementById('settingKepsekNip')) document.getElementById('settingKepsekNip').value = s.kepsekNip || '';
+  if (document.getElementById('settingTahunAjaran')) document.getElementById('settingTahunAjaran').value = s.tahunAjaran || '2026/2027';
 }
 
 // Render Seluruh Elemen Tampilan
 function renderAll() {
   renderSidebarControls();
   renderDocumentPreview();
+  renderDbTable();
+  if (document.getElementById('editorTemplateSelect')) {
+    populateEditorTemplateSelect();
+    loadTemplateToEditor(AppState.editingTemplateId || AppState.activeTemplateId);
+  }
+  if (document.getElementById('templateTableBody')) {
+    renderTemplateTableList();
+  }
+  populateSettingsInputs();
+  highlightActiveNavigation();
   if (window.lucide) lucide.createIcons();
 }
 
@@ -1051,21 +1070,40 @@ function selectSearchResult(idx) {
   renderAll();
 }
 
-// ================= MODAL TEMPLATE & WYSIWYG EDITOR =================
+// ================= MODAL & HALAMAN TEMPLATE WYSIWYG =================
 function openTemplateModal(tab = 'editor') {
   if (typeof closeDatabaseModal === 'function') closeDatabaseModal();
   if (typeof closeSettingsModal === 'function') closeSettingsModal();
   if (typeof closeBatchPrintModal === 'function') closeBatchPrintModal();
   if (typeof closeDriveSuccessModal === 'function') closeDriveSuccessModal();
   if (typeof closeAllDropdowns === 'function') closeAllDropdowns();
-  document.getElementById('templateManagerModal').classList.remove('hidden');
-  populateEditorTemplateSelect();
-  switchTemplateTab(tab);
-  loadTemplateToEditor(AppState.editingTemplateId || AppState.activeTemplateId);
+
+  if (window.location.protocol === 'file:' || window.isLocalPreview) {
+    if (typeof switchLocalPage === 'function') {
+      switchLocalPage('template');
+      switchTemplateTab(tab);
+      return;
+    }
+  }
+
+  const modalEl = document.getElementById('templateManagerModal');
+  if (modalEl) {
+    modalEl.classList.remove('hidden');
+    populateEditorTemplateSelect();
+    switchTemplateTab(tab);
+    loadTemplateToEditor(AppState.editingTemplateId || AppState.activeTemplateId);
+  } else {
+    navigateTo('template', tab ? { tab: tab } : {});
+  }
 }
 
 function closeTemplateModal() {
-  document.getElementById('templateManagerModal').classList.add('hidden');
+  const modalEl = document.getElementById('templateManagerModal');
+  if (modalEl) {
+    modalEl.classList.add('hidden');
+  } else {
+    navigateTo('surat');
+  }
 }
 
 function switchTemplateTab(tab) {
@@ -1531,19 +1569,37 @@ function scrollToSuratPreview() {
   }
 }
 
-// ================= MODAL DATABASE SISWA =================
+// ================= MODAL & HALAMAN DATABASE SISWA =================
 function openDatabaseModal() {
   if (typeof closeSettingsModal === 'function') closeSettingsModal();
   if (typeof closeTemplateModal === 'function') closeTemplateModal();
   if (typeof closeBatchPrintModal === 'function') closeBatchPrintModal();
   if (typeof closeDriveSuccessModal === 'function') closeDriveSuccessModal();
   if (typeof closeAllDropdowns === 'function') closeAllDropdowns();
-  document.getElementById('databaseModal').classList.remove('hidden');
-  renderDbTable();
+
+  if (window.location.protocol === 'file:' || window.isLocalPreview) {
+    if (typeof switchLocalPage === 'function') {
+      switchLocalPage('database');
+      return;
+    }
+  }
+
+  const modalEl = document.getElementById('databaseModal');
+  if (modalEl) {
+    modalEl.classList.remove('hidden');
+    renderDbTable();
+  } else {
+    navigateTo('database');
+  }
 }
 
 function closeDatabaseModal() {
-  document.getElementById('databaseModal').classList.add('hidden');
+  const modalEl = document.getElementById('databaseModal');
+  if (modalEl) {
+    modalEl.classList.add('hidden');
+  } else {
+    navigateTo('surat');
+  }
 }
 
 function renderDbTable(filterText = '') {
@@ -2138,65 +2194,31 @@ function openSettingsModal() {
   if (typeof closeBatchPrintModal === 'function') closeBatchPrintModal();
   if (typeof closeDriveSuccessModal === 'function') closeDriveSuccessModal();
   if (typeof closeAllDropdowns === 'function') closeAllDropdowns();
-  try {
-    const s = AppState.settings || {};
-    const kopVal = (s.kopUrl && s.kopUrl.trim()) ? s.kopUrl.trim() : DEFAULT_ASSET_URLS.kop;
-    const ttdVal = (s.ttdUrl && s.ttdUrl.trim()) ? s.ttdUrl.trim() : DEFAULT_ASSET_URLS.ttd;
-    const ttdBasahVal = (s.ttdBasahUrl && s.ttdBasahUrl.trim()) ? s.ttdBasahUrl.trim() : DEFAULT_ASSET_URLS.ttd_basah;
-    const logoVal = (s.logoWebUrl && s.logoWebUrl.trim()) ? s.logoWebUrl.trim() : DEFAULT_ASSET_URLS.logo;
 
-    const setVal = (id, val) => {
-      const el = document.getElementById(id);
-      if (el) el.value = val;
-    };
-
-    setVal('settingKopUrl', kopVal);
-    setVal('settingTtdUrl', ttdVal);
-    setVal('settingTtdBasahUrl', ttdBasahVal);
-    setVal('settingLogoWebUrl', logoVal);
-    setVal('settingDriveFolderUrl', s.driveFolderUrl || AppState.driveFolderUrl || '');
-
-    const sheetLinkEl = document.getElementById('displayActiveSpreadsheetUrl');
-    if (sheetLinkEl) {
-      const sUrl = AppState.spreadsheetUrl || s.spreadsheetUrl || '';
-      sheetLinkEl.textContent = sUrl || 'Tersambung ke Google Spreadsheet database';
-      sheetLinkEl.href = sUrl || '#';
+  if (window.location.protocol === 'file:' || window.isLocalPreview) {
+    if (typeof switchLocalPage === 'function') {
+      switchLocalPage('pengaturan');
+      return;
     }
-
-    // Perbarui gambar pratinjau di dalam modal pengaturan
-    const kopPreview = document.getElementById('previewSettingsKop');
-    if (kopPreview) kopPreview.src = getDirectImageUrl(kopVal, typeof ASSETS !== 'undefined' ? ASSETS.kop : '');
-
-    const ttdPreview = document.getElementById('previewSettingsTtd');
-    if (ttdPreview) ttdPreview.src = getDirectImageUrl(ttdVal, typeof ASSETS !== 'undefined' ? ASSETS.ttd : '');
-
-    const ttdBasahPreview = document.getElementById('previewSettingsTtdBasah');
-    if (ttdBasahPreview) ttdBasahPreview.src = getDirectImageUrl(ttdBasahVal, typeof ASSETS !== 'undefined' ? ASSETS.ttdBasah : '');
-    
-    const logoPreview = document.getElementById('previewSettingsLogo');
-    if (logoPreview) logoPreview.src = getDirectImageUrl(logoVal, typeof ASSETS !== 'undefined' ? ASSETS.logoWeb : '');
-    
-    setVal('settingNamaSekolah', s.namaSekolah || 'SMK Negeri 1 Klungkung');
-    setVal('settingSubJudulSekolah', s.subJudulSekolah || '');
-    setVal('settingAlamatSekolah', s.alamatSekolah || '');
-    setVal('settingKepsekNama', s.kepsekNama || '');
-    setVal('settingKepsekPangkat', s.kepsekPangkat || '');
-    setVal('settingKepsekNip', s.kepsekNip || '');
-    setVal('settingTahunAjaran', s.tahunAjaran || '');
-  } catch (err) {
-    console.warn('Error saat mengisi data modal pengaturan:', err);
   }
 
   const modal = document.getElementById('settingsModal');
   if (modal) {
+    populateSettingsInputs();
     modal.classList.remove('hidden');
+    if (window.lucide) lucide.createIcons();
+  } else {
+    navigateTo('pengaturan');
   }
-  if (window.lucide) lucide.createIcons();
 }
 
 function closeSettingsModal() {
   const modal = document.getElementById('settingsModal');
-  if (modal) modal.classList.add('hidden');
+  if (modal) {
+    modal.classList.add('hidden');
+  } else {
+    navigateTo('surat');
+  }
 }
 
 function saveApplicationSettings() {
@@ -3152,4 +3174,142 @@ window.addEventListener('click', function(e) {
     closeAllDropdowns();
   }
 });
+
+// ==========================================
+// MULTI-PAGE ROUTING & NAVIGATION ENGINE
+// Sesuai Spesifikasi Teknik pembuatan.md (Scriptlet Pattern)
+// ==========================================
+
+function getAppUrl() {
+  if (AppState.webAppUrl && AppState.webAppUrl.trim()) return AppState.webAppUrl.trim();
+  try {
+    if (typeof APP_URL !== 'undefined' && APP_URL) return APP_URL;
+  } catch(e) {}
+  return window.location.href.split('?')[0];
+}
+
+function getCurrentPage() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('page');
+    if (p) return p.toLowerCase().trim();
+  } catch(e) {}
+  
+  if (window._serverActivePage) return window._serverActivePage.toLowerCase().trim();
+  
+  const saved = sessionStorage.getItem('surat_pkl_active_page') || localStorage.getItem('surat_pkl_active_page');
+  if (saved) return saved.toLowerCase().trim();
+
+  if (document.getElementById('dbTableBody') && !document.getElementById('documentTemplate')) return 'database';
+  if (document.getElementById('wysiwygEditor') && !document.getElementById('documentTemplate')) return 'template';
+  if (document.getElementById('settingNamaSekolah') && !document.getElementById('documentTemplate')) return 'pengaturan';
+  return 'surat';
+}
+
+function navigateTo(page, params) {
+  sessionStorage.setItem('surat_pkl_active_page', page);
+  localStorage.setItem('surat_pkl_active_page', page);
+
+  // Jika sedang berjalan di file lokal (preview_local.html)
+  if (window.location.protocol === 'file:' || window.isLocalPreview) {
+    if (typeof switchLocalPage === 'function') {
+      switchLocalPage(page, params);
+      return;
+    }
+  }
+
+  let baseUrl = getAppUrl();
+  let url = baseUrl + '?page=' + encodeURIComponent(page);
+  if (params && typeof params === 'object') {
+    for (let k in params) {
+      if (params.hasOwnProperty(k)) {
+        url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+      }
+    }
+  }
+
+  // Mengarahkan jendela induk (window.top) untuk menghindari blank putih akibat sandbox iframe GAS
+  try {
+    if (window.top && window.top !== window) {
+      window.top.location.href = url;
+      return;
+    }
+  } catch (e) {}
+
+  window.location.href = url;
+}
+
+function highlightActiveNavigation() {
+  const page = getCurrentPage();
+
+  const navTabs = [
+    { id: 'navTabSurat', mobileId: 'mobileNavSurat', key: 'surat', activeClass: 'bg-indigo-600 text-white shadow-xs font-bold' },
+    { id: 'navTabDatabase', mobileId: 'mobileNavDatabase', key: 'database', activeClass: 'bg-sky-600 text-white shadow-xs font-bold' },
+    { id: 'navTabTemplate', mobileId: 'mobileNavTemplate', key: 'template', activeClass: 'bg-amber-600 text-white shadow-xs font-bold' },
+    { id: 'navTabPengaturan', mobileId: 'mobileNavPengaturan', key: 'pengaturan', activeClass: 'bg-violet-600 text-white shadow-xs font-bold' }
+  ];
+
+  navTabs.forEach(item => {
+    const tabEl = document.getElementById(item.id);
+    const mobEl = document.getElementById(item.mobileId);
+    const isActive = (item.key === page) || (item.key === 'surat' && (page === 'dashboard' || !page));
+
+    if (tabEl) {
+      if (isActive) {
+        tabEl.className = 'nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ' + item.activeClass;
+      } else {
+        tabEl.className = 'nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10';
+      }
+    }
+
+    if (mobEl) {
+      if (isActive) {
+        mobEl.classList.remove('text-slate-400');
+        mobEl.classList.add('text-indigo-400', 'font-bold');
+      } else {
+        mobEl.classList.remove('text-indigo-400', 'font-bold');
+        mobEl.classList.add('text-slate-400');
+      }
+    }
+  });
+}
+
+function switchLocalPage(page, params) {
+  const views = {
+    'surat': document.getElementById('viewPageSurat'),
+    'database': document.getElementById('viewPageDatabase'),
+    'template': document.getElementById('viewPageTemplate'),
+    'pengaturan': document.getElementById('viewPagePengaturan')
+  };
+
+  const targetKey = (page === 'dashboard' || !page) ? 'surat' : page;
+
+  Object.keys(views).forEach(k => {
+    const el = views[k];
+    if (el) {
+      el.classList.toggle('hidden', k !== targetKey);
+    }
+  });
+
+  window._serverActivePage = targetKey;
+  highlightActiveNavigation();
+
+  if (targetKey === 'database') {
+    renderDbTable();
+  } else if (targetKey === 'template') {
+    populateEditorTemplateSelect();
+    const tab = (params && params.tab) ? params.tab : 'editor';
+    switchTemplateTab(tab);
+    loadTemplateToEditor(AppState.editingTemplateId || AppState.activeTemplateId);
+  } else if (targetKey === 'pengaturan') {
+    populateSettingsInputs();
+  } else {
+    renderSidebarControls();
+    renderDocumentPreview();
+  }
+
+  if (window.lucide) lucide.createIcons();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 </script>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database Siswa PKL - SMKN 1 FYJ Channel</title>
+  <?!= include('Styles'); ?>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col overflow-x-hidden">
+
+  <!-- TOP HEADER NAVIGATION -->
+  <?!= include('Header'); ?>
+
+  <!-- MAIN PAGE CONTAINER: DATABASE SISWA -->
+  <main class="max-w-[1600px] w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 flex-1 flex flex-col gap-4">
+    
+    <!-- Top Action Card & Breadcrumbs -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shadow-xs flex-shrink-0">
+          <i data-lucide="database" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-slate-800">Database Siswa PKL</h2>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-200">Google Sheets Sync</span>
+          </div>
+          <p class="text-xs text-slate-500">Tersinkronisasi langsung dengan spreadsheet database online SMKN 1 FYJ Channel</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 self-stretch sm:self-auto justify-end">
+        <button onclick="navigateTo('surat')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer" title="Kembali ke Pratinjau Surat">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>Kembali ke Surat</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Toolbar: Search & Action Buttons -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Search Input -->
+      <div class="flex items-center gap-2 flex-1 min-w-[240px] max-w-md">
+        <div class="relative w-full">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+          <input type="text" id="dbSearchInput" oninput="onDbSearchInput(this.value)" placeholder="Cari nama siswa, guru, kelas, tempat, pangkat..." class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center flex-wrap gap-2">
+        <!-- Hidden File Input untuk Impor Excel -->
+        <input type="file" id="excelImportFileInput" accept=".xls,.xlsx,.csv" class="hidden" onchange="handleExcelImportFile(event)">
+
+        <!-- 1. Tambah Siswa Manual -->
+        <button onclick="openAddStudentModal()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
+          <i data-lucide="user-plus" class="w-4 h-4"></i>
+          <span>+ Tambah Siswa</span>
+        </button>
+
+        <!-- 2. Ekspor Excel (.xls) -->
+        <button onclick="exportDataToExcel()" class="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Unduh seluruh data siswa ke format Excel (.xls)">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Ekspor (.xls)</span>
+        </button>
+
+        <!-- 3. Impor Excel -->
+        <button onclick="document.getElementById('excelImportFileInput').click()" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Unggah berkas Excel (.xls, .xlsx, .csv) untuk impor data siswa">
+          <i data-lucide="upload" class="w-4 h-4"></i>
+          <span>Impor Excel</span>
+        </button>
+
+        <!-- 4. Hapus Semua Data -->
+        <button onclick="confirmClearAllStudents()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Hapus seluruh data siswa dari database">
+          <i data-lucide="trash-2" class="w-4 h-4 text-rose-600"></i>
+          <span>Hapus Semua</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Data Table Container -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex-1 flex flex-col">
+      <div class="overflow-x-auto overflow-y-auto max-h-[68vh] w-full border-b border-slate-200">
+        <table class="w-full border-collapse text-left text-xs whitespace-nowrap sm:whitespace-normal">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 font-bold sticky-th">
+              <th class="p-3 border-b border-slate-200 w-12 text-center sticky-th">No</th>
+              <th class="p-3 border-b border-slate-200 sticky-th min-w-[160px]">Nama Siswa</th>
+              <th class="p-3 border-b border-slate-200 w-24 sticky-th">Kelas</th>
+              <th class="p-3 border-b border-slate-200 sticky-th min-w-[140px]">Jurusan</th>
+              <th class="p-3 border-b border-slate-200 sticky-th min-w-[220px]">Guru Pembimbing</th>
+              <th class="p-3 border-b border-slate-200 sticky-th min-w-[200px]">Tempat PKL</th>
+              <th class="p-3 border-b border-slate-200 w-24 text-center sticky-th">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="dbTableBody" class="divide-y divide-slate-100">
+            <!-- Injected by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Table Footer / Count -->
+      <div class="p-3 sm:p-4 px-6 bg-slate-50 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-500">
+        <div>Menampilkan <span id="dbRecordCount" class="font-bold text-slate-800">0</span> data siswa terdaftar</div>
+        <div class="flex items-center gap-2">
+          <button onclick="refreshDataFromSheets()" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1 transition cursor-pointer">
+            <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+            <span>Sinkron Ulang Spreadsheet</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SHARED MODALS & OVERLAYS -->
+  <?!= include('Modals'); ?>
+
+  <!-- ASSETS & CLIENT LOGIC -->
+  <?!= include('Assets'); ?>
+  <?!= include('Scripts'); ?>
+</body>
+</html>

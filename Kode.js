@@ -26,8 +26,11 @@ function setupDatabase() {
   return { success: true, message: 'Database Spreadsheet berhasil diisi data awal dan aset kop/ttd.' };
 }
 
+var _activePage = 'surat';
+var _activeParams = {};
+
 /**
- * Web App Entry Point: Menampilkan antarmuka HTML
+ * Web App Entry Point: Menampilkan antarmuka HTML multi-page
  */
 function doGet(e) {
   // Jika ada parameter api, tangani sebagai JSON endpoint
@@ -35,11 +38,55 @@ function doGet(e) {
     return handleApiGet(e.parameter);
   }
 
-  const template = HtmlService.createTemplateFromFile('Index');
+  const page = (e && e.parameter && e.parameter.page) ? String(e.parameter.page).toLowerCase().trim() : 'surat';
+  _activePage = page;
+  _activeParams = (e && e.parameter) ? e.parameter : {};
+
+  let targetFile = 'Index';
+  let pageTitle = 'Aplikasi Surat PKL - SMKN 1 FYJ Channel';
+
+  switch (page) {
+    case 'database':
+      targetFile = 'Database';
+      pageTitle = 'Database Siswa PKL - SMKN 1 FYJ Channel';
+      break;
+    case 'template':
+      targetFile = 'TemplateManager';
+      pageTitle = 'Manajemen Template Surat - SMKN 1 FYJ Channel';
+      break;
+    case 'pengaturan':
+    case 'settings':
+      targetFile = 'Pengaturan';
+      pageTitle = 'Pengaturan Sistem & Kop TTD - SMKN 1 FYJ Channel';
+      break;
+    case 'surat':
+    case 'dashboard':
+    default:
+      targetFile = 'Index';
+      pageTitle = 'Aplikasi Surat PKL - SMKN 1 FYJ Channel';
+      break;
+  }
+
+  const template = HtmlService.createTemplateFromFile(targetFile);
+  template.currentPage = page;
+  template.params = _activeParams;
+  template.appUrl = getAppUrl();
+
   return template.evaluate()
-    .setTitle('Aplikasi Surat PKL - SMKN 1 FYJ Channel')
+    .setTitle(pageTitle)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1.0')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+/**
+ * Mendapatkan URL Web App Apps Script secara dinamis
+ */
+function getAppUrl() {
+  try {
+    return ScriptApp.getService().getUrl() || '';
+  } catch (err) {
+    return '';
+  }
 }
 
 /**
@@ -97,10 +144,27 @@ function doPost(e) {
 }
 
 /**
- * Helper untuk menyertakan file HTML parsial dalam Apps Script
+ * Helper untuk menyertakan file HTML parsial dalam Apps Script (Scriptlet Pattern)
  */
-function include(filename) {
-  return HtmlService.createHtmlOutputFromFile(filename).getContent();
+function include(filename, data) {
+  try {
+    const t = HtmlService.createTemplateFromFile(filename);
+    t.currentPage = _activePage;
+    t.params = _activeParams;
+    t.appUrl = getAppUrl();
+    if (data && typeof data === 'object') {
+      for (let k in data) {
+        if (data.hasOwnProperty(k)) t[k] = data[k];
+      }
+    }
+    return t.evaluate().getContent();
+  } catch (err) {
+    try {
+      return HtmlService.createHtmlOutputFromFile(filename).getContent();
+    } catch (e2) {
+      return '<!-- Gagal memuat komponen "' + filename + '": ' + err.toString() + ' -->';
+    }
+  }
 }
 
 /**

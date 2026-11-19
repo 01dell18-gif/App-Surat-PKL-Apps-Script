@@ -1,0 +1,250 @@
+<!-- ================= SHARED MODALS & OVERLAYS ================= -->
+
+<!-- 1. BATCH PRINT ENGINE CONTAINER (HIDDEN ON SCREEN, VISIBLE ON PRINT) -->
+<div id="batchPrintContainer"></div>
+
+<!-- 2. MODERN MINIMALIST CONFIRMATION MODAL -->
+<div id="modernConfirmModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden no-print" onclick="if(event.target === this) closeModernConfirmModal()">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-5 text-center space-y-4 border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+    <div id="confirmModalIconWrap" class="w-12 h-12 rounded-full mx-auto flex items-center justify-center bg-rose-100 text-rose-600">
+      <i id="confirmModalIcon" data-lucide="alert-triangle" class="w-6 h-6"></i>
+    </div>
+    <div>
+      <h4 id="confirmModalTitle" class="text-sm font-bold text-slate-800">Konfirmasi</h4>
+      <p id="confirmModalMessage" class="text-xs text-slate-500 mt-1 leading-relaxed">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+    </div>
+    <div class="flex items-center gap-2 pt-1">
+      <button id="confirmModalCancelBtn" type="button" onclick="closeModernConfirmModal()" class="flex-1 py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition cursor-pointer">
+        Batal
+      </button>
+      <button id="confirmModalOkBtn" type="button" class="flex-1 py-2 px-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
+        Lanjutkan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. MODAL TAMBAH / EDIT SISWA -->
+<div id="studentFormModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden no-print">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
+    <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+      <h4 id="studentModalTitle" class="text-sm font-bold text-slate-800">Tambah Data Siswa PKL</h4>
+      <button onclick="closeStudentFormModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    <form id="formStudent" onsubmit="handleStudentFormSubmit(event)" class="p-5 space-y-3 text-xs">
+      <input type="hidden" id="formStudentId">
+      <div>
+        <label class="block font-bold text-slate-600 mb-1">Nama Lengkap Siswa *</label>
+        <input type="text" id="formStudentNama" required class="w-full p-2 border border-slate-300 rounded-lg font-medium">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">NIS</label>
+          <input type="text" id="formStudentNis" class="w-full p-2 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">NISN</label>
+          <input type="text" id="formStudentNisn" class="w-full p-2 border border-slate-300 rounded-lg">
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Kelas *</label>
+          <input type="text" id="formStudentKelas" placeholder="XII BD 1" required class="w-full p-2 border border-slate-300 rounded-lg font-medium">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Jurusan</label>
+          <input type="text" id="formStudentJurusan" placeholder="Bisnis Digital" class="w-full p-2 border border-slate-300 rounded-lg">
+        </div>
+      </div>
+      <div>
+        <label class="block font-bold text-slate-600 mb-1">Guru Pembimbing *</label>
+        <input type="text" id="formStudentGuru" required class="w-full p-2 border border-slate-300 rounded-lg font-medium">
+      </div>
+      <div>
+        <label class="block font-bold text-slate-600 mb-1">NIP Guru</label>
+        <input type="text" id="formStudentNip" placeholder="19770309 200903 2 010 (kosongkan jika tanpa NIP)" class="w-full p-2 border border-slate-300 rounded-lg">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Pangkat / Golongan Guru</label>
+          <input type="text" id="formStudentGuruPangkat" placeholder="Pembina (IV/a)" class="w-full p-2 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Jabatan Guru</label>
+          <input type="text" id="formStudentGuruJabatan" placeholder="Guru Pembimbing PKL" class="w-full p-2 border border-slate-300 rounded-lg">
+        </div>
+      </div>
+      <div>
+        <label class="block font-bold text-slate-600 mb-1">Tempat PKL (DU/DI) *</label>
+        <input type="text" id="formStudentTempat" required class="w-full p-2 border border-slate-300 rounded-lg font-medium">
+      </div>
+      <div>
+        <label class="block font-bold text-slate-600 mb-1">Alamat Tempat PKL</label>
+        <textarea id="formStudentAlamat" rows="2" class="w-full p-2 border border-slate-300 rounded-lg"></textarea>
+      </div>
+      <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+        <button type="button" onclick="closeStudentFormModal()" class="px-4 py-2 border border-slate-300 rounded-lg font-semibold hover:bg-slate-50 cursor-pointer">Batal</button>
+        <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold shadow-sm cursor-pointer">Simpan Data</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 4. MODAL CETAK MASSAL & UNDUH ZIP -->
+<div id="batchPrintModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden no-print" onclick="if(event.target === this) closeBatchPrintModal()">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shadow-xs">
+          <i data-lucide="printer" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-800">Cetak Massal / Unduh ZIP</h3>
+          <p class="text-[11px] text-slate-400">Pilih jangkauan berkas dokumen yang akan dicetak</p>
+        </div>
+      </div>
+      <button onclick="closeBatchPrintModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Pilihan Scope -->
+    <div class="space-y-2.5 text-xs text-slate-700">
+      <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-indigo-50/40 hover:border-indigo-200 cursor-pointer transition">
+        <input type="radio" name="batchScope" value="group" checked onchange="updateBatchPrintModalInfo()" class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
+        <div>
+          <div class="font-bold text-slate-800">Per Kelompok DU/DI (Standar Dinas)</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Mengelompokkan siswa berdasarkan kesamaan Guru Pembimbing & Tempat PKL. Dilengkapi lembar Lampiran 2 jika relevan.</div>
+        </div>
+      </label>
+
+      <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-indigo-50/40 hover:border-indigo-200 cursor-pointer transition">
+        <input type="radio" name="batchScope" value="siswa" onchange="updateBatchPrintModalInfo()" class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
+        <div>
+          <div class="font-bold text-slate-800">1 Berkas Surat per Siswa (Individu)</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Mencetak atau mengunduh 1 surat mandiri untuk setiap siswa yang terdaftar di database.</div>
+        </div>
+      </label>
+
+      <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-indigo-50/40 hover:border-indigo-200 cursor-pointer transition">
+        <input type="radio" name="batchScope" value="current_filter" onchange="updateBatchPrintModalInfo()" class="mt-0.5 text-indigo-600 focus:ring-indigo-500">
+        <div>
+          <div class="font-bold text-slate-800">Hanya Siswa Terpilih (Sesuai Filter)</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Mencetak siswa yang sedang aktif tampil pada filter layar utama saat ini.</div>
+        </div>
+      </label>
+    </div>
+
+    <!-- Info Jumlah Dokumen -->
+    <div class="p-3 bg-indigo-50/60 border border-indigo-100 rounded-xl flex items-center justify-between text-xs">
+      <span class="text-slate-600 font-medium">Estimasi Output:</span>
+      <span id="batchPrintDocCount" class="font-bold text-indigo-700">0 Dokumen</span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex items-center gap-2 pt-2">
+      <button type="button" onclick="closeBatchPrintModal()" class="flex-1 py-2 px-3 border border-slate-300 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition cursor-pointer">
+        Batal
+      </button>
+      <button type="button" onclick="executeBatchPrint()" class="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+        <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+        <span>Mulai Cetak</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 5. MODAL CHANGELOG / RIWAYAT PEMBARUAN SISTEM -->
+<div id="changelogModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden no-print" onclick="if(event.target === this) closeChangelogModal()">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+    <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4 bg-slate-50/80">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-800">Catatan Pembaruan Sistem</h3>
+          <p class="text-[11px] text-slate-400">Riwayat versi & penambahan fitur kedinasan</p>
+        </div>
+      </div>
+      <button type="button" onclick="closeChangelogModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Body Changelog -->
+    <div class="p-5 overflow-y-auto space-y-4 text-xs">
+      <!-- v2.4.0 -->
+      <div class="relative pl-6 border-l-2 border-indigo-500 space-y-2">
+        <div class="absolute -left-[5px] top-1 w-2 h-2 rounded-full bg-indigo-600 ring-4 ring-indigo-100"></div>
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+            <span>Versi 2.4.0</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Terbaru</span>
+          </span>
+          <span class="text-[11px] text-slate-400">November 2026</span>
+        </div>
+        <p class="text-[11.5px] text-slate-600 leading-relaxed">Pembaruan arsitektur modular multi-page, template kedinasan baru, sistem informasi rilis interaktif, dan optimalisasi presisi margin cetak massal.</p>
+        <ul class="space-y-1.5 list-disc list-inside text-slate-600 leading-relaxed text-[11px] bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <li><strong class="text-slate-800">Arsitektur Modular Multi-Page (Scriptlet Pattern):</strong> Pemisahan kode menu menjadi file HTML mandiri per modul (Surat, Database, Template, Pengaturan) dengan Query Parameter Routing (?page=...) bebas blank putih.</li>
+          <li><strong class="text-slate-800">Format Suket Monitoring & Nilai Otomatis:</strong> Menghilangkan blok Kepada Yth pada Suket Monitoring PKL agar langsung diawali judul Surat Tugas, serta standarisasi tanda '-' otomatis untuk NIP dan Pangkat/Golongan guru yang belum terisi di semua template surat.</li>
+          <li><strong class="text-slate-800">Template Suket Monitoring PKL:</strong> Penambahan template resmi Surat Tugas Guru Pembimbing untuk monitoring berkala PKL siswa di lokasi DU/DI binaan.</li>
+          <li><strong class="text-slate-800">Data Pangkat & Jabatan Pembimbing:</strong> Penambahan atribut Pangkat/Golongan dan Jabatan Guru Pembimbing pada database siswa, form edit, template surat, ekspor-impor Excel, dan cetak massal.</li>
+          <li><strong class="text-slate-800">Perbaikan Header Tabel Database:</strong> Mengatasi space kosong dan kebocoran baris data pada sticky header tabel database siswa saat di-scroll.</li>
+          <li><strong class="text-slate-800">Presisi Margin Cetak Massal:</strong> Mengatasi jarak berlebih pada lembar pertama dokumen cetak massal dan menyelaraskan pemisahan halaman cetak.</li>
+          <li><strong class="text-slate-800">Proteksi Format Tabel:</strong> Memastikan tabel daftar siswa lampiran utuh tanpa terpotong baik saat cetak maupun ekspor dokumen Word.</li>
+        </ul>
+      </div>
+
+      <!-- v2.3.0 -->
+      <div class="relative pl-6 border-l-2 border-slate-200 space-y-1.5">
+        <div class="absolute -left-[5px] top-1 w-2 h-2 rounded-full bg-slate-300 ring-4 ring-white"></div>
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-slate-700 text-xs">Versi 2.3.0</span>
+          <span class="text-[11px] text-slate-400">November 2026</span>
+        </div>
+        <ul class="space-y-1 list-disc list-inside text-slate-500 leading-relaxed text-[11px]">
+          <li><strong class="text-slate-700">Unduh Massal ZIP:</strong> Kemampuan mengunduh seluruh arsip dokumen Word (.docx) secara massal dalam satu file ZIP terkompresi.</li>
+          <li><strong class="text-slate-700">Standar Tanggal Indonesia:</strong> Otomatisasi konversi format tanggal ISO menjadi format resmi bahasa Indonesia (dd MMMM yyyy).</li>
+          <li><strong class="text-slate-700">Sinkronisasi Database URL:</strong> Tautan Spreadsheet, Folder Drive, dan Web App terbaca langsung secara dinamis dari database.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer Modal -->
+    <div class="p-3 px-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+      <span class="text-[11px] text-slate-400">SMKN 1 FYJ Channel</span>
+      <button type="button" onclick="closeChangelogModal()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-lg text-xs transition cursor-pointer">
+        Tutup
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. MODAL NOTIFIKASI SUKSES SIMPAN GOOGLE DRIVE -->
+<div id="driveSuccessModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden no-print">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 text-center space-y-4 border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+    <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+      <i data-lucide="check-circle" class="w-8 h-8"></i>
+    </div>
+    <div>
+      <h4 class="text-base font-bold text-slate-800">Berhasil Disimpan ke Google Drive!</h4>
+      <p class="text-xs text-slate-500 mt-1" id="driveSuccessFilename">Dokumen telah tersimpan dengan aman di folder Google Drive.</p>
+    </div>
+    <div class="flex flex-col gap-2 pt-2">
+      <a id="btnDriveViewFile" href="#" target="_blank" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-xs flex items-center justify-center gap-2 shadow-sm transition">
+        <i data-lucide="external-link" class="w-4 h-4"></i>
+        <span>Buka Berkas di Google Drive</span>
+      </a>
+      <a id="btnDriveViewFolder" href="#" target="_blank" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs flex items-center justify-center gap-2 transition">
+        <i data-lucide="folder" class="w-4 h-4 text-amber-500"></i>
+        <span>Buka Folder Penyimpanan Drive</span>
+      </a>
+    </div>
+    <button onclick="closeDriveSuccessModal()" class="text-xs text-slate-400 hover:text-slate-600 pt-1 font-semibold cursor-pointer">Tutup</button>
+  </div>
+</div>
+
+<!-- 7. TOAST NOTIFICATION POPUP CONTAINER -->
+<div id="toastContainer" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none no-print"></div>
