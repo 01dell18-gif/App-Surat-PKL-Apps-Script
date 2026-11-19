@@ -762,6 +762,38 @@ function getActiveFilteredStudents() {
   }
 }
 
+// Membangun Badge Tanda Tangan Elektronik (BSrE) Sesuai Standar Resmi Pemprov Bali & SMKN 1 Klungkung
+// Format persis seperti contoh gambar: Logo Lambang Bali di kiri + 5 baris identitas pejabat di kanan dalam kotak berbingkai
+function buildTtdElektronikHtml(s, isForWord = false) {
+  s = s || AppState.settings || {};
+  const logoSrc = typeof ASSETS !== 'undefined' ? ASSETS.logoBali : '';
+  const rawSchool = s.namaSekolah || 'SMK Negeri 1 Klungkung';
+  const cleanSchool = rawSchool.replace(/^kepala\s+/i, '').trim();
+  const namaSekolahUpper = cleanSchool.toUpperCase();
+  const kepsekNama = s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.';
+  const kepsekPangkat = s.kepsekPangkat || 'Pembina (IV/a)';
+  const kepsekNip = s.kepsekNip || '19770309 200903 2 010';
+
+  const tableWidth = isForWord ? 'width="310"' : '';
+
+  return `
+    <table ${tableWidth} border="1" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 310px; border: 1px solid #000; border-collapse: collapse; margin-top: 4px; margin-bottom: 2px; background-color: #ffffff;" class="ttd-elektronik-box">
+      <tr>
+        <td style="width: 68px; text-align: center; vertical-align: middle; padding: 6px 4px 6px 6px; border: none;">
+          ${logoSrc ? `<img src="${logoSrc}" alt="Lambang Bali" width="54" height="66" style="height: 66px; width: 54px; max-width: 54px; object-fit: contain; display: block; margin: 0 auto;">` : ''}
+        </td>
+        <td style="vertical-align: middle; padding: 6px 8px 6px 4px; border: none; font-family: Arial, Helvetica, sans-serif; font-size: 8pt; line-height: 1.25; color: #000; text-align: left;">
+          <div style="font-size: 7.5pt; text-decoration: underline; margin-bottom: 2px; white-space: nowrap;">Ditandatangani secara elektronik oleh :</div>
+          <div style="font-size: 8pt; font-weight: bold; text-transform: uppercase; margin-bottom: 1px;">KEPALA ${namaSekolahUpper}</div>
+          <div style="font-size: 8.5pt; font-weight: bold; margin-bottom: 1px;">${kepsekNama}</div>
+          <div style="font-size: 7.5pt; margin-bottom: 1px;">${kepsekPangkat}</div>
+          <div style="font-size: 7.5pt;">NIP. ${kepsekNip}</div>
+        </td>
+      </tr>
+    </table>
+  `;
+}
+
 // Render Pratinjau Dokumen Nyata (WYSIWYG Live Canvas)
 function renderDocumentPreview() {
   const activeStudents = getActiveFilteredStudents();
@@ -917,7 +949,7 @@ function renderDocumentPreview() {
   if (docTitimangsaHeader) {
     docTitimangsaHeader.innerHTML = `
       <div>Dikeluarkan di ${s.titimangsaTempat || 'Klungkung'}</div>
-      <div>Pada Tanggal, <span id="docTglSurat">${formatIndonesianDate(s.tglSurat) || '12 November 2026'}</span></div>
+      <div>Pada Tanggal, <span id="docTglSurat">${formatIndonesianDate(s.tglSurat) || '16 November 2026'}</span></div>
     `;
   }
   
@@ -927,14 +959,8 @@ function renderDocumentPreview() {
   const docTtdArea = document.getElementById('docTtdArea');
   if (docTtdArea) {
     if (AppState.showTtd) {
-      // TTD Elektronik (Barcode): Nama dan NIP disembunyikan karena sudah tercantum di dalam badge barcode
-      const rawTtd = s.ttdUrl || DEFAULT_ASSET_URLS.ttd;
-      const ttdSrc = getDirectImageUrl(rawTtd, typeof ASSETS !== 'undefined' ? (ASSETS.ttd || ASSETS.ttdElektronik) : '');
-      docTtdArea.innerHTML = `
-        <div style="margin: 8px 0 4px 0;">
-          ${ttdSrc ? `<img src="${ttdSrc}" alt="TTD Barcode" style="height: 70px; object-fit: contain;">` : '<div style="height: 70px;"></div>'}
-        </div>
-      `;
+      // TTD Elektronik: Format resmi Pemprov Bali / BSrE sesuai media_1795065225414_04f3df72.png
+      docTtdArea.innerHTML = buildTtdElektronikHtml(s);
     } else {
       // TTD Basah Otomatis (Cap Stempel Bulat + TTD Basah) Sesuai media_1794809351021_0ce943ca.png
       const rawTtdBasah = s.ttdBasahUrl || DEFAULT_ASSET_URLS.ttd_basah;
@@ -2709,13 +2735,7 @@ function buildSingleSuratHtml(studentList, activeTemplate, s) {
   // 6. Area Tanda Tangan
   let ttdMediaHtml = '';
   if (AppState.showTtd) {
-    const rawTtd = s.ttdUrl || DEFAULT_ASSET_URLS.ttd;
-    const ttdSrc = getDirectImageUrl(rawTtd, typeof ASSETS !== 'undefined' ? (ASSETS.ttd || ASSETS.ttdElektronik) : '');
-    ttdMediaHtml = `
-      <div style="margin: 8px 0 4px 0;">
-        ${ttdSrc ? `<img src="${ttdSrc}" alt="TTD Barcode" style="height: 70px; object-fit: contain;">` : '<div style="height: 70px;"></div>'}
-      </div>
-    `;
+    ttdMediaHtml = buildTtdElektronikHtml(s);
   } else {
     const rawTtdBasah = s.ttdBasahUrl || DEFAULT_ASSET_URLS.ttd_basah;
     const ttdBasahSrc = getDirectImageUrl(rawTtdBasah, typeof ASSETS !== 'undefined' ? ASSETS.ttdBasah : '');
@@ -2728,12 +2748,12 @@ function buildSingleSuratHtml(studentList, activeTemplate, s) {
 
   const ttdBlockHtml = `
     <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px; page-break-inside: avoid;">
-      <div style="width: 280px; text-align: left; position: relative;">
+      <div style="width: 310px; max-width: 100%; text-align: left; position: relative;">
         <div>
           <div>Dikeluarkan di ${s.titimangsaTempat || 'Klungkung'}</div>
-          <div>Pada Tanggal, ${formatIndonesianDate(s.tglSurat) || '12 November 2026'}</div>
+          <div>Pada Tanggal, ${formatIndonesianDate(s.tglSurat) || '16 November 2026'}</div>
         </div>
-        <div><div>Kepala ${s.namaSekolah || 'SMK Negeri 1 Klungkung'}</div></div>
+        <div style="margin-bottom: 2px;"><div>Kepala ${s.namaSekolah || 'SMK Negeri 1 Klungkung'}</div></div>
         ${ttdMediaHtml}
         ${AppState.showTtd ? '' : `
           <div style="font-weight: bold; text-decoration: underline; margin-top: 2px; position: relative; z-index: 3;">${s.kepsekNama || 'Sri Rejeki, S.Pd.,M.Pd.'}</div>
@@ -2944,9 +2964,7 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
   // 6. Area Tanda Tangan Khusus Word (Tabel 2 Kolom untuk memastikan rata kanan di Word)
   let ttdMediaWord = '';
   if (AppState.showTtd) {
-    const rawTtd = s.ttdUrl || DEFAULT_ASSET_URLS.ttd;
-    const ttdSrc = getDirectImageUrl(rawTtd, typeof ASSETS !== 'undefined' ? (ASSETS.ttd || ASSETS.ttdElektronik) : '');
-    ttdMediaWord = ttdSrc ? `<img src="${ttdSrc}" alt="TTD Barcode" width="210" height="70" style="width: 210px; height: 70px; max-width: 210px; display: block; margin: 6pt 0;">` : '<div style="height: 70px;"></div>';
+    ttdMediaWord = buildTtdElektronikHtml(s, true);
   } else {
     const rawTtdBasah = s.ttdBasahUrl || DEFAULT_ASSET_URLS.ttd_basah;
     const ttdBasahSrc = getDirectImageUrl(rawTtdBasah, typeof ASSETS !== 'undefined' ? ASSETS.ttdBasah : '');
@@ -2956,15 +2974,15 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
   const ttdWordTable = `
     <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width: 100%; border: none; margin-top: 18pt; border-collapse: collapse; page-break-inside: avoid;">
       <tr>
-        <td width="55%" style="width: 55%; border: none; font-size: 1pt; line-height: 1pt;">&nbsp;</td>
-        <td width="45%" align="left" style="width: 45%; border: none; text-align: left; vertical-align: top;">
-          <table width="260" border="0" cellpadding="0" cellspacing="0" style="width: 260px; border: none; text-align: left;">
+        <td width="50%" style="width: 50%; border: none; font-size: 1pt; line-height: 1pt;">&nbsp;</td>
+        <td width="50%" align="left" style="width: 50%; border: none; text-align: left; vertical-align: top;">
+          <table width="310" border="0" cellpadding="0" cellspacing="0" style="width: 310px; border: none; text-align: left;">
             <tr>
               <td style="border: none; text-align: left; font-family: 'Bookman Old Style', 'Times New Roman', serif; font-size: 11pt; line-height: 1.35;">
                 <div>Dikeluarkan di ${s.titimangsaTempat || 'Klungkung'}</div>
-                <div>Pada Tanggal, ${formatIndonesianDate(s.tglSurat) || '12 November 2026'}</div>
-                <div style="margin-top: 2pt;">Kepala ${s.namaSekolah || 'SMK Negeri 1 Klungkung'}</div>
-                <div style="margin: 6pt 0;">${ttdMediaWord}</div>
+                <div>Pada Tanggal, ${formatIndonesianDate(s.tglSurat) || '16 November 2026'}</div>
+                <div style="margin-top: 2pt; margin-bottom: 2pt;">Kepala ${s.namaSekolah || 'SMK Negeri 1 Klungkung'}</div>
+                <div style="margin: 4pt 0;">${ttdMediaWord}</div>
                 ${AppState.showTtd ? '' : `
                   <div style="font-weight: bold; text-decoration: underline; margin-top: 2pt;">${s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.'}</div>
                   <div>${s.kepsekPangkat ? `<div>${s.kepsekPangkat}</div>` : ''}</div>
