@@ -309,6 +309,11 @@ function showModernConfirm({ title = 'Konfirmasi', message = 'Lanjutkan tindakan
   };
 }
 
+function closeModernConfirmModal() {
+  const modal = document.getElementById('modernConfirmModal');
+  if (modal) modal.classList.add('hidden');
+}
+
 // Inisialisasi Aplikasi Saat Halaman Selesai Dimuat
 document.addEventListener('DOMContentLoaded', function() {
   initApp();
@@ -3384,23 +3389,34 @@ function refreshDataFromSheets() {
   }
 }
 
-// Dropdown Helper
-function toggleDropdown(menuId) {
+// Dropdown Helper dengan proteksi Stop Propagation & Mobile Support
+function toggleDropdown(menuId, event) {
+  if (event) {
+    if (typeof event.stopPropagation === 'function') event.stopPropagation();
+    if (typeof event.preventDefault === 'function') event.preventDefault();
+  }
   const menu = document.getElementById(menuId);
   if (!menu) return;
   const isHidden = menu.classList.contains('hidden');
   closeAllDropdowns();
-  if (isHidden) menu.classList.remove('hidden');
+  if (isHidden) {
+    menu.classList.remove('hidden');
+  }
 }
 
 function closeAllDropdowns() {
   document.querySelectorAll('.dropdown-menu-list').forEach(el => el.classList.add('hidden'));
 }
 
-window.addEventListener('click', function(e) {
-  if (!e.target.closest('#dropdownCetakWrapper') && !e.target.closest('#dropdownUnduhWrapper')) {
-    closeAllDropdowns();
+document.addEventListener('click', function(e) {
+  if (e && e.target) {
+    const isInsideCetak = e.target.closest && e.target.closest('#dropdownCetakWrapper');
+    const isInsideUnduh = e.target.closest && e.target.closest('#dropdownUnduhWrapper');
+    if (isInsideCetak || isInsideUnduh) {
+      return;
+    }
   }
+  closeAllDropdowns();
 });
 
 // ==========================================
