@@ -146,27 +146,52 @@
         </div>
 
         <!-- Variable Pills Inserter -->
-        <div class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-2.5 flex flex-wrap items-center gap-1.5 text-[11px]">
-          <span class="font-bold text-indigo-900 mr-1 flex items-center gap-1">
-            <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-indigo-600"></i>
-            <span>Sisipkan Variabel:</span>
-          </span>
-          <button onclick="insertEditorVariable('{noSurat}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{noSurat}</button>
-          <button onclick="insertEditorVariable('{tglSurat}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{tglSurat}</button>
-          <button onclick="insertEditorVariable('{tempatPkl}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{tempatPkl}</button>
-          <button onclick="insertEditorVariable('{alamatPkl}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{alamatPkl}</button>
-          <button onclick="insertEditorVariable('{tahunAjaran}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{tahunAjaran}</button>
-          <button onclick="insertEditorVariable('{namaSekolah}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{namaSekolah}</button>
-          <button onclick="insertEditorVariable('{tglPelepasan}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{tglPelepasan}</button>
-          <button onclick="insertEditorVariable('{periodePkl}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{periodePkl}</button>
-          <button onclick="insertEditorVariable('{tglPenarikan}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{tglPenarikan}</button>
-          <button onclick="insertEditorVariable('{guruNama}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{guruNama}</button>
-          <button onclick="insertEditorVariable('{guruNip}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{guruNip}</button>
-          <button onclick="insertEditorVariable('{siswaNama}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{siswaNama}</button>
-          <button onclick="insertEditorVariable('{siswaNisNisn}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{siswaNisNisn}</button>
-          <button onclick="insertEditorVariable('{tingkatKelas}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{tingkatKelas}</button>
-          <button onclick="insertEditorVariable('{jurusanPkl}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{jurusanPkl}</button>
-          <button onclick="insertEditorVariable('{tabelSiswaPermohonan}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer">+{tabelSiswaPermohonan}</button>
+        <div class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-3 flex flex-col gap-2 text-[11px]">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-indigo-950 flex items-center gap-1.5">
+              <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-indigo-600"></i>
+              <span>Sisipkan Variabel Otomatis:</span>
+            </span>
+            <span class="text-[10px] text-slate-400">Klik tombol di bawah untuk menyisipkan variabel langsung ke posisi kursor editor</span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1.5">
+            <!-- Informasi Surat & Jadwal -->
+            <button type="button" onclick="insertEditorVariable('{noSurat}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer" title="Nomor Surat Resmi">+{noSurat}</button>
+            <button type="button" onclick="insertEditorVariable('{tglSurat}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer" title="Tanggal Surat (Bahasa Indonesia)">+{tglSurat}</button>
+            <button type="button" onclick="insertEditorVariable('{tahunAjaran}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer" title="Tahun Ajaran Aktif">+{tahunAjaran}</button>
+            <button type="button" onclick="insertEditorVariable('{namaSekolah}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer" title="Nama Resmi Sekolah">+{namaSekolah}</button>
+            <button type="button" onclick="insertEditorVariable('{tglPelepasan}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer" title="Tanggal Pelepasan Siswa">+{tglPelepasan}</button>
+            <button type="button" onclick="insertEditorVariable('{periodePkl}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer" title="Periode Pelaksanaan PKL">+{periodePkl}</button>
+            <button type="button" onclick="insertEditorVariable('{tglPenarikan}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer" title="Tanggal Penarikan Siswa">+{tglPenarikan}</button>
+            <button type="button" onclick="insertEditorVariable('{titimangsaTempat}')" class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer" title="Tempat Pengeluaran Surat (contoh: Klungkung)">+{titimangsaTempat}</button>
+
+            <!-- DU/DI & Lokasi -->
+            <button type="button" onclick="insertEditorVariable('{tempatPkl}')" class="px-2 py-0.5 rounded-md bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 font-mono text-emerald-900 transition font-medium cursor-pointer" title="Nama Tempat PKL (DU/DI)">+{tempatPkl}</button>
+            <button type="button" onclick="insertEditorVariable('{daftarTempatPkl}')" class="px-2 py-0.5 rounded-md bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 font-mono text-emerald-900 transition font-medium cursor-pointer" title="Daftar Bernomor Tempat Monitoring PKL">+{daftarTempatPkl}</button>
+            <button type="button" onclick="insertEditorVariable('{alamatPkl}')" class="px-2 py-0.5 rounded-md bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 font-mono text-emerald-900 transition font-medium cursor-pointer" title="Alamat Tempat PKL">+{alamatPkl}</button>
+
+            <!-- Guru Pembimbing -->
+            <button type="button" onclick="insertEditorVariable('{guruNama}')" class="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 border border-blue-300 font-mono text-blue-900 transition font-medium cursor-pointer" title="Nama Guru Pembimbing">+{guruNama}</button>
+            <button type="button" onclick="insertEditorVariable('{guruNip}')" class="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 border border-blue-300 font-mono text-blue-900 transition font-medium cursor-pointer" title="NIP Guru Pembimbing">+{guruNip}</button>
+            <button type="button" onclick="insertEditorVariable('{guruPangkat}')" class="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 border border-blue-300 font-mono text-blue-900 transition font-medium cursor-pointer" title="Pangkat / Golongan Guru Pembimbing">+{guruPangkat}</button>
+            <button type="button" onclick="insertEditorVariable('{guruJabatan}')" class="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 border border-blue-300 font-mono text-blue-900 transition font-medium cursor-pointer" title="Jabatan Guru Pembimbing">+{guruJabatan}</button>
+
+            <!-- Siswa PKL -->
+            <button type="button" onclick="insertEditorVariable('{siswaNama}')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 border border-sky-300 font-mono text-sky-900 transition font-medium cursor-pointer" title="Nama Siswa">+{siswaNama}</button>
+            <button type="button" onclick="insertEditorVariable('{siswaNis}')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 border border-sky-300 font-mono text-sky-900 transition font-medium cursor-pointer" title="Nomor Induk Siswa">+{siswaNis}</button>
+            <button type="button" onclick="insertEditorVariable('{siswaNisn}')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 border border-sky-300 font-mono text-sky-900 transition font-medium cursor-pointer" title="NISN Siswa">+{siswaNisn}</button>
+            <button type="button" onclick="insertEditorVariable('{siswaNisNisn}')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 border border-sky-300 font-mono text-sky-900 transition font-medium cursor-pointer" title="Gabungan NIS/NISN">+{siswaNisNisn}</button>
+            <button type="button" onclick="insertEditorVariable('{tingkatKelas}')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 border border-sky-300 font-mono text-sky-900 transition font-medium cursor-pointer" title="Tingkat Kelas (contoh: XII)">+{tingkatKelas}</button>
+            <button type="button" onclick="insertEditorVariable('{jurusanPkl}')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 border border-sky-300 font-mono text-sky-900 transition font-medium cursor-pointer" title="Konsentrasi Keahlian / Jurusan">+{jurusanPkl}</button>
+            <button type="button" onclick="insertEditorVariable('{siswaJurusan}')" class="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 border border-sky-300 font-mono text-sky-900 transition font-medium cursor-pointer" title="Jurusan Siswa">+{siswaJurusan}</button>
+            <button type="button" onclick="insertEditorVariable('{tabelSiswaPermohonan}')" class="px-2 py-0.5 rounded-md bg-amber-50 hover:bg-amber-100 border border-amber-300 font-mono text-amber-900 transition font-medium cursor-pointer" title="Tabel Daftar Siswa Khusus Surat Permohonan">+{tabelSiswaPermohonan}</button>
+
+            <!-- Kepala Sekolah -->
+            <button type="button" onclick="insertEditorVariable('{kepsekNama}')" class="px-2 py-0.5 rounded-md bg-violet-50 hover:bg-violet-100 border border-violet-300 font-mono text-violet-900 transition font-medium cursor-pointer" title="Nama Kepala Sekolah & Gelar">+{kepsekNama}</button>
+            <button type="button" onclick="insertEditorVariable('{kepsekNip}')" class="px-2 py-0.5 rounded-md bg-violet-50 hover:bg-violet-100 border border-violet-300 font-mono text-violet-900 transition font-medium cursor-pointer" title="NIP Kepala Sekolah">+{kepsekNip}</button>
+            <button type="button" onclick="insertEditorVariable('{kepsekPangkat}')" class="px-2 py-0.5 rounded-md bg-violet-50 hover:bg-violet-100 border border-violet-300 font-mono text-violet-900 transition font-medium cursor-pointer" title="Pangkat / Golongan Kepala Sekolah">+{kepsekPangkat}</button>
+          </div>
         </div>
 
         <!-- Editable WYSIWYG Content Area -->
