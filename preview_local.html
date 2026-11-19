@@ -332,52 +332,71 @@
 <body class="min-h-full flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
 
 <!-- ================= TOP HEADER NAVIGATION ================= -->
-<header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-indigo-900 text-white shadow-lg sticky top-0 z-40 no-print border-b border-indigo-800/40">
+<header
+  class="bg-gradient-to-r from-slate-900 via-indigo-950 to-indigo-900 text-white shadow-lg sticky top-0 z-40 no-print border-b border-indigo-800/40">
   <div class="max-w-[1600px] mx-auto px-3 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4">
-    
+
     <!-- Brand & School Info -->
     <div class="flex items-center gap-2.5 sm:gap-3 select-none min-w-0">
-      <div id="headerBrandLogoWrapper" onclick="navigateTo('surat')" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center text-indigo-300 shadow-inner overflow-hidden flex-shrink-0 transition-transform hover:scale-105 cursor-pointer" title="Kembali ke Halaman Surat">
+      <div id="headerBrandLogoWrapper" onclick="navigateTo('surat')"
+        class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center text-indigo-300 shadow-inner overflow-hidden flex-shrink-0 transition-transform hover:scale-105 cursor-pointer"
+        title="Kembali ke Halaman Surat">
         <i id="defaultBrandIcon" data-lucide="file-badge" class="w-5 h-5 sm:w-6 sm:h-6"></i>
       </div>
       <div class="min-w-0">
         <div class="flex items-center gap-1.5 sm:gap-2">
-          <h1 onclick="navigateTo('surat')" class="text-sm sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight truncate cursor-pointer hover:text-indigo-200 transition" title="Kembali ke Halaman Surat">Aplikasi Surat PKL</h1>
-          <button type="button" onclick="event.stopPropagation(); openChangelogModal(event);" class="text-[9px] sm:text-[10px] font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 hover:border-emerald-300 px-1.5 sm:px-2 py-0.5 rounded-full flex items-center gap-1 cursor-pointer transition shadow-xs group flex-shrink-0" title="Klik untuk melihat catatan rilis & pembaruan versi">
+          <h1 onclick="navigateTo('surat')"
+            class="text-sm sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight truncate cursor-pointer hover:text-indigo-200 transition"
+            title="Kembali ke Halaman Surat">Aplikasi Surat PKL</h1>
+          <button type="button" onclick="event.stopPropagation(); openChangelogModal(event);"
+            class="text-[9px] sm:text-[10px] font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 hover:border-emerald-300 px-1.5 sm:px-2 py-0.5 rounded-full flex items-center gap-1 cursor-pointer transition shadow-xs group flex-shrink-0"
+            title="Klik untuk melihat catatan rilis & pembaruan versi">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>v2.4.0</span>
-            <i data-lucide="sparkles" class="w-2.5 h-2.5 text-emerald-300/80 group-hover:text-emerald-100 transition-transform group-hover:scale-110"></i>
+            <i data-lucide="sparkles"
+              class="w-2.5 h-2.5 text-emerald-300/80 group-hover:text-emerald-100 transition-transform group-hover:scale-110"></i>
           </button>
         </div>
-        <p id="headerSchoolSubtitle" onclick="navigateTo('surat')" class="text-[11px] text-indigo-200/80 truncate max-w-[200px] sm:max-w-md hidden sm:block cursor-pointer hover:text-white transition" title="Kembali ke Halaman Surat">SMK Negeri 1 Klungkung • Tahun Ajaran 2026/2027</p>
+        <p id="headerSchoolSubtitle" onclick="navigateTo('surat')"
+          class="text-[11px] text-indigo-200/80 truncate max-w-[200px] sm:max-w-md hidden sm:block cursor-pointer hover:text-white transition"
+          title="Kembali ke Halaman Surat">SMK Negeri 1 Klungkung • Tahun Ajaran 2026/2027</p>
       </div>
     </div>
 
     <!-- Main Navigation Menus & Toolbar -->
     <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-      
+
       <!-- NAV TABS (DESKTOP & TABLET SAJA, DI MOBILE DISEMBUNYIKAN KARENA SUDAH ADA DI BOTTOM BAR) -->
-      <nav class="flex mobile-hide items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-indigo-800/40 mr-1 flex-shrink-0">
+      <nav
+        class="flex mobile-hide items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-indigo-800/40 mr-1 flex-shrink-0">
         <!-- 1. Halaman Surat (Dashboard) -->
-        <button onclick="navigateTo('surat')" id="navTabSurat" class="nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10" title="Halaman Utama Pembuatan Surat">
+        <button onclick="navigateTo('surat')" id="navTabSurat"
+          class="nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10"
+          title="Halaman Utama Pembuatan Surat">
           <i data-lucide="file-text" class="w-3.5 h-3.5 text-indigo-400"></i>
           <span>Surat</span>
         </button>
 
         <!-- 2. Halaman Database Siswa -->
-        <button onclick="navigateTo('database')" id="navTabDatabase" class="nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10" title="Database Siswa PKL (Google Sheets)">
+        <button onclick="navigateTo('database')" id="navTabDatabase"
+          class="nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10"
+          title="Database Siswa PKL (Google Sheets)">
           <i data-lucide="database" class="w-3.5 h-3.5 text-sky-400"></i>
           <span>Database</span>
         </button>
 
         <!-- 3. Halaman Template WYSIWYG -->
-        <button onclick="navigateTo('template')" id="navTabTemplate" class="nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10" title="Template Surat & WYSIWYG Editor">
+        <button onclick="navigateTo('template')" id="navTabTemplate"
+          class="nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10"
+          title="Template Surat & WYSIWYG Editor">
           <i data-lucide="layout-template" class="w-3.5 h-3.5 text-amber-400"></i>
           <span>Template</span>
         </button>
 
         <!-- 4. Halaman Pengaturan -->
-        <button onclick="navigateTo('pengaturan')" id="navTabPengaturan" class="nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10" title="Pengaturan Identitas, Kop & TTD">
+        <button onclick="navigateTo('pengaturan')" id="navTabPengaturan"
+          class="nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10"
+          title="Pengaturan Identitas, Kop & TTD">
           <i data-lucide="settings" class="w-3.5 h-3.5 text-violet-400"></i>
           <span>Pengaturan</span>
         </button>
@@ -386,20 +405,26 @@
       <!-- ACTION BUTTONS: DRIVE, CETAK, UNDUH & REFRESH -->
       <div class="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
         <!-- Simpan ke Google Drive -->
-        <button onclick="saveCurrentDocToDrive()" class="inline-flex items-center gap-1 sm:gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-2 sm:px-2.5 py-1.5 rounded-lg text-xs transition shadow-xs whitespace-nowrap cursor-pointer" title="Simpan Dokumen Aktif ke Google Drive">
+        <button onclick="saveCurrentDocToDrive()"
+          class="inline-flex items-center gap-1 sm:gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-2 sm:px-2.5 py-1.5 rounded-lg text-xs transition shadow-xs whitespace-nowrap cursor-pointer"
+          title="Simpan Dokumen Aktif ke Google Drive">
           <i data-lucide="cloud-upload" class="w-3.5 h-3.5 text-blue-100 flex-shrink-0"></i>
           <span class="hidden sm:inline">Drive</span>
         </button>
 
         <!-- Cetak Dokumen Dropdown -->
         <div class="relative inline-block text-left" id="dropdownCetakWrapper">
-          <button type="button" id="btnHeaderCetak" onclick="toggleDropdown('dropdownCetakMenu', event)" class="inline-flex items-center gap-1 bg-indigo-700 hover:bg-indigo-600 text-white font-medium px-2 sm:px-2.5 py-1.5 rounded-lg text-xs transition shadow-xs whitespace-nowrap cursor-pointer" title="Pilihan Cetak Dokumen">
+          <button type="button" id="btnHeaderCetak" onclick="toggleDropdown('dropdownCetakMenu', event)"
+            class="inline-flex items-center gap-1 bg-indigo-700 hover:bg-indigo-600 text-white font-medium px-2 sm:px-2.5 py-1.5 rounded-lg text-xs transition shadow-xs whitespace-nowrap cursor-pointer"
+            title="Pilihan Cetak Dokumen">
             <i data-lucide="printer" class="w-3.5 h-3.5 text-indigo-200 flex-shrink-0"></i>
             <span>Cetak</span>
             <i data-lucide="chevron-down" class="w-3 h-3 opacity-80 flex-shrink-0"></i>
           </button>
-          <div id="dropdownCetakMenu" class="dropdown-menu-list hidden absolute right-0 top-full mt-1.5 w-56 bg-white rounded-xl shadow-2xl border border-slate-200 py-1.5 z-50 text-slate-700">
-            <button type="button" onclick="printCurrentDoc(); closeAllDropdowns();" class="w-full text-left px-3.5 py-2 text-xs hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 transition cursor-pointer">
+          <div id="dropdownCetakMenu"
+            class="dropdown-menu-list hidden absolute right-0 top-full mt-1.5 w-56 bg-white rounded-xl shadow-2xl border border-slate-200 py-1.5 z-50 text-slate-700">
+            <button type="button" onclick="printCurrentDoc(); closeAllDropdowns();"
+              class="w-full text-left px-3.5 py-2 text-xs hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 transition cursor-pointer">
               <i data-lucide="file-text" class="w-4 h-4 text-indigo-600"></i>
               <div>
                 <div class="font-semibold text-slate-800">Cetak Surat Ini</div>
@@ -407,7 +432,8 @@
               </div>
             </button>
             <div class="border-t border-slate-100 my-1"></div>
-            <button type="button" onclick="openBatchPrintModal(); closeAllDropdowns();" class="w-full text-left px-3.5 py-2 text-xs hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 transition cursor-pointer">
+            <button type="button" onclick="openBatchPrintModal(); closeAllDropdowns();"
+              class="w-full text-left px-3.5 py-2 text-xs hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 transition cursor-pointer">
               <i data-lucide="copy" class="w-4 h-4 text-amber-500"></i>
               <div>
                 <div class="font-semibold text-slate-800">Cetak Massal (Batch)</div>
@@ -419,13 +445,17 @@
 
         <!-- Unduh Dokumen Dropdown -->
         <div class="relative inline-block text-left" id="dropdownUnduhWrapper">
-          <button type="button" id="btnHeaderUnduh" onclick="toggleDropdown('dropdownUnduhMenu', event)" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-2 sm:px-2.5 py-1.5 rounded-lg text-xs transition shadow-xs whitespace-nowrap cursor-pointer" title="Pilihan Unduh Dokumen">
+          <button type="button" id="btnHeaderUnduh" onclick="toggleDropdown('dropdownUnduhMenu', event)"
+            class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-2 sm:px-2.5 py-1.5 rounded-lg text-xs transition shadow-xs whitespace-nowrap cursor-pointer"
+            title="Pilihan Unduh Dokumen">
             <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-100 flex-shrink-0"></i>
             <span>Unduh</span>
             <i data-lucide="chevron-down" class="w-3 h-3 opacity-80 flex-shrink-0"></i>
           </button>
-          <div id="dropdownUnduhMenu" class="dropdown-menu-list hidden absolute right-0 top-full mt-1.5 w-56 bg-white rounded-xl shadow-2xl border border-slate-200 py-1.5 z-50 text-slate-700">
-            <button type="button" onclick="downloadDocxClient(); closeAllDropdowns();" class="w-full text-left px-3.5 py-2 text-xs hover:bg-emerald-50 hover:text-emerald-700 flex items-center gap-2.5 transition cursor-pointer">
+          <div id="dropdownUnduhMenu"
+            class="dropdown-menu-list hidden absolute right-0 top-full mt-1.5 w-56 bg-white rounded-xl shadow-2xl border border-slate-200 py-1.5 z-50 text-slate-700">
+            <button type="button" onclick="downloadDocxClient(); closeAllDropdowns();"
+              class="w-full text-left px-3.5 py-2 text-xs hover:bg-emerald-50 hover:text-emerald-700 flex items-center gap-2.5 transition cursor-pointer">
               <i data-lucide="file-type-2" class="w-4 h-4 text-emerald-600"></i>
               <div>
                 <div class="font-semibold text-slate-800">Unduh Word (.DOCX)</div>
@@ -433,7 +463,8 @@
               </div>
             </button>
             <div class="border-t border-slate-100 my-1"></div>
-            <button type="button" onclick="downloadAllWordZip(); closeAllDropdowns();" class="w-full text-left px-3.5 py-2 text-xs hover:bg-emerald-50 hover:text-emerald-700 flex items-center gap-2.5 transition cursor-pointer">
+            <button type="button" onclick="downloadAllWordZip(); closeAllDropdowns();"
+              class="w-full text-left px-3.5 py-2 text-xs hover:bg-emerald-50 hover:text-emerald-700 flex items-center gap-2.5 transition cursor-pointer">
               <i data-lucide="archive" class="w-4 h-4 text-emerald-600"></i>
               <div>
                 <div class="font-semibold text-slate-800">Unduh Semua Word (.ZIP)</div>
@@ -444,7 +475,9 @@
         </div>
 
         <!-- Refresh Button -->
-        <button type="button" onclick="refreshDataFromSheets()" class="flex flex-none items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 p-1.5 sm:p-2 rounded-lg transition shadow-xs cursor-pointer" title="Muat Ulang Data dari Spreadsheet">
+        <button type="button" onclick="refreshDataFromSheets()"
+          class="flex flex-none items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 p-1.5 sm:p-2 rounded-lg transition shadow-xs cursor-pointer"
+          title="Muat Ulang Data dari Spreadsheet">
           <i data-lucide="rotate-cw" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
         </button>
       </div>
@@ -454,279 +487,336 @@
 </header>
 
 <!-- ================= MOBILE BOTTOM NAVIGATION BAR ================= -->
-<nav class="desktop-hide fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 z-40 px-2 py-1 flex items-center justify-around text-slate-300 shadow-2xl no-print">
-  <button onclick="navigateTo('surat')" id="mobileNavSurat" class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
+<nav
+  class="desktop-hide fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 z-40 px-2 py-1 flex items-center justify-around text-slate-300 shadow-2xl no-print">
+  <button onclick="navigateTo('surat')" id="mobileNavSurat"
+    class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
     <i data-lucide="file-text" class="w-4 h-4"></i>
     <span class="text-[10px] font-medium leading-tight">Surat</span>
   </button>
-  <button onclick="navigateTo('database')" id="mobileNavDatabase" class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
+  <button onclick="navigateTo('database')" id="mobileNavDatabase"
+    class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
     <i data-lucide="database" class="w-4 h-4"></i>
     <span class="text-[10px] font-medium leading-tight">Data</span>
   </button>
-  <button onclick="navigateTo('template')" id="mobileNavTemplate" class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
+  <button onclick="navigateTo('template')" id="mobileNavTemplate"
+    class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
     <i data-lucide="layout-template" class="w-4 h-4"></i>
     <span class="text-[10px] font-medium leading-tight">Template</span>
   </button>
-  <button onclick="navigateTo('pengaturan')" id="mobileNavPengaturan" class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
+  <button onclick="navigateTo('pengaturan')" id="mobileNavPengaturan"
+    class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
     <i data-lucide="settings" class="w-4 h-4"></i>
     <span class="text-[10px] font-medium leading-tight">Setting</span>
   </button>
-  <button onclick="openBatchPrintModal()" class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-amber-400 hover:text-amber-300 transition">
+  <button onclick="openBatchPrintModal()"
+    class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-amber-400 hover:text-amber-300 transition">
     <i data-lucide="printer" class="w-4 h-4"></i>
     <span class="text-[10px] font-semibold leading-tight">Cetak</span>
   </button>
 </nav>
-
 
   <main class="flex-1 max-w-[1600px] w-full mx-auto px-2 sm:px-4 lg:px-6 py-3 sm:py-4">
     <div id="pageViewSurat" class="page-view-section block">
 
 
     <!-- ================= SIDEBAR CONTROLS ================= -->
-    <aside class="w-full lg:w-96 flex-shrink-0 flex flex-col gap-5 no-print">
+    <aside id="sidebarControls" class="w-full lg:w-96 flex-shrink-0 flex flex-col gap-3.5 no-print transition-all duration-300">
 
-      <!-- MODE SELECTION & GURU/DUDI PICKER -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80">
-        <h2 class="text-sm font-bold text-slate-800 mb-3 flex items-center justify-between">
-          <span class="flex items-center gap-2">
-            <i data-lucide="sliders" class="w-4 h-4 text-indigo-600"></i>
-            <span>Pemilihan Surat</span>
-          </span>
-          <span class="text-[11px] font-medium text-slate-400">Filter Aktif</span>
-        </h2>
-
-        <!-- Mode Segmented Buttons -->
-        <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl mb-4">
-          <button id="btnModePerGuru" onclick="setSelectionMode('per-guru')"
-            class="py-2 text-[11px] font-semibold rounded-lg bg-indigo-600 text-white shadow-sm transition truncate px-1 text-center cursor-pointer">
-            👨‍🏫 Pembimbing
-          </button>
-          <button id="btnModePerDuDi" onclick="setSelectionMode('per-du-di')"
-            class="py-2 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition truncate px-1 text-center cursor-pointer">
-            🏢 Tempat PKL
-          </button>
-          <button id="btnModePerSiswa" onclick="setSelectionMode('per-siswa')"
-            class="py-2 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition truncate px-1 text-center cursor-pointer">
-            🎓 Nama Siswa
-          </button>
-        </div>
-
-        <!-- Realtime Live Search -->
-        <div class="mb-4 relative">
-          <div class="relative">
-            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
-            <input type="text" id="quickSearchInput" oninput="onQuickSearchInput(this.value)"
-              placeholder="Cari Guru, Siswa, atau DU/DI..."
-              class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
-          </div>
-          <div id="quickSearchResults"
-            class="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-20 max-h-60 overflow-y-auto hidden">
-          </div>
-        </div>
-
-        <!-- PANEL PER GURU -->
-        <div id="panelPerGuru" class="space-y-3.5">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Guru
-              Pembimbing</label>
-            <select id="guruSelect" onchange="onGuruChange()"
-              class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Tempat
-              PKL</label>
-            <select id="tempatFilterSelect" onchange="onTempatFilterChange()"
-              class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-medium text-indigo-900 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Nama
-              Siswa</label>
-            <select id="siswaFilterSelectPerGuru" onchange="onSiswaFilterChange('per-guru')"
-              class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-        </div>
-
-        <!-- PANEL PER DU/DI -->
-        <div id="panelPerDuDi" class="space-y-3.5 hidden">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Tempat PKL
-              (DU/DI)</label>
-            <select id="dudiSelect" onchange="onDuDiChange()"
-              class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Nama
-              Siswa</label>
-            <select id="siswaFilterSelectPerDuDi" onchange="onSiswaFilterChange('per-du-di')"
-              class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-900 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-        </div>
-
-        <!-- PANEL PER SISWA -->
-        <div id="panelPerSiswa" class="space-y-3.5 hidden">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Nama
-              Siswa</label>
-            <select id="siswaSelect" onchange="onSiswaChange()"
-              class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-        </div>
-
-        <!-- INFO CARD RINGKASAN -->
-        <div
-          class="mt-4 bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100 rounded-xl p-3.5 text-xs text-slate-700 space-y-2">
-          <div class="flex items-start justify-between border-b border-indigo-100/60 pb-2">
+      <!-- 1. PEMILIHAN SURAT ACCORDION CARD -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+        <button type="button" id="accordionHeader_pemilihan" onclick="toggleSidebarAccordion('pemilihan')"
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer border-b border-slate-100 bg-indigo-50/40">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+              <i data-lucide="sliders" class="w-4 h-4"></i>
+            </div>
             <div>
-              <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Guru Pembimbing</div>
-              <div id="infoGuruNama" class="font-bold text-slate-900 text-xs mt-0.5">-</div>
-              <div class="text-[11px] text-slate-500">NIP: <span id="infoNip">-</span></div>
-            </div>
-            <div class="text-right">
-              <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Siswa</div>
-              <div class="text-base font-extrabold text-indigo-700"><span id="infoJumlahSiswa">0</span> <span
-                  class="text-xs font-normal text-slate-500">Orang</span></div>
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Pemilihan Surat</h2>
+              <p class="text-[10.5px] text-slate-400 truncate">Pilih Guru, Tempat PKL & Siswa</p>
             </div>
           </div>
-          <div>
-            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Tujuan DU/DI</div>
-            <div id="infoTempatTujuan" class="font-medium text-slate-800 mt-0.5">-</div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">Utama</span>
+            <i id="accordionChevron_pemilihan" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200 rotate-180"></i>
           </div>
-          <div id="infoSiswaDetailRow" class="hidden border-t border-indigo-100/60 pt-2 text-[11px] space-y-1">
-            <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Detail Siswa Terpilih</div>
-            <div class="font-bold text-slate-900 text-xs" id="infoDetailSiswaNama">-</div>
-            <div class="grid grid-cols-2 gap-1 text-slate-600">
-              <div class="col-span-2">NIS/NISN: <span id="infoDetailSiswaNisNisn"
-                  class="font-semibold text-slate-900">-</span></div>
+        </button>
+
+        <div id="accordionBody_pemilihan" class="p-4 sm:p-5">
+          <!-- Mode Segmented Buttons -->
+          <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl mb-4">
+            <button id="btnModePerGuru" onclick="setSelectionMode('per-guru')"
+              class="py-2 text-[11px] font-semibold rounded-lg bg-indigo-600 text-white shadow-sm transition truncate px-1 text-center cursor-pointer">
+              👨‍🏫 Pembimbing
+            </button>
+            <button id="btnModePerDuDi" onclick="setSelectionMode('per-du-di')"
+              class="py-2 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition truncate px-1 text-center cursor-pointer">
+              🏢 Tempat PKL
+            </button>
+            <button id="btnModePerSiswa" onclick="setSelectionMode('per-siswa')"
+              class="py-2 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition truncate px-1 text-center cursor-pointer">
+              🎓 Nama Siswa
+            </button>
+          </div>
+
+          <!-- Realtime Live Search -->
+          <div class="mb-4 relative">
+            <div class="relative">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+              <input type="text" id="quickSearchInput" oninput="onQuickSearchInput(this.value)"
+                placeholder="Cari Guru, Siswa, atau DU/DI..."
+                class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
             </div>
-            <div class="text-slate-600">Jurusan: <span id="infoDetailSiswaJurusan"
-                class="font-semibold text-slate-900">-</span></div>
+            <div id="quickSearchResults"
+              class="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-20 max-h-60 overflow-y-auto hidden">
+            </div>
+          </div>
+
+          <!-- PANEL PER GURU -->
+          <div id="panelPerGuru" class="space-y-3.5">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Guru
+                Pembimbing</label>
+              <select id="guruSelect" onchange="onGuruChange()"
+                class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Tempat
+                PKL</label>
+              <select id="tempatFilterSelect" onchange="onTempatFilterChange()"
+                class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-medium text-indigo-900 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Nama
+                Siswa</label>
+              <select id="siswaFilterSelectPerGuru" onchange="onSiswaFilterChange('per-guru')"
+                class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- PANEL PER DU/DI -->
+          <div id="panelPerDuDi" class="space-y-3.5 hidden">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Tempat PKL
+                (DU/DI)</label>
+              <select id="dudiSelect" onchange="onDuDiChange()"
+                class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Nama
+                Siswa</label>
+              <select id="siswaFilterSelectPerDuDi" onchange="onSiswaFilterChange('per-du-di')"
+                class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-900 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- PANEL PER SISWA -->
+          <div id="panelPerSiswa" class="space-y-3.5 hidden">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Nama
+                Siswa</label>
+              <select id="siswaSelect" onchange="onSiswaChange()"
+                class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- INFO CARD RINGKASAN -->
+          <div
+            class="mt-4 bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100 rounded-xl p-3.5 text-xs text-slate-700 space-y-2">
+            <div class="flex items-start justify-between border-b border-indigo-100/60 pb-2">
+              <div>
+                <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Guru Pembimbing</div>
+                <div id="infoGuruNama" class="font-bold text-slate-900 text-xs mt-0.5">-</div>
+                <div class="text-[11px] text-slate-500">NIP: <span id="infoNip">-</span></div>
+              </div>
+              <div class="text-right">
+                <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Siswa</div>
+                <div class="text-base font-extrabold text-indigo-700"><span id="infoJumlahSiswa">0</span> <span
+                    class="text-xs font-normal text-slate-500">Orang</span></div>
+              </div>
+            </div>
+            <div>
+              <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Tujuan DU/DI</div>
+              <div id="infoTempatTujuan" class="font-medium text-slate-800 mt-0.5">-</div>
+            </div>
+            <div id="infoSiswaDetailRow" class="hidden border-t border-indigo-100/60 pt-2 text-[11px] space-y-1">
+              <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Detail Siswa Terpilih</div>
+              <div class="font-bold text-slate-900 text-xs" id="infoDetailSiswaNama">-</div>
+              <div class="grid grid-cols-2 gap-1 text-slate-600">
+                <div class="col-span-2">NIS/NISN: <span id="infoDetailSiswaNisNisn"
+                    class="font-semibold text-slate-900">-</span></div>
+              </div>
+              <div class="text-slate-600">Jurusan: <span id="infoDetailSiswaJurusan"
+                    class="font-semibold text-slate-900">-</span></div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- TEMPLATE PICKER & QUICK SWITCH -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 space-y-3">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-          <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-            <i data-lucide="layout-template" class="w-4 h-4 text-indigo-600"></i>
-            <span>Template Surat</span>
-          </h2>
+      <!-- 2. TEMPLATE SURAT ACCORDION CARD -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+        <button type="button" id="accordionHeader_template" onclick="toggleSidebarAccordion('template')"
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+              <i data-lucide="layout-template" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Template Surat</h2>
+              <p class="text-[10.5px] text-slate-400 truncate">Pilih format & naskah redaksi</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <i id="accordionChevron_template" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
+          </div>
+        </button>
+
+        <div id="accordionBody_template" class="hidden p-4 sm:p-5 space-y-3.5">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+            <span class="text-xs font-semibold text-slate-700">Daftar Pilihan Template</span>
+            <button onclick="event.stopPropagation(); navigateTo('template');"
+              class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 px-2 py-0.5 rounded-lg transition cursor-pointer">
+              <i data-lucide="list" class="w-3.5 h-3.5"></i>
+              <span>Kelola Template</span>
+            </button>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Template Aktif Digunakan</label>
+            <select id="sidebarTemplateSelect" onchange="onSidebarTemplateChange()"
+              class="w-full p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-950 focus:ring-2 focus:ring-indigo-500">
+              <!-- Injected by JS -->
+            </select>
+          </div>
+
           <button onclick="navigateTo('template')"
-            class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg transition cursor-pointer">
-            <i data-lucide="list" class="w-3.5 h-3.5"></i>
-            <span>Daftar Template</span>
+            class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+            <i data-lucide="file-pen" class="w-4 h-4 text-indigo-600"></i>
+            <span>Edit Redaksi di Editor Teks (WYSIWYG)</span>
           </button>
         </div>
+      </div>
 
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Template Aktif Digunakan</label>
-          <select id="sidebarTemplateSelect" onchange="onSidebarTemplateChange()"
-            class="w-full p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-950 focus:ring-2 focus:ring-indigo-500">
-            <!-- Injected by JS -->
-          </select>
-        </div>
-
-        <button onclick="navigateTo('template')"
-          class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-          <i data-lucide="file-pen" class="w-4 h-4 text-indigo-600"></i>
-          <span>Edit Redaksi di Editor Teks (WYSIWYG)</span>
+      <!-- 3. NOMOR & JADWAL SURAT ACCORDION CARD -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+        <button type="button" id="accordionHeader_jadwal" onclick="toggleSidebarAccordion('jadwal')"
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+              <i data-lucide="file-pen" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Nomor & Jadwal Surat</h2>
+              <p class="text-[10.5px] text-slate-400 truncate">Sesuaikan tanggal & masa PKL</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <i id="accordionChevron_jadwal" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
+          </div>
         </button>
-      </div>
 
-      <!-- FORM PENGATURAN SURAT -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 space-y-3.5">
-        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2.5 flex items-center gap-2">
-          <i data-lucide="file-pen" class="w-4 h-4 text-indigo-600"></i>
-          <span>Nomor & Jadwal Surat</span>
-        </h2>
-
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nomor Surat</label>
-          <input type="text" id="inputNoSurat" oninput="onSettingsInputChange()"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
-        </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
+        <div id="accordionBody_jadwal" class="hidden p-4 sm:p-5 space-y-3.5">
           <div>
-            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Surat</label>
-            <input type="text" id="inputTglSurat" oninput="onSettingsInputChange()"
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nomor Surat</label>
+            <input type="text" id="inputNoSurat" oninput="onSettingsInputChange()"
               class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
           </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Surat</label>
+              <input type="text" id="inputTglSurat" oninput="onSettingsInputChange()"
+                class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tahun Ajaran</label>
+              <input type="text" id="inputTahunAjaran" oninput="onSettingsInputChange()"
+                class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+            </div>
+          </div>
+
           <div>
-            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tahun Ajaran</label>
-            <input type="text" id="inputTahunAjaran" oninput="onSettingsInputChange()"
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Pelepasan Siswa</label>
+            <input type="text" id="inputTglPelepasan" oninput="onSettingsInputChange()"
               class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
           </div>
-        </div>
 
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Pelepasan Siswa</label>
-          <input type="text" id="inputTglPelepasan" oninput="onSettingsInputChange()"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
-        </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Periode Pelaksanaan PKL</label>
+            <input type="text" id="inputPeriodePkl" oninput="onSettingsInputChange()"
+              class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+          </div>
 
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Periode Pelaksanaan PKL</label>
-          <input type="text" id="inputPeriodePkl" oninput="onSettingsInputChange()"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Penarikan</label>
-          <input type="text" id="inputTglPenarikan" oninput="onSettingsInputChange()"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Penarikan</label>
+            <input type="text" id="inputTglPenarikan" oninput="onSettingsInputChange()"
+              class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+          </div>
         </div>
       </div>
 
-      <!-- FORMAT & OPSI CETAK -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 space-y-3.5">
-        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2.5 flex items-center gap-2">
-          <i data-lucide="settings-2" class="w-4 h-4 text-indigo-600"></i>
-          <span>Opsi Tampilan & Format Kertas</span>
-        </h2>
+      <!-- 4. OPSI TAMPILAN & FORMAT KERTAS ACCORDION CARD -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+        <button type="button" id="accordionHeader_opsi" onclick="toggleSidebarAccordion('opsi')"
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
+              <i data-lucide="settings-2" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Opsi Tampilan & Format Kertas</h2>
+              <p class="text-[10.5px] text-slate-400 truncate">Kop, TTD barcode, ukuran F4/A4</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <i id="accordionChevron_opsi" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
+          </div>
+        </button>
 
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Ukuran Kertas Dokumen</label>
-          <select id="paperSizeSelect" onchange="onPaperSizeChange(this.value)"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium">
-            <option value="f4">Folio / F4 (215 x 330 mm) - Standar Surat Dinas</option>
-            <option value="a4">A4 (210 x 297 mm) - Standar Internasional</option>
-          </select>
-        </div>
+        <div id="accordionBody_opsi" class="hidden p-4 sm:p-5 space-y-3.5">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Ukuran Kertas Dokumen</label>
+            <select id="paperSizeSelect" onchange="onPaperSizeChange(this.value)"
+              class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium">
+              <option value="f4">Folio / F4 (215 x 330 mm) - Standar Surat Dinas</option>
+              <option value="a4">A4 (210 x 297 mm) - Standar Internasional</option>
+            </select>
+          </div>
 
-        <div class="space-y-2.5 pt-1">
-          <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
-            <input type="checkbox" id="toggleKop" onchange="onToggleOptionChange()"
-              class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
-            <span>Tampilkan Kop Surat Resmi</span>
-          </label>
+          <div class="space-y-2.5 pt-1">
+            <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" id="toggleKop" onchange="onToggleOptionChange()"
+                class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
+              <span>Tampilkan Kop Surat Resmi</span>
+            </label>
 
-          <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer pt-1">
-            <input type="checkbox" id="toggleTtd" onchange="onToggleOptionChange()"
-              class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
-            <span>Gunakan TTD Elektronik (Barcode)</span>
-          </label>
+            <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer pt-1">
+              <input type="checkbox" id="toggleTtd" onchange="onToggleOptionChange()"
+                class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
+              <span>Gunakan TTD Elektronik (Barcode)</span>
+            </label>
 
-          <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer pt-1">
-            <input type="checkbox" id="toggleAlamat" onchange="onToggleOptionChange()"
-              class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
-            <span>Tampilkan Alamat DU/DI di Tujuan Surat</span>
-          </label>
+            <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer pt-1">
+              <input type="checkbox" id="toggleAlamat" onchange="onToggleOptionChange()"
+                class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
+              <span>Tampilkan Alamat DU/DI di Tujuan Surat</span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -739,8 +829,15 @@
       <div id="docPreviewToolbar"
         class="w-full max-w-[215mm] mb-3 sm:mb-4 flex flex-wrap items-center justify-between gap-2 no-print px-1 sm:px-2">
         <div class="flex items-center gap-2 text-xs text-slate-500">
-          <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i>
-          <span class="font-medium">Pratinjau Dokumen Nyata (WYSIWYG)</span>
+          <button type="button" onclick="toggleSidebarDrawer()" class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition border border-indigo-200 shadow-2xs cursor-pointer" title="Tampilkan / Sembunyikan Panel Menu Samping">
+            <i id="btnToggleSidebarIcon" data-lucide="panel-left-close" class="w-3.5 h-3.5"></i>
+            <span id="btnToggleSidebarText" class="hidden sm:inline">Panel Samping</span>
+          </button>
+          <div class="h-4 w-px bg-slate-200 hidden sm:block"></div>
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i>
+            <span class="font-medium hidden sm:inline">Pratinjau Dokumen Nyata (WYSIWYG)</span>
+          </div>
         </div>
         <div class="flex items-center gap-1.5 sm:gap-2">
           <button onclick="saveCurrentDocToDrive()"
@@ -5380,6 +5477,62 @@ document.addEventListener('click', function(e) {
   }
   closeAllDropdowns();
 });
+
+// ==========================================
+// SIDEBAR ACCORDION & DRAWER CONTROLLER
+// Mekanisme Accordion: membuka satu panel dan menutup panel sebelumnya otomatis
+// ==========================================
+function toggleSidebarAccordion(sectionId) {
+  const sections = ['pemilihan', 'template', 'jadwal', 'opsi'];
+  const targetBody = document.getElementById('accordionBody_' + sectionId);
+  const targetChevron = document.getElementById('accordionChevron_' + sectionId);
+  const targetHeader = document.getElementById('accordionHeader_' + sectionId);
+  if (!targetBody) return;
+
+  const isCurrentlyOpen = !targetBody.classList.contains('hidden');
+
+  // Tutup seluruh panel lain secara otomatis
+  sections.forEach(id => {
+    const body = document.getElementById('accordionBody_' + id);
+    const chevron = document.getElementById('accordionChevron_' + id);
+    const header = document.getElementById('accordionHeader_' + id);
+    if (body) body.classList.add('hidden');
+    if (chevron) chevron.classList.remove('rotate-180');
+    if (header) {
+      header.classList.remove('border-b', 'border-slate-100', 'bg-indigo-50/40');
+    }
+  });
+
+  // Jika sebelumnya tertutup, buka panel ini
+  if (!isCurrentlyOpen) {
+    targetBody.classList.remove('hidden');
+    if (targetChevron) targetChevron.classList.add('rotate-180');
+    if (targetHeader) {
+      targetHeader.classList.add('border-b', 'border-slate-100', 'bg-indigo-50/40');
+    }
+  }
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function toggleSidebarDrawer() {
+  const sidebar = document.getElementById('sidebarControls');
+  const icon = document.getElementById('btnToggleSidebarIcon');
+  const text = document.getElementById('btnToggleSidebarText');
+  if (!sidebar) return;
+
+  const isHidden = sidebar.classList.contains('hidden');
+  if (isHidden) {
+    sidebar.classList.remove('hidden');
+    if (icon) icon.setAttribute('data-lucide', 'panel-left-close');
+    if (text) text.textContent = 'Tutup Panel';
+  } else {
+    sidebar.classList.add('hidden');
+    if (icon) icon.setAttribute('data-lucide', 'panel-left-open');
+    if (text) text.textContent = 'Buka Panel';
+  }
+  if (window.lucide) lucide.createIcons();
+}
 
 // ==========================================
 // MULTI-PAGE ROUTING & NAVIGATION ENGINE

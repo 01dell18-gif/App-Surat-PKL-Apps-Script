@@ -18,250 +18,302 @@
     class="max-w-[1600px] w-full mx-auto px-3 sm:px-6 pt-4 pb-24 md:py-6 flex-1 flex flex-col lg:flex-row gap-5 lg:gap-6">
 
     <!-- ================= SIDEBAR CONTROLS ================= -->
-    <aside class="w-full lg:w-96 flex-shrink-0 flex flex-col gap-5 no-print">
+    <aside id="sidebarControls" class="w-full lg:w-96 flex-shrink-0 flex flex-col gap-3.5 no-print transition-all duration-300">
 
-      <!-- MODE SELECTION & GURU/DUDI PICKER -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80">
-        <h2 class="text-sm font-bold text-slate-800 mb-3 flex items-center justify-between">
-          <span class="flex items-center gap-2">
-            <i data-lucide="sliders" class="w-4 h-4 text-indigo-600"></i>
-            <span>Pemilihan Surat</span>
-          </span>
-          <span class="text-[11px] font-medium text-slate-400">Filter Aktif</span>
-        </h2>
-
-        <!-- Mode Segmented Buttons -->
-        <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl mb-4">
-          <button id="btnModePerGuru" onclick="setSelectionMode('per-guru')"
-            class="py-2 text-[11px] font-semibold rounded-lg bg-indigo-600 text-white shadow-sm transition truncate px-1 text-center cursor-pointer">
-            👨‍🏫 Pembimbing
-          </button>
-          <button id="btnModePerDuDi" onclick="setSelectionMode('per-du-di')"
-            class="py-2 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition truncate px-1 text-center cursor-pointer">
-            🏢 Tempat PKL
-          </button>
-          <button id="btnModePerSiswa" onclick="setSelectionMode('per-siswa')"
-            class="py-2 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition truncate px-1 text-center cursor-pointer">
-            🎓 Nama Siswa
-          </button>
-        </div>
-
-        <!-- Realtime Live Search -->
-        <div class="mb-4 relative">
-          <div class="relative">
-            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
-            <input type="text" id="quickSearchInput" oninput="onQuickSearchInput(this.value)"
-              placeholder="Cari Guru, Siswa, atau DU/DI..."
-              class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
-          </div>
-          <div id="quickSearchResults"
-            class="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-20 max-h-60 overflow-y-auto hidden">
-          </div>
-        </div>
-
-        <!-- PANEL PER GURU -->
-        <div id="panelPerGuru" class="space-y-3.5">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Guru
-              Pembimbing</label>
-            <select id="guruSelect" onchange="onGuruChange()"
-              class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Tempat
-              PKL</label>
-            <select id="tempatFilterSelect" onchange="onTempatFilterChange()"
-              class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-medium text-indigo-900 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Nama
-              Siswa</label>
-            <select id="siswaFilterSelectPerGuru" onchange="onSiswaFilterChange('per-guru')"
-              class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-        </div>
-
-        <!-- PANEL PER DU/DI -->
-        <div id="panelPerDuDi" class="space-y-3.5 hidden">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Tempat PKL
-              (DU/DI)</label>
-            <select id="dudiSelect" onchange="onDuDiChange()"
-              class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Nama
-              Siswa</label>
-            <select id="siswaFilterSelectPerDuDi" onchange="onSiswaFilterChange('per-du-di')"
-              class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-900 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-        </div>
-
-        <!-- PANEL PER SISWA -->
-        <div id="panelPerSiswa" class="space-y-3.5 hidden">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Nama
-              Siswa</label>
-            <select id="siswaSelect" onchange="onSiswaChange()"
-              class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-        </div>
-
-        <!-- INFO CARD RINGKASAN -->
-        <div
-          class="mt-4 bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100 rounded-xl p-3.5 text-xs text-slate-700 space-y-2">
-          <div class="flex items-start justify-between border-b border-indigo-100/60 pb-2">
+      <!-- 1. PEMILIHAN SURAT ACCORDION CARD -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+        <button type="button" id="accordionHeader_pemilihan" onclick="toggleSidebarAccordion('pemilihan')"
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer border-b border-slate-100 bg-indigo-50/40">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+              <i data-lucide="sliders" class="w-4 h-4"></i>
+            </div>
             <div>
-              <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Guru Pembimbing</div>
-              <div id="infoGuruNama" class="font-bold text-slate-900 text-xs mt-0.5">-</div>
-              <div class="text-[11px] text-slate-500">NIP: <span id="infoNip">-</span></div>
-            </div>
-            <div class="text-right">
-              <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Siswa</div>
-              <div class="text-base font-extrabold text-indigo-700"><span id="infoJumlahSiswa">0</span> <span
-                  class="text-xs font-normal text-slate-500">Orang</span></div>
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Pemilihan Surat</h2>
+              <p class="text-[10.5px] text-slate-400 truncate">Pilih Guru, Tempat PKL & Siswa</p>
             </div>
           </div>
-          <div>
-            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Tujuan DU/DI</div>
-            <div id="infoTempatTujuan" class="font-medium text-slate-800 mt-0.5">-</div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">Utama</span>
+            <i id="accordionChevron_pemilihan" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200 rotate-180"></i>
           </div>
-          <div id="infoSiswaDetailRow" class="hidden border-t border-indigo-100/60 pt-2 text-[11px] space-y-1">
-            <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Detail Siswa Terpilih</div>
-            <div class="font-bold text-slate-900 text-xs" id="infoDetailSiswaNama">-</div>
-            <div class="grid grid-cols-2 gap-1 text-slate-600">
-              <div class="col-span-2">NIS/NISN: <span id="infoDetailSiswaNisNisn"
-                  class="font-semibold text-slate-900">-</span></div>
+        </button>
+
+        <div id="accordionBody_pemilihan" class="p-4 sm:p-5">
+          <!-- Mode Segmented Buttons -->
+          <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl mb-4">
+            <button id="btnModePerGuru" onclick="setSelectionMode('per-guru')"
+              class="py-2 text-[11px] font-semibold rounded-lg bg-indigo-600 text-white shadow-sm transition truncate px-1 text-center cursor-pointer">
+              👨‍🏫 Pembimbing
+            </button>
+            <button id="btnModePerDuDi" onclick="setSelectionMode('per-du-di')"
+              class="py-2 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition truncate px-1 text-center cursor-pointer">
+              🏢 Tempat PKL
+            </button>
+            <button id="btnModePerSiswa" onclick="setSelectionMode('per-siswa')"
+              class="py-2 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition truncate px-1 text-center cursor-pointer">
+              🎓 Nama Siswa
+            </button>
+          </div>
+
+          <!-- Realtime Live Search -->
+          <div class="mb-4 relative">
+            <div class="relative">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+              <input type="text" id="quickSearchInput" oninput="onQuickSearchInput(this.value)"
+                placeholder="Cari Guru, Siswa, atau DU/DI..."
+                class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
             </div>
-            <div class="text-slate-600">Jurusan: <span id="infoDetailSiswaJurusan"
-                class="font-semibold text-slate-900">-</span></div>
+            <div id="quickSearchResults"
+              class="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-20 max-h-60 overflow-y-auto hidden">
+            </div>
+          </div>
+
+          <!-- PANEL PER GURU -->
+          <div id="panelPerGuru" class="space-y-3.5">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Guru
+                Pembimbing</label>
+              <select id="guruSelect" onchange="onGuruChange()"
+                class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Tempat
+                PKL</label>
+              <select id="tempatFilterSelect" onchange="onTempatFilterChange()"
+                class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-medium text-indigo-900 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Nama
+                Siswa</label>
+              <select id="siswaFilterSelectPerGuru" onchange="onSiswaFilterChange('per-guru')"
+                class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- PANEL PER DU/DI -->
+          <div id="panelPerDuDi" class="space-y-3.5 hidden">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Tempat PKL
+                (DU/DI)</label>
+              <select id="dudiSelect" onchange="onDuDiChange()"
+                class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Nama
+                Siswa</label>
+              <select id="siswaFilterSelectPerDuDi" onchange="onSiswaFilterChange('per-du-di')"
+                class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-900 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- PANEL PER SISWA -->
+          <div id="panelPerSiswa" class="space-y-3.5 hidden">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Nama
+                Siswa</label>
+              <select id="siswaSelect" onchange="onSiswaChange()"
+                class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- INFO CARD RINGKASAN -->
+          <div
+            class="mt-4 bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100 rounded-xl p-3.5 text-xs text-slate-700 space-y-2">
+            <div class="flex items-start justify-between border-b border-indigo-100/60 pb-2">
+              <div>
+                <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Guru Pembimbing</div>
+                <div id="infoGuruNama" class="font-bold text-slate-900 text-xs mt-0.5">-</div>
+                <div class="text-[11px] text-slate-500">NIP: <span id="infoNip">-</span></div>
+              </div>
+              <div class="text-right">
+                <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Siswa</div>
+                <div class="text-base font-extrabold text-indigo-700"><span id="infoJumlahSiswa">0</span> <span
+                    class="text-xs font-normal text-slate-500">Orang</span></div>
+              </div>
+            </div>
+            <div>
+              <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Tujuan DU/DI</div>
+              <div id="infoTempatTujuan" class="font-medium text-slate-800 mt-0.5">-</div>
+            </div>
+            <div id="infoSiswaDetailRow" class="hidden border-t border-indigo-100/60 pt-2 text-[11px] space-y-1">
+              <div class="text-[10px] uppercase font-bold text-indigo-600 tracking-wider">Detail Siswa Terpilih</div>
+              <div class="font-bold text-slate-900 text-xs" id="infoDetailSiswaNama">-</div>
+              <div class="grid grid-cols-2 gap-1 text-slate-600">
+                <div class="col-span-2">NIS/NISN: <span id="infoDetailSiswaNisNisn"
+                    class="font-semibold text-slate-900">-</span></div>
+              </div>
+              <div class="text-slate-600">Jurusan: <span id="infoDetailSiswaJurusan"
+                    class="font-semibold text-slate-900">-</span></div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- TEMPLATE PICKER & QUICK SWITCH -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 space-y-3">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-          <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-            <i data-lucide="layout-template" class="w-4 h-4 text-indigo-600"></i>
-            <span>Template Surat</span>
-          </h2>
+      <!-- 2. TEMPLATE SURAT ACCORDION CARD -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+        <button type="button" id="accordionHeader_template" onclick="toggleSidebarAccordion('template')"
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+              <i data-lucide="layout-template" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Template Surat</h2>
+              <p class="text-[10.5px] text-slate-400 truncate">Pilih format & naskah redaksi</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <i id="accordionChevron_template" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
+          </div>
+        </button>
+
+        <div id="accordionBody_template" class="hidden p-4 sm:p-5 space-y-3.5">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+            <span class="text-xs font-semibold text-slate-700">Daftar Pilihan Template</span>
+            <button onclick="event.stopPropagation(); navigateTo('template');"
+              class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 px-2 py-0.5 rounded-lg transition cursor-pointer">
+              <i data-lucide="list" class="w-3.5 h-3.5"></i>
+              <span>Kelola Template</span>
+            </button>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Template Aktif Digunakan</label>
+            <select id="sidebarTemplateSelect" onchange="onSidebarTemplateChange()"
+              class="w-full p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-950 focus:ring-2 focus:ring-indigo-500">
+              <!-- Injected by JS -->
+            </select>
+          </div>
+
           <button onclick="navigateTo('template')"
-            class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg transition cursor-pointer">
-            <i data-lucide="list" class="w-3.5 h-3.5"></i>
-            <span>Daftar Template</span>
+            class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+            <i data-lucide="file-pen" class="w-4 h-4 text-indigo-600"></i>
+            <span>Edit Redaksi di Editor Teks (WYSIWYG)</span>
           </button>
         </div>
+      </div>
 
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Template Aktif Digunakan</label>
-          <select id="sidebarTemplateSelect" onchange="onSidebarTemplateChange()"
-            class="w-full p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-950 focus:ring-2 focus:ring-indigo-500">
-            <!-- Injected by JS -->
-          </select>
-        </div>
-
-        <button onclick="navigateTo('template')"
-          class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-          <i data-lucide="file-pen" class="w-4 h-4 text-indigo-600"></i>
-          <span>Edit Redaksi di Editor Teks (WYSIWYG)</span>
+      <!-- 3. NOMOR & JADWAL SURAT ACCORDION CARD -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+        <button type="button" id="accordionHeader_jadwal" onclick="toggleSidebarAccordion('jadwal')"
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+              <i data-lucide="file-pen" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Nomor & Jadwal Surat</h2>
+              <p class="text-[10.5px] text-slate-400 truncate">Sesuaikan tanggal & masa PKL</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <i id="accordionChevron_jadwal" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
+          </div>
         </button>
-      </div>
 
-      <!-- FORM PENGATURAN SURAT -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 space-y-3.5">
-        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2.5 flex items-center gap-2">
-          <i data-lucide="file-pen" class="w-4 h-4 text-indigo-600"></i>
-          <span>Nomor & Jadwal Surat</span>
-        </h2>
-
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nomor Surat</label>
-          <input type="text" id="inputNoSurat" oninput="onSettingsInputChange()"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
-        </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
+        <div id="accordionBody_jadwal" class="hidden p-4 sm:p-5 space-y-3.5">
           <div>
-            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Surat</label>
-            <input type="text" id="inputTglSurat" oninput="onSettingsInputChange()"
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nomor Surat</label>
+            <input type="text" id="inputNoSurat" oninput="onSettingsInputChange()"
               class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
           </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Surat</label>
+              <input type="text" id="inputTglSurat" oninput="onSettingsInputChange()"
+                class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tahun Ajaran</label>
+              <input type="text" id="inputTahunAjaran" oninput="onSettingsInputChange()"
+                class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+            </div>
+          </div>
+
           <div>
-            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tahun Ajaran</label>
-            <input type="text" id="inputTahunAjaran" oninput="onSettingsInputChange()"
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Pelepasan Siswa</label>
+            <input type="text" id="inputTglPelepasan" oninput="onSettingsInputChange()"
               class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
           </div>
-        </div>
 
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Pelepasan Siswa</label>
-          <input type="text" id="inputTglPelepasan" oninput="onSettingsInputChange()"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
-        </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Periode Pelaksanaan PKL</label>
+            <input type="text" id="inputPeriodePkl" oninput="onSettingsInputChange()"
+              class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+          </div>
 
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Periode Pelaksanaan PKL</label>
-          <input type="text" id="inputPeriodePkl" oninput="onSettingsInputChange()"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Penarikan</label>
-          <input type="text" id="inputTglPenarikan" oninput="onSettingsInputChange()"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Penarikan</label>
+            <input type="text" id="inputTglPenarikan" oninput="onSettingsInputChange()"
+              class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+          </div>
         </div>
       </div>
 
-      <!-- FORMAT & OPSI CETAK -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 space-y-3.5">
-        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2.5 flex items-center gap-2">
-          <i data-lucide="settings-2" class="w-4 h-4 text-indigo-600"></i>
-          <span>Opsi Tampilan & Format Kertas</span>
-        </h2>
+      <!-- 4. OPSI TAMPILAN & FORMAT KERTAS ACCORDION CARD -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+        <button type="button" id="accordionHeader_opsi" onclick="toggleSidebarAccordion('opsi')"
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
+              <i data-lucide="settings-2" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Opsi Tampilan & Format Kertas</h2>
+              <p class="text-[10.5px] text-slate-400 truncate">Kop, TTD barcode, ukuran F4/A4</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <i id="accordionChevron_opsi" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
+          </div>
+        </button>
 
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Ukuran Kertas Dokumen</label>
-          <select id="paperSizeSelect" onchange="onPaperSizeChange(this.value)"
-            class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium">
-            <option value="f4">Folio / F4 (215 x 330 mm) - Standar Surat Dinas</option>
-            <option value="a4">A4 (210 x 297 mm) - Standar Internasional</option>
-          </select>
-        </div>
+        <div id="accordionBody_opsi" class="hidden p-4 sm:p-5 space-y-3.5">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Ukuran Kertas Dokumen</label>
+            <select id="paperSizeSelect" onchange="onPaperSizeChange(this.value)"
+              class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium">
+              <option value="f4">Folio / F4 (215 x 330 mm) - Standar Surat Dinas</option>
+              <option value="a4">A4 (210 x 297 mm) - Standar Internasional</option>
+            </select>
+          </div>
 
-        <div class="space-y-2.5 pt-1">
-          <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
-            <input type="checkbox" id="toggleKop" onchange="onToggleOptionChange()"
-              class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
-            <span>Tampilkan Kop Surat Resmi</span>
-          </label>
+          <div class="space-y-2.5 pt-1">
+            <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" id="toggleKop" onchange="onToggleOptionChange()"
+                class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
+              <span>Tampilkan Kop Surat Resmi</span>
+            </label>
 
-          <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer pt-1">
-            <input type="checkbox" id="toggleTtd" onchange="onToggleOptionChange()"
-              class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
-            <span>Gunakan TTD Elektronik (Barcode)</span>
-          </label>
+            <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer pt-1">
+              <input type="checkbox" id="toggleTtd" onchange="onToggleOptionChange()"
+                class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
+              <span>Gunakan TTD Elektronik (Barcode)</span>
+            </label>
 
-          <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer pt-1">
-            <input type="checkbox" id="toggleAlamat" onchange="onToggleOptionChange()"
-              class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
-            <span>Tampilkan Alamat DU/DI di Tujuan Surat</span>
-          </label>
+            <label class="flex items-center gap-2.5 text-xs text-slate-700 cursor-pointer pt-1">
+              <input type="checkbox" id="toggleAlamat" onchange="onToggleOptionChange()"
+                class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" checked>
+              <span>Tampilkan Alamat DU/DI di Tujuan Surat</span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -274,8 +326,15 @@
       <div id="docPreviewToolbar"
         class="w-full max-w-[215mm] mb-3 sm:mb-4 flex flex-wrap items-center justify-between gap-2 no-print px-1 sm:px-2">
         <div class="flex items-center gap-2 text-xs text-slate-500">
-          <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i>
-          <span class="font-medium">Pratinjau Dokumen Nyata (WYSIWYG)</span>
+          <button type="button" onclick="toggleSidebarDrawer()" class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition border border-indigo-200 shadow-2xs cursor-pointer" title="Tampilkan / Sembunyikan Panel Menu Samping">
+            <i id="btnToggleSidebarIcon" data-lucide="panel-left-close" class="w-3.5 h-3.5"></i>
+            <span id="btnToggleSidebarText" class="hidden sm:inline">Panel Samping</span>
+          </button>
+          <div class="h-4 w-px bg-slate-200 hidden sm:block"></div>
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i>
+            <span class="font-medium hidden sm:inline">Pratinjau Dokumen Nyata (WYSIWYG)</span>
+          </div>
         </div>
         <div class="flex items-center gap-1.5 sm:gap-2">
           <button onclick="saveCurrentDocToDrive()"

@@ -3424,6 +3424,62 @@ document.addEventListener('click', function(e) {
 });
 
 // ==========================================
+// SIDEBAR ACCORDION & DRAWER CONTROLLER
+// Mekanisme Accordion: membuka satu panel dan menutup panel sebelumnya otomatis
+// ==========================================
+function toggleSidebarAccordion(sectionId) {
+  const sections = ['pemilihan', 'template', 'jadwal', 'opsi'];
+  const targetBody = document.getElementById('accordionBody_' + sectionId);
+  const targetChevron = document.getElementById('accordionChevron_' + sectionId);
+  const targetHeader = document.getElementById('accordionHeader_' + sectionId);
+  if (!targetBody) return;
+
+  const isCurrentlyOpen = !targetBody.classList.contains('hidden');
+
+  // Tutup seluruh panel lain secara otomatis
+  sections.forEach(id => {
+    const body = document.getElementById('accordionBody_' + id);
+    const chevron = document.getElementById('accordionChevron_' + id);
+    const header = document.getElementById('accordionHeader_' + id);
+    if (body) body.classList.add('hidden');
+    if (chevron) chevron.classList.remove('rotate-180');
+    if (header) {
+      header.classList.remove('border-b', 'border-slate-100', 'bg-indigo-50/40');
+    }
+  });
+
+  // Jika sebelumnya tertutup, buka panel ini
+  if (!isCurrentlyOpen) {
+    targetBody.classList.remove('hidden');
+    if (targetChevron) targetChevron.classList.add('rotate-180');
+    if (targetHeader) {
+      targetHeader.classList.add('border-b', 'border-slate-100', 'bg-indigo-50/40');
+    }
+  }
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function toggleSidebarDrawer() {
+  const sidebar = document.getElementById('sidebarControls');
+  const icon = document.getElementById('btnToggleSidebarIcon');
+  const text = document.getElementById('btnToggleSidebarText');
+  if (!sidebar) return;
+
+  const isHidden = sidebar.classList.contains('hidden');
+  if (isHidden) {
+    sidebar.classList.remove('hidden');
+    if (icon) icon.setAttribute('data-lucide', 'panel-left-close');
+    if (text) text.textContent = 'Tutup Panel';
+  } else {
+    sidebar.classList.add('hidden');
+    if (icon) icon.setAttribute('data-lucide', 'panel-left-open');
+    if (text) text.textContent = 'Buka Panel';
+  }
+  if (window.lucide) lucide.createIcons();
+}
+
+// ==========================================
 // MULTI-PAGE ROUTING & NAVIGATION ENGINE
 // Sesuai Spesifikasi Teknik pembuatan.md (Scriptlet Pattern)
 // ==========================================
