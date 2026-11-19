@@ -1642,6 +1642,7 @@ function renderDbTable(filterText = '') {
     (r.guru && r.guru.toLowerCase().includes(q)) || 
     (r.tempat && r.tempat.toLowerCase().includes(q)) || 
     (r.kelas && r.kelas.toLowerCase().includes(q)) ||
+    (r.jurusan && r.jurusan.toLowerCase().includes(q)) ||
     (r.guru_pangkat && r.guru_pangkat.toLowerCase().includes(q)) ||
     (r.guru_jabatan && r.guru_jabatan.toLowerCase().includes(q))
   ) : AppState.records;
@@ -1779,6 +1780,162 @@ function deleteStudentById(id) {
       showToast(`Data siswa "${name}" berhasil dihapus.`, 'success');
     }
   });
+}
+
+// ================= HELPER ESCAPE HTML =================
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ================= UPDATE NAMA JURUSAN MASAL =================
+function openUpdateJurusanModal() {
+  const selectEl = document.getElementById('selectJurusanLama');
+  const inputEl = document.getElementById('inputJurusanBaru');
+  const modal = document.getElementById('modalUpdateJurusan');
+  if (!modal || !selectEl) return;
+
+  const records = AppState.records || [];
+  const counts = {};
+  const list = [];
+
+  records.forEach(r => {
+    const j = (r.jurusan || '').trim();
+    if (j) {
+      if (!counts[j]) {
+        counts[j] = 0;
+        list.push(j);
+      }
+      counts[j]++;
+    }
+  });
+
+  list.sort((a, b) => a.localeCompare(b));
+
+  if (list.length === 0) {
+    selectEl.innerHTML = '<option value="">-- Tidak ada jurusan terdaftar --</option>';
+    if (inputEl) inputEl.value = '';
+    onJurusanLamaChange();
+  } else {
+    selectEl.innerHTML = list.map(j => `<option value="${escapeHtml(j)}">${escapeHtml(j)} (${counts[j]} siswa)</option>`).join('');
+    if (inputEl) inputEl.value = list[0];
+    onJurusanLamaChange();
+  }
+
+  modal.classList.remove('hidden');
+  if (inputEl) {
+    setTimeout(() => {
+      inputEl.focus();
+      inputEl.select();
+    }, 100);
+  }
+}
+
+function closeUpdateJurusanModal() {
+  const modal = document.getElementById('modalUpdateJurusan');
+  if (modal) modal.classList.add('hidden');
+}
+
+function onJurusanLamaChange() {
+  const selectEl = document.getElementById('selectJurusanLama');
+  const countEl = document.getElementById('countJurusanSiswaTerdampak');
+  const inputEl = document.getElementById('inputJurusanBaru');
+  if (!selectEl || !countEl) return;
+
+  const selectedJurusan = selectEl.value;
+  if (!selectedJurusan) {
+    countEl.textContent = '0 siswa';
+    return;
+  }
+
+  const records = AppState.records || [];
+  let matchingCount = 0;
+  records.forEach(r => {
+    if (String(r.jurusan || '').trim().toLowerCase() === selectedJurusan.toLowerCase()) {
+      matchingCount++;
+    }
+  });
+
+  countEl.textContent = `${matchingCount} siswa`;
+  if (inputEl && (!inputEl.value || selectEl.dataset.prevVal !== selectedJurusan)) {
+    inputEl.value = selectedJurusan;
+  }
+  selectEl.dataset.prevVal = selectedJurusan;
+}
+
+function handleBatchJurusanSubmit(event) {
+  if (event) event.preventDefault();
+  const selectEl = document.getElementById('selectJurusanLama');
+  const inputEl = document.getElementById('inputJurusanBaru');
+  if (!selectEl || !inputEl) return;
+
+  const oldJurusan = selectEl.value;
+  const newJurusan = inputEl.value.trim();
+
+  if (!oldJurusan) {
+    showToast('Pilih nama jurusan lama yang ingin diganti.', 'warning');
+    return;
+  }
+  if (!newJurusan) {
+    showToast('Ketikkan nama jurusan baru.', 'warning');
+    return;
+  }
+  if (oldJurusan.toLowerCase() === newJurusan.toLowerCase()) {
+    showToast('Nama jurusan lama dan jurusan baru tidak boleh sama.', 'warning');
+    return;
+  }
+
+  // Update in-memory AppState.records
+  let updatedCount = 0;
+  (AppState.records || []).forEach(r => {
+    if (String(r.jurusan || '').trim().toLowerCase() === oldJurusan.toLowerCase()) {
+      r.jurusan = newJurusan;
+      updatedCount++;
+    }
+  });
+
+  if (updatedCount === 0) {
+    showToast(`Tidak ditemukan siswa dengan jurusan "${oldJurusan}".`, 'warning');
+    closeUpdateJurusanModal();
+    return;
+  }
+
+  // Bersihkan cache dan perbarui UI seketika
+  try { localStorage.removeItem('surat_pkl_cached_data'); } catch(e) {}
+  processDataset();
+  renderDbTable();
+  renderAll();
+  closeUpdateJurusanModal();
+
+  // Sinkronkan ke Google Sheets via Apps Script
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    showToast(`Menyimpan perubahan ${updatedCount} siswa ke Google Sheets...`, 'info');
+    google.script.run
+      .withSuccessHandler(function(res) {
+        if (res && res.success) {
+          if (res.students) {
+            AppState.records = res.students;
+            processDataset();
+            renderDbTable();
+            renderAll();
+          }
+          showToast(`Berhasil mengubah nama jurusan "${oldJurusan}" menjadi "${newJurusan}" untuk ${res.updatedCount || updatedCount} siswa di Google Sheets!`, 'success');
+        } else {
+          showToast((res && res.message) || 'Gagal menyinkronkan ke spreadsheet.', 'error');
+        }
+      })
+      .withFailureHandler(function(err) {
+        showToast('Gagal menyinkronkan ke Google Sheets: ' + err.toString(), 'error');
+      })
+      .updateJurusanBatch(oldJurusan, newJurusan);
+  } else {
+    showToast(`Mode Pratinjau: Berhasil mengubah nama jurusan "${oldJurusan}" menjadi "${newJurusan}" (${updatedCount} siswa).`, 'success');
+  }
 }
 
 // ================= EKSPOR & IMPOR DATA EXCEL & HAPUS SEMUA =================

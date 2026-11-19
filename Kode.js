@@ -117,6 +117,9 @@ function doPost(e) {
       case 'clearAllStudents':
         result = clearAllStudents();
         break;
+      case 'updateJurusanBatch':
+        result = updateJurusanBatch(payload.oldJurusan, payload.newJurusan);
+        break;
       case 'saveSettings':
         result = saveSettings(payload.settings);
         break;
@@ -747,6 +750,60 @@ function clearAllStudents() {
   }
   clearInitialDataCache();
   return { success: true };
+}
+
+/**
+ * Update / Ganti Nama Jurusan Secara Massal di Sheet Siswa
+ */
+function updateJurusanBatch(oldJurusan, newJurusan) {
+  if (!oldJurusan || !newJurusan) {
+    return { success: false, message: 'Nama jurusan lama dan jurusan baru wajib diisi.' };
+  }
+  const cleanOld = String(oldJurusan).trim();
+  const cleanNew = String(newJurusan).trim();
+  if (cleanOld.toLowerCase() === cleanNew.toLowerCase()) {
+    return { success: false, message: 'Nama jurusan lama dan jurusan baru tidak boleh sama.' };
+  }
+
+  const ss = getSpreadsheet();
+  const sheet = ss.getSheetByName(CONFIG.SHEET_SISWA);
+  if (!sheet || sheet.getLastRow() <= 1) {
+    return { success: false, message: 'Tidak ada data siswa di spreadsheet.' };
+  }
+
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+  const jurusanColIdx = headers.indexOf('jurusan');
+  if (jurusanColIdx === -1) {
+    return { success: false, message: 'Kolom jurusan tidak ditemukan di spreadsheet.' };
+  }
+
+  let updatedCount = 0;
+  for (let i = 1; i < data.length; i++) {
+    const currentVal = String(data[i][jurusanColIdx] || '').trim();
+    if (currentVal.toLowerCase() === cleanOld.toLowerCase()) {
+      data[i][jurusanColIdx] = cleanNew;
+      updatedCount++;
+    }
+  }
+
+  if (updatedCount > 0) {
+    const colNumber = jurusanColIdx + 1;
+    const colValues = [];
+    for (let i = 1; i < data.length; i++) {
+      colValues.push([data[i][jurusanColIdx]]);
+    }
+    sheet.getRange(2, colNumber, colValues.length, 1).setValues(colValues);
+    clearInitialDataCache();
+  }
+
+  return {
+    success: true,
+    updatedCount: updatedCount,
+    oldJurusan: cleanOld,
+    newJurusan: cleanNew,
+    students: getInitialData(true).students
+  };
 }
 
 /**

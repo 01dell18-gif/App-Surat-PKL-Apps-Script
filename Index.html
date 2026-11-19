@@ -277,21 +277,21 @@
           <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i>
           <span class="font-medium">Pratinjau Dokumen Nyata (WYSIWYG)</span>
         </div>
-        <div class="flex items-center gap-2 sm:gap-3">
+        <div class="flex items-center gap-1.5 sm:gap-2">
           <button onclick="saveCurrentDocToDrive()"
-            class="text-xs bg-blue-50 border border-blue-300 hover:bg-blue-100 text-blue-700 px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-semibold transition shadow-sm cursor-pointer">
+            class="text-xs bg-blue-50 border border-blue-300 hover:bg-blue-100 text-blue-700 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 font-semibold transition shadow-xs cursor-pointer" title="Simpan ke Google Drive">
             <i data-lucide="cloud-upload" class="w-3.5 h-3.5 text-blue-600"></i>
-            <span>Simpan ke Google Drive</span>
+            <span><span class="hidden sm:inline">Simpan ke </span>Drive</span>
           </button>
           <button onclick="navigateTo('template')"
-            class="text-xs bg-white border border-slate-300 hover:bg-slate-50 text-indigo-700 px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-medium transition shadow-sm cursor-pointer">
+            class="text-xs bg-white border border-slate-300 hover:bg-slate-50 text-indigo-700 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 font-medium transition shadow-xs cursor-pointer" title="Edit Template Surat">
             <i data-lucide="file-pen" class="w-3.5 h-3.5 text-indigo-600"></i>
             <span>Edit Template</span>
           </button>
           <button onclick="printCurrentDoc()"
-            class="text-xs bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-medium transition shadow-sm cursor-pointer">
+            class="text-xs bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 font-medium transition shadow-xs cursor-pointer" title="Cetak Dokumen Pratinjau">
             <i data-lucide="printer" class="w-3.5 h-3.5 text-indigo-600"></i>
-            <span>Cetak Pratinjau Ini</span>
+            <span>Cetak<span class="hidden sm:inline"> Pratinjau</span></span>
           </button>
         </div>
       </div>

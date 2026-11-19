@@ -30,51 +30,57 @@
       </div>
 
       <div class="flex items-center gap-2 self-stretch sm:self-auto justify-end">
-        <button onclick="navigateTo('surat')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer" title="Kembali ke Pratinjau Surat">
-          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <button onclick="navigateTo('surat')" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg sm:rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer" title="Kembali ke Pratinjau Surat">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           <span>Kembali ke Surat</span>
         </button>
       </div>
     </div>
 
     <!-- Toolbar: Search & Action Buttons -->
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-2.5 sm:p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-3">
       
       <!-- Search Input -->
-      <div class="flex items-center gap-2 flex-1 min-w-[240px] max-w-md">
+      <div class="flex items-center gap-2 flex-1 min-w-[200px] max-w-md">
         <div class="relative w-full">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
-          <input type="text" id="dbSearchInput" oninput="onDbSearchInput(this.value)" placeholder="Cari nama siswa, guru, kelas, tempat, pangkat..." class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
+          <i data-lucide="search" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 absolute left-3 top-2 sm:top-2.5"></i>
+          <input type="text" id="dbSearchInput" oninput="onDbSearchInput(this.value)" placeholder="Cari nama siswa, guru, kelas, jurusan, tempat..." class="w-full pl-8 sm:pl-9 pr-3 py-1.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-lg sm:rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:bg-white transition outline-none">
         </div>
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex items-center flex-wrap gap-2">
+      <div class="flex items-center flex-wrap gap-1.5 sm:gap-2">
         <!-- Hidden File Input untuk Impor Excel -->
         <input type="file" id="excelImportFileInput" accept=".xls,.xlsx,.csv" class="hidden" onchange="handleExcelImportFile(event)">
 
         <!-- 1. Tambah Siswa Manual -->
-        <button onclick="openAddStudentModal()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
-          <i data-lucide="user-plus" class="w-4 h-4"></i>
-          <span>+ Tambah Siswa</span>
+        <button onclick="openAddStudentModal()" class="px-2.5 py-1.5 sm:px-3 sm:py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg sm:rounded-xl text-xs font-semibold flex items-center gap-1 sm:gap-1.5 shadow-xs transition cursor-pointer" title="Tambah Data Siswa Baru">
+          <i data-lucide="user-plus" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+          <span>+ Siswa<span class="hidden md:inline"> Baru</span></span>
         </button>
 
-        <!-- 2. Ekspor Excel (.xls) -->
-        <button onclick="exportDataToExcel()" class="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Unduh seluruh data siswa ke format Excel (.xls)">
-          <i data-lucide="download" class="w-4 h-4"></i>
-          <span>Ekspor (.xls)</span>
+        <!-- 2. Update Nama Jurusan Masal -->
+        <button onclick="openUpdateJurusanModal()" class="px-2.5 py-1.5 sm:px-3 sm:py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg sm:rounded-xl text-xs font-semibold flex items-center gap-1 sm:gap-1.5 shadow-xs transition cursor-pointer" title="Ganti atau perbarui nama jurusan secara massal di seluruh data siswa">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+          <span>Ubah Jurusan</span>
         </button>
 
-        <!-- 3. Impor Excel -->
-        <button onclick="document.getElementById('excelImportFileInput').click()" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Unggah berkas Excel (.xls, .xlsx, .csv) untuk impor data siswa">
-          <i data-lucide="upload" class="w-4 h-4"></i>
-          <span>Impor Excel</span>
+        <!-- 3. Ekspor Excel (.xls) -->
+        <button onclick="exportDataToExcel()" class="px-2.5 py-1.5 sm:px-3 sm:py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg sm:rounded-xl text-xs font-semibold flex items-center gap-1 sm:gap-1.5 shadow-xs transition cursor-pointer" title="Unduh seluruh data siswa ke format Excel (.xls)">
+          <i data-lucide="download" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+          <span>Ekspor<span class="hidden md:inline"> (.xls)</span></span>
         </button>
 
-        <!-- 4. Hapus Semua Data -->
-        <button onclick="confirmClearAllStudents()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Hapus seluruh data siswa dari database">
-          <i data-lucide="trash-2" class="w-4 h-4 text-rose-600"></i>
-          <span>Hapus Semua</span>
+        <!-- 4. Impor Excel -->
+        <button onclick="document.getElementById('excelImportFileInput').click()" class="px-2.5 py-1.5 sm:px-3 sm:py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg sm:rounded-xl text-xs font-semibold flex items-center gap-1 sm:gap-1.5 shadow-xs transition cursor-pointer" title="Unggah berkas Excel (.xls, .xlsx, .csv) untuk impor data siswa">
+          <i data-lucide="upload" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+          <span>Impor<span class="hidden md:inline"> Excel</span></span>
+        </button>
+
+        <!-- 5. Hapus Semua Data -->
+        <button onclick="confirmClearAllStudents()" class="px-2.5 py-1.5 sm:px-3 sm:py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg sm:rounded-xl text-xs font-semibold flex items-center gap-1 sm:gap-1.5 shadow-xs transition cursor-pointer" title="Hapus seluruh data siswa dari database">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-600"></i>
+          <span>Hapus<span class="hidden md:inline"> Semua</span></span>
         </button>
       </div>
 

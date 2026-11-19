@@ -29,14 +29,14 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2 self-stretch sm:self-auto justify-end">
-        <button onclick="navigateTo('surat')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer" title="Kembali ke Pratinjau Surat">
-          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      <div class="flex items-center gap-1.5 sm:gap-2 self-stretch sm:self-auto justify-end">
+        <button onclick="navigateTo('surat')" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg sm:rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer" title="Kembali ke Pratinjau Surat">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           <span>Kembali ke Surat</span>
         </button>
-        <button onclick="saveApplicationSettings()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Simpan seluruh perubahan pengaturan">
-          <i data-lucide="save" class="w-4 h-4"></i>
-          <span>Simpan Pengaturan</span>
+        <button onclick="saveApplicationSettings()" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg sm:rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition cursor-pointer" title="Simpan seluruh perubahan pengaturan">
+          <i data-lucide="save" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+          <span>Simpan<span class="hidden sm:inline"> Pengaturan</span></span>
         </button>
       </div>
     </div>
@@ -316,10 +316,10 @@
         </div>
 
         <!-- Sticky / Card Save Button Action -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 flex items-center justify-between">
-          <span class="text-xs text-slate-500">Pastikan data yang diinput sudah benar sebelum menyimpan.</span>
-          <button onclick="saveApplicationSettings()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm transition cursor-pointer">
-            <i data-lucide="save" class="w-4 h-4"></i>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-3 sm:p-4 flex items-center justify-between gap-2">
+          <span class="text-xs text-slate-500">Pastikan data sudah benar sebelum menyimpan.</span>
+          <button onclick="saveApplicationSettings()" class="px-3.5 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg sm:rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+            <i data-lucide="save" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
             <span>Simpan Pengaturan</span>
           </button>
         </div>
