@@ -584,21 +584,40 @@ function populateSettingsInputs() {
   if (document.getElementById('settingTahunAjaran')) document.getElementById('settingTahunAjaran').value = s.tahunAjaran || '2026/2027';
 }
 
-// Render Seluruh Elemen Tampilan
+// Render Seluruh Elemen Tampilan dengan Aman Sesuai Halaman Aktif
 function renderAll() {
-  renderSidebarControls();
-  renderDocumentPreview();
-  renderDbTable();
-  if (document.getElementById('editorTemplateSelect')) {
-    populateEditorTemplateSelect();
-    loadTemplateToEditor(AppState.editingTemplateId || AppState.activeTemplateId);
+  // 1. Jika di Halaman Surat (Index.html)
+  if (document.getElementById('documentTemplate') || document.getElementById('guruSelect')) {
+    try { renderSidebarControls(); } catch (e) { console.warn('renderSidebarControls error:', e); }
+    try { renderDocumentPreview(); } catch (e) { console.warn('renderDocumentPreview error:', e); }
+  }
+
+  // 2. Jika di Halaman Database (Database.html)
+  if (document.getElementById('dbTableBody')) {
+    try { renderDbTable(); } catch (e) { console.warn('renderDbTable error:', e); }
+  }
+
+  // 3. Jika di Halaman Template Manager (TemplateManager.html)
+  if (document.getElementById('editorTemplateSelect') || document.getElementById('wysiwygEditor')) {
+    try {
+      populateEditorTemplateSelect();
+      loadTemplateToEditor(AppState.editingTemplateId || AppState.activeTemplateId);
+    } catch (e) { console.warn('editor populate error:', e); }
   }
   if (document.getElementById('templateTableBody')) {
-    renderTemplateTableList();
+    try { renderTemplateTableList(); } catch (e) { console.warn('renderTemplateTableList error:', e); }
   }
-  populateSettingsInputs();
-  highlightActiveNavigation();
-  if (window.lucide) lucide.createIcons();
+
+  // 4. Jika di Halaman Pengaturan (Pengaturan.html)
+  if (document.getElementById('settingNamaSekolah') || document.getElementById('settingKopUrl')) {
+    try { populateSettingsInputs(); } catch (e) { console.warn('populateSettingsInputs error:', e); }
+  }
+
+  // 5. Global Navigation & Icons
+  try { highlightActiveNavigation(); } catch (e) {}
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
 }
 
 // Render Dropdown Kontrol Sidebar
@@ -669,31 +688,38 @@ function renderSidebarControls() {
 }
 
 function updateInfoCard() {
-  let activeStudents = getActiveFilteredStudents();
   const infoJumlahSiswa = document.getElementById('infoJumlahSiswa');
+  const infoGuruNama = document.getElementById('infoGuruNama');
+  const infoNip = document.getElementById('infoNip');
+  const infoTempatTujuan = document.getElementById('infoTempatTujuan');
+
+  // Jika tidak berada di halaman Surat (misal di Database atau Template), lewati tanpa eror
+  if (!infoGuruNama && !infoJumlahSiswa && !infoTempatTujuan) return;
+
+  let activeStudents = getActiveFilteredStudents();
   if (infoJumlahSiswa) infoJumlahSiswa.textContent = activeStudents.length;
 
   if (AppState.selectedMode === 'per-guru') {
     const curGuru = AppState.gurus[AppState.selectedGuruIdx];
     if (curGuru) {
-      document.getElementById('infoGuruNama').textContent = curGuru.guru;
-      document.getElementById('infoNip').textContent = cleanFieldValue(curGuru.nip, '-');
+      if (infoGuruNama) infoGuruNama.textContent = curGuru.guru;
+      if (infoNip) infoNip.textContent = cleanFieldValue(curGuru.nip, '-');
       const tempatList = Array.from(new Set(activeStudents.map(s => s.tempat)));
-      document.getElementById('infoTempatTujuan').textContent = tempatList.length === 1 ? tempatList[0] : `${tempatList.length} Tempat DU/DI Berbeda`;
+      if (infoTempatTujuan) infoTempatTujuan.textContent = tempatList.length === 1 ? tempatList[0] : `${tempatList.length} Tempat DU/DI Berbeda`;
     }
   } else if (AppState.selectedMode === 'per-du-di') {
     const curPlace = AppState.places[AppState.selectedDuDiIdx];
     if (curPlace) {
-      document.getElementById('infoGuruNama').textContent = Array.from(new Set(activeStudents.map(s => s.guru))).join(', ') || '-';
-      document.getElementById('infoNip').textContent = '-';
-      document.getElementById('infoTempatTujuan').textContent = curPlace.tempat;
+      if (infoGuruNama) infoGuruNama.textContent = Array.from(new Set(activeStudents.map(s => s.guru))).join(', ') || '-';
+      if (infoNip) infoNip.textContent = '-';
+      if (infoTempatTujuan) infoTempatTujuan.textContent = curPlace.tempat;
     }
   } else {
     const curSiswa = AppState.records[AppState.selectedSiswaIdx];
     if (curSiswa) {
-      document.getElementById('infoGuruNama').textContent = curSiswa.guru;
-      document.getElementById('infoNip').textContent = cleanFieldValue(curSiswa.nip, '-');
-      document.getElementById('infoTempatTujuan').textContent = curSiswa.tempat;
+      if (infoGuruNama) infoGuruNama.textContent = curSiswa.guru;
+      if (infoNip) infoNip.textContent = cleanFieldValue(curSiswa.nip, '-');
+      if (infoTempatTujuan) infoTempatTujuan.textContent = curSiswa.tempat;
     }
   }
 }
@@ -2267,13 +2293,23 @@ function saveApplicationSettings() {
 
 // ================= SIMPAN KE GOOGLE DRIVE =================
 function saveCurrentDocToDrive() {
-  const docContainer = document.getElementById('documentTemplate');
-  if (!docContainer) return;
-
   const activeStudents = getActiveFilteredStudents();
+  if (!activeStudents || activeStudents.length === 0) {
+    showToast('Tidak ada data siswa untuk disimpan ke Drive.', 'warning');
+    return;
+  }
   const firstStudent = activeStudents[0] || {};
   const safeName = (firstStudent.guru || firstStudent.siswa || 'Dokumen').replace(/[^a-zA-Z0-9]/g, '_');
   const filename = `Surat_PKL_${safeName}_${Date.now()}.html`;
+
+  let innerContent = '';
+  const docContainer = document.getElementById('documentTemplate');
+  if (docContainer) {
+    innerContent = docContainer.innerHTML;
+  } else {
+    const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0];
+    innerContent = buildSingleSuratHtml(activeStudents, activeTemplate, AppState.settings);
+  }
 
   // Ambil HTML dokumen lengkap
   const fullHtml = `
@@ -2288,7 +2324,7 @@ function saveCurrentDocToDrive() {
       </style>
     </head>
     <body>
-      ${docContainer.innerHTML}
+      ${innerContent}
     </body>
     </html>
   `;
@@ -2296,7 +2332,8 @@ function saveCurrentDocToDrive() {
   const base64Data = btoa(unescape(encodeURIComponent(fullHtml)));
 
   if (typeof google !== 'undefined' && google.script && google.script.run) {
-    const btn = event ? event.target : null;
+    let btn = null;
+    try { if (typeof event !== 'undefined' && event && event.target) btn = event.target.closest('button') || event.target; } catch(e) {}
     const origText = btn ? btn.innerHTML : '';
     if (btn) btn.innerHTML = '<span>Menyimpan ke Drive...</span>';
 
@@ -2337,7 +2374,32 @@ function closeDriveSuccessModal() {
 
 // ================= CETAK & UNDUH DOKUMEN =================
 function printCurrentDoc() {
-  window.print();
+  const docContainer = document.getElementById('documentTemplate');
+  if (docContainer) {
+    window.print();
+  } else {
+    // Cetak surat aktif secara instan dari menu Database / Template / Pengaturan
+    const activeStudents = getActiveFilteredStudents();
+    if (!activeStudents || activeStudents.length === 0) {
+      showToast('Tidak ada data siswa untuk dicetak.', 'warning');
+      return;
+    }
+    const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0];
+    const s = AppState.settings;
+    const container = document.getElementById('batchPrintContainer');
+    if (container) {
+      const singleHtml = buildSingleSuratHtml(activeStudents, activeTemplate, s);
+      container.innerHTML = `<div class="doc-page paper-${AppState.paperSize}">${singleHtml}</div>`;
+      document.body.classList.add('batch-print-active');
+      window.print();
+      setTimeout(() => {
+        document.body.classList.remove('batch-print-active');
+        container.innerHTML = '';
+      }, 1000);
+    } else {
+      navigateTo('surat');
+    }
+  }
 }
 
 /**
