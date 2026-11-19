@@ -80,6 +80,11 @@
     padding: 15mm 20mm 20mm 25mm;
   }
 
+  #docScaleViewport {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
   .page-break-divider {
     position: relative;
     margin: 40px 0;
@@ -202,6 +207,18 @@
       margin: 0 !important;
       padding: 0 !important;
       overflow: hidden !important;
+    }
+
+    #docScaleViewport {
+      width: 100% !important;
+      height: auto !important;
+      overflow: visible !important;
+      margin: 0 !important;
+    }
+
+    #documentTemplate {
+      transform: none !important;
+      margin: 0 !important;
     }
 
     .doc-page {

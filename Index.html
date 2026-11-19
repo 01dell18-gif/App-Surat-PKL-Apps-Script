@@ -18,10 +18,12 @@
     class="max-w-[1600px] w-full mx-auto px-3 sm:px-6 pt-4 pb-24 md:py-6 flex-1 flex flex-col lg:flex-row gap-5 lg:gap-6">
 
     <!-- ================= SIDEBAR CONTROLS ================= -->
-    <aside id="sidebarControls" class="w-full lg:w-96 flex-shrink-0 flex flex-col gap-3.5 no-print transition-all duration-300">
+    <aside id="sidebarControls"
+      class="w-full lg:w-96 flex-shrink-0 flex flex-col gap-3.5 no-print transition-all duration-300">
 
       <!-- 1. PEMILIHAN SURAT ACCORDION CARD -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
         <button type="button" id="accordionHeader_pemilihan" onclick="toggleSidebarAccordion('pemilihan')"
           class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer border-b border-slate-100 bg-indigo-50/40">
           <div class="flex items-center gap-2.5 min-w-0">
@@ -35,7 +37,8 @@
           </div>
           <div class="flex items-center gap-2 shrink-0">
             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">Utama</span>
-            <i id="accordionChevron_pemilihan" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200 rotate-180"></i>
+            <i id="accordionChevron_pemilihan" data-lucide="chevron-down"
+              class="w-4 h-4 text-slate-400 transition-transform duration-200 rotate-180"></i>
           </div>
         </button>
 
@@ -159,14 +162,15 @@
                     class="font-semibold text-slate-900">-</span></div>
               </div>
               <div class="text-slate-600">Jurusan: <span id="infoDetailSiswaJurusan"
-                    class="font-semibold text-slate-900">-</span></div>
+                  class="font-semibold text-slate-900">-</span></div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- 2. TEMPLATE SURAT ACCORDION CARD -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
         <button type="button" id="accordionHeader_template" onclick="toggleSidebarAccordion('template')"
           class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
           <div class="flex items-center gap-2.5 min-w-0">
@@ -179,7 +183,8 @@
             </div>
           </div>
           <div class="flex items-center gap-2 shrink-0">
-            <i id="accordionChevron_template" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
+            <i id="accordionChevron_template" data-lucide="chevron-down"
+              class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
           </div>
         </button>
 
@@ -210,7 +215,8 @@
       </div>
 
       <!-- 3. NOMOR & JADWAL SURAT ACCORDION CARD -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
         <button type="button" id="accordionHeader_jadwal" onclick="toggleSidebarAccordion('jadwal')"
           class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
           <div class="flex items-center gap-2.5 min-w-0">
@@ -223,7 +229,8 @@
             </div>
           </div>
           <div class="flex items-center gap-2 shrink-0">
-            <i id="accordionChevron_jadwal" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
+            <i id="accordionChevron_jadwal" data-lucide="chevron-down"
+              class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
           </div>
         </button>
 
@@ -268,7 +275,8 @@
       </div>
 
       <!-- 4. OPSI TAMPILAN & FORMAT KERTAS ACCORDION CARD -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
         <button type="button" id="accordionHeader_opsi" onclick="toggleSidebarAccordion('opsi')"
           class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
           <div class="flex items-center gap-2.5 min-w-0">
@@ -281,7 +289,8 @@
             </div>
           </div>
           <div class="flex items-center gap-2 shrink-0">
-            <i id="accordionChevron_opsi" data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
+            <i id="accordionChevron_opsi" data-lucide="chevron-down"
+              class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
           </div>
         </button>
 
@@ -324,31 +333,42 @@
 
       <!-- TOOLBAR ZOOM & PRINT -->
       <div id="docPreviewToolbar"
-        class="w-full max-w-[215mm] mb-3 sm:mb-4 flex flex-wrap items-center justify-between gap-2 no-print px-1 sm:px-2">
-        <div class="flex items-center gap-2 text-xs text-slate-500">
-          <button type="button" onclick="toggleSidebarDrawer()" class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition border border-indigo-200 shadow-2xs cursor-pointer" title="Tampilkan / Sembunyikan Panel Menu Samping">
+        class="w-full max-w-[215mm] mb-3 sm:mb-4 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 no-print px-1 sm:px-2">
+        <div class="flex items-center gap-1.5 sm:gap-2 text-xs text-slate-500">
+          <button type="button" onclick="toggleSidebarDrawer()"
+            class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition border border-indigo-200 shadow-2xs cursor-pointer"
+            title="Tampilkan / Sembunyikan Panel Menu Samping">
             <i id="btnToggleSidebarIcon" data-lucide="panel-left-close" class="w-3.5 h-3.5"></i>
             <span id="btnToggleSidebarText" class="hidden sm:inline">Panel Samping</span>
           </button>
-          <div class="h-4 w-px bg-slate-200 hidden sm:block"></div>
-          <div class="flex items-center gap-1.5">
+          <button type="button" id="btnToggleDocFit" onclick="toggleDocFitMobile()"
+            class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition border border-indigo-200 shadow-2xs cursor-pointer"
+            title="Sesuaikan lebar dokumen pas dengan layar (Fit to Screen)">
+            <i id="btnDocFitIcon" data-lucide="scan" class="w-3.5 h-3.5"></i>
+            <span id="btnDocFitText">Fit Layar</span>
+          </button>
+          <div class="h-4 w-px bg-slate-200 hidden md:block"></div>
+          <div class="hidden md:flex items-center gap-1.5">
             <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i>
-            <span class="font-medium hidden sm:inline">Pratinjau Dokumen Nyata (WYSIWYG)</span>
+            <span class="font-medium">Pratinjau Dokumen Nyata (WYSIWYG)</span>
           </div>
         </div>
         <div class="flex items-center gap-1.5 sm:gap-2">
           <button onclick="saveCurrentDocToDrive()"
-            class="text-xs bg-blue-50 border border-blue-300 hover:bg-blue-100 text-blue-700 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 font-semibold transition shadow-xs cursor-pointer" title="Simpan ke Google Drive">
+            class="text-xs bg-blue-50 border border-blue-300 hover:bg-blue-100 text-blue-700 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 font-semibold transition shadow-xs cursor-pointer"
+            title="Simpan ke Google Drive">
             <i data-lucide="cloud-upload" class="w-3.5 h-3.5 text-blue-600"></i>
             <span><span class="hidden sm:inline">Simpan ke </span>Drive</span>
           </button>
           <button onclick="navigateTo('template')"
-            class="text-xs bg-white border border-slate-300 hover:bg-slate-50 text-indigo-700 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 font-medium transition shadow-xs cursor-pointer" title="Edit Template Surat">
+            class="text-xs bg-white border border-slate-300 hover:bg-slate-50 text-indigo-700 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 font-medium transition shadow-xs cursor-pointer"
+            title="Edit Template Surat">
             <i data-lucide="file-pen" class="w-3.5 h-3.5 text-indigo-600"></i>
-            <span>Edit Template</span>
+            <span>Edit<span class="hidden sm:inline"> Template</span></span>
           </button>
           <button onclick="printCurrentDoc()"
-            class="text-xs bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 font-medium transition shadow-xs cursor-pointer" title="Cetak Dokumen Pratinjau">
+            class="text-xs bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 font-medium transition shadow-xs cursor-pointer"
+            title="Cetak Dokumen Pratinjau">
             <i data-lucide="printer" class="w-3.5 h-3.5 text-indigo-600"></i>
             <span>Cetak<span class="hidden sm:inline"> Pratinjau</span></span>
           </button>
@@ -356,100 +376,102 @@
       </div>
 
       <!-- DOCUMENT CONTAINER -->
-      <div class="w-full overflow-x-auto pb-6 flex justify-start lg:justify-center">
-        <div id="documentTemplate" class="doc-page paper-f4 shrink-0 shadow-lg">
+      <div id="docPreviewContainer" class="w-full overflow-x-auto pb-6 flex justify-start lg:justify-center">
+        <div id="docScaleViewport" class="transition-all duration-200">
+          <div id="documentTemplate" class="doc-page paper-f4 shrink-0 shadow-lg">
 
-          <!-- HALAMAN 1: SURAT PENGANTAR / BERITA ACARA -->
-          <div id="pageSuratPengantar" class="surat-page">
+            <!-- HALAMAN 1: SURAT PENGANTAR / BERITA ACARA -->
+            <div id="pageSuratPengantar" class="surat-page">
 
-            <!-- KOP SURAT RESMI -->
-            <div id="docKopContainer"></div>
+              <!-- KOP SURAT RESMI -->
+              <div id="docKopContainer"></div>
 
-            <!-- JUDUL SURAT -->
-            <div id="docJudulContainer"
-              style="text-align: center; margin-top: 10px; margin-bottom: 14px; display: none;">
-              <div id="docJudulSurat" style="font-size: 13pt; font-weight: bold; letter-spacing: 1px;">SURAT PENGANTAR
+              <!-- JUDUL SURAT -->
+              <div id="docJudulContainer"
+                style="text-align: center; margin-top: 10px; margin-bottom: 14px; display: none;">
+                <div id="docJudulSurat" style="font-size: 13pt; font-weight: bold; letter-spacing: 1px;">SURAT PENGANTAR
+                </div>
+                <div style="font-size: 11pt; margin-top: 2px;">Nomor: <span
+                    id="docNoSurat">B.10.000/9546/SMKN1KLK/DIKPORA</span></div>
               </div>
-              <div style="font-size: 11pt; margin-top: 2px;">Nomor: <span
-                  id="docNoSurat">B.10.000/9546/SMKN1KLK/DIKPORA</span></div>
+
+              <!-- TUJUAN SURAT -->
+              <div id="docTujuanSuratContainer" style="margin-bottom: 14px; display: none;">
+                <table style="width: 100%;">
+                  <tr>
+                    <td style="width: 10%; vertical-align: top;">Kepada:</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td style="vertical-align: top;">Yth.</td>
+                    <td>
+                      <div style="font-weight: bold;" id="docNamaTempat">Pimpinan DU/DI</div>
+                      <div style="font-size: 10.5pt; color: #333;" id="docAlamatTempat"></div>
+                      <div>di -</div>
+                      <div style="text-indent: 20px;">Tempat</div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- ISI SURAT DINAMIS (DARI TEMPLATE WYSIWYG AKTIF) -->
+              <div id="docIsiSuratContainer" style="text-align: justify; line-height: 1.35; font-size: 11pt;"></div>
+
+              <!-- TANDA TANGAN KEPALA SEKOLAH -->
+              <div
+                style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px; page-break-inside: avoid;">
+                <div style="width: 280px; text-align: left; position: relative;">
+                  <div id="docTitimangsaHeader">
+                    <div>Dikeluarkan di Klungkung</div>
+                    <div>Pada Tanggal, <span id="docTglSurat">12 November 2026</span></div>
+                  </div>
+                  <div id="docJabatanTtd">
+                    <div>Kepala <span id="docNamaSekolahTtd">SMK Negeri 1 Klungkung</span></div>
+                  </div>
+
+                  <!-- TTD Area (Injected by JS: TTD Elektronik atau TTD Basah) -->
+                  <div id="docTtdArea"></div>
+                </div>
+              </div>
+
             </div>
 
-            <!-- TUJUAN SURAT -->
-            <div id="docTujuanSuratContainer" style="margin-bottom: 14px; display: none;">
-              <table style="width: 100%;">
-                <tr>
-                  <td style="width: 10%; vertical-align: top;">Kepada:</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td style="vertical-align: top;">Yth.</td>
-                  <td>
-                    <div style="font-weight: bold;" id="docNamaTempat">Pimpinan DU/DI</div>
-                    <div style="font-size: 10.5pt; color: #333;" id="docAlamatTempat"></div>
-                    <div>di -</div>
-                    <div style="text-indent: 20px;">Tempat</div>
-                  </td>
-                </tr>
+            <!-- DIVIDER ANTAR HALAMAN DI LAYAR PREVIEW -->
+            <div id="pageDividerLampiran" class="page-break-divider no-print"></div>
+
+            <!-- HALAMAN 2: LAMPIRAN DAFTAR SISWA -->
+            <div id="pageLampiran" class="lampiran-page print-page-break">
+
+              <div style="font-weight: bold; margin-bottom: 12px; font-size: 11pt;">
+                Lampiran : <br>
+                Daftar Nama Siswa Peserta PKL
+              </div>
+
+              <table class="lampiran-table"
+                style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 10.5pt; border: 1px solid #000;"
+                border="1">
+                <thead>
+                  <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
+                    <th
+                      style="padding: 6px 8px; width: 6%; border: 1px solid #000; text-align: center; box-sizing: border-box;">
+                      No</th>
+                    <th
+                      style="padding: 6px 8px; width: 34%; border: 1px solid #000; text-align: left; box-sizing: border-box;">
+                      Nama Siswa</th>
+                    <th
+                      style="padding: 6px 8px; width: 18%; border: 1px solid #000; text-align: center; box-sizing: border-box;">
+                      Kelas</th>
+                    <th
+                      style="padding: 6px 8px; width: 42%; border: 1px solid #000; text-align: left; box-sizing: border-box;">
+                      Tempat PKL</th>
+                  </tr>
+                </thead>
+                <tbody id="docTbodySiswa"></tbody>
               </table>
-            </div>
 
-            <!-- ISI SURAT DINAMIS (DARI TEMPLATE WYSIWYG AKTIF) -->
-            <div id="docIsiSuratContainer" style="text-align: justify; line-height: 1.35; font-size: 11pt;"></div>
-
-            <!-- TANDA TANGAN KEPALA SEKOLAH -->
-            <div
-              style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px; page-break-inside: avoid;">
-              <div style="width: 280px; text-align: left; position: relative;">
-                <div id="docTitimangsaHeader">
-                  <div>Dikeluarkan di Klungkung</div>
-                  <div>Pada Tanggal, <span id="docTglSurat">12 November 2026</span></div>
-                </div>
-                <div id="docJabatanTtd">
-                  <div>Kepala <span id="docNamaSekolahTtd">SMK Negeri 1 Klungkung</span></div>
-                </div>
-
-                <!-- TTD Area (Injected by JS: TTD Elektronik atau TTD Basah) -->
-                <div id="docTtdArea"></div>
-              </div>
             </div>
 
           </div>
-
-          <!-- DIVIDER ANTAR HALAMAN DI LAYAR PREVIEW -->
-          <div id="pageDividerLampiran" class="page-break-divider no-print"></div>
-
-          <!-- HALAMAN 2: LAMPIRAN DAFTAR SISWA -->
-          <div id="pageLampiran" class="lampiran-page print-page-break">
-
-            <div style="font-weight: bold; margin-bottom: 12px; font-size: 11pt;">
-              Lampiran : <br>
-              Daftar Nama Siswa Peserta PKL
-            </div>
-
-            <table class="lampiran-table"
-              style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 10.5pt; border: 1px solid #000;"
-              border="1">
-              <thead>
-                <tr style="background-color: #f1f5f9; text-align: center; font-weight: bold;">
-                  <th
-                    style="padding: 6px 8px; width: 6%; border: 1px solid #000; text-align: center; box-sizing: border-box;">
-                    No</th>
-                  <th
-                    style="padding: 6px 8px; width: 34%; border: 1px solid #000; text-align: left; box-sizing: border-box;">
-                    Nama Siswa</th>
-                  <th
-                    style="padding: 6px 8px; width: 18%; border: 1px solid #000; text-align: center; box-sizing: border-box;">
-                    Kelas</th>
-                  <th
-                    style="padding: 6px 8px; width: 42%; border: 1px solid #000; text-align: left; box-sizing: border-box;">
-                    Tempat PKL</th>
-                </tr>
-              </thead>
-              <tbody id="docTbodySiswa"></tbody>
-            </table>
-
-          </div>
-
         </div>
       </div>
 

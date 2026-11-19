@@ -24,6 +24,7 @@ const AppState = {
   showTtd: true,
   showAlamat: true,
   isHtmlMode: false,
+  isDocFitActive: false,
   spreadsheetUrl: '',
   driveFolderUrl: '',
   webAppUrl: ''
@@ -342,6 +343,11 @@ function setActiveTemplate(tplId) {
 
 function initApp() {
   if (window.lucide) lucide.createIcons();
+
+  // Otomatis aktifkan mode Fit Layar jika dibuka pada perangkat mobile (< 768px)
+  if (window.innerWidth < 768) {
+    AppState.isDocFitActive = true;
+  }
 
   // Optimistic fast render from localStorage cache
   try {
@@ -966,6 +972,13 @@ function renderDocumentPreview() {
   } else {
     if (pageLampiran) pageLampiran.style.display = 'none';
     if (pageDivider) pageDivider.style.display = 'none';
+  }
+
+  // Perbarui skala dokumen jika mode Fit Layar aktif
+  if (AppState.isDocFitActive) {
+    requestAnimationFrame(function() {
+      applyDocFitScale();
+    });
   }
 }
 
@@ -3463,7 +3476,107 @@ function toggleSidebarDrawer() {
     if (text) text.textContent = 'Buka Panel';
   }
   if (window.lucide) lucide.createIcons();
+
+  if (AppState.isDocFitActive) {
+    setTimeout(applyDocFitScale, 300);
+  }
 }
+
+/**
+ * Fit to Screen / Zoom Dokumen Khusus Tampilan Mobile & Layar Terbatas
+ */
+function toggleDocFitMobile(forceState) {
+  if (typeof forceState === 'boolean') {
+    AppState.isDocFitActive = forceState;
+  } else {
+    AppState.isDocFitActive = !AppState.isDocFitActive;
+  }
+  applyDocFitScale();
+}
+
+function applyDocFitScale() {
+  const doc = document.getElementById('documentTemplate');
+  const viewport = document.getElementById('docScaleViewport');
+  const btn = document.getElementById('btnToggleDocFit');
+  const icon = document.getElementById('btnDocFitIcon');
+  const text = document.getElementById('btnDocFitText');
+  const previewArea = document.getElementById('mainDocumentPreviewArea');
+  
+  if (!doc) return;
+
+  if (AppState.isDocFitActive) {
+    const containerWidth = previewArea ? previewArea.clientWidth : window.innerWidth;
+    // Beri ruang margin kiri-kanan (total 16px) agar dokumen rapi di tengah
+    const availableWidth = Math.max(280, Math.min(containerWidth - 16, window.innerWidth - 16));
+    const originalWidth = doc.offsetWidth || 813;
+    const originalHeight = doc.offsetHeight || 1200;
+
+    const scale = availableWidth < originalWidth ? (availableWidth / originalWidth) : 1;
+
+    if (scale < 0.999) {
+      const scaledWidth = Math.floor(originalWidth * scale);
+      const scaledHeight = Math.ceil(originalHeight * scale);
+
+      if (viewport) {
+        viewport.style.width = scaledWidth + 'px';
+        viewport.style.height = scaledHeight + 'px';
+        viewport.style.overflow = 'hidden';
+        viewport.style.margin = '0 auto';
+        viewport.style.position = 'relative';
+      }
+
+      doc.style.transformOrigin = 'top left';
+      doc.style.transform = 'scale(' + scale + ')';
+    } else {
+      if (viewport) {
+        viewport.style.width = '';
+        viewport.style.height = '';
+        viewport.style.overflow = '';
+        viewport.style.margin = '';
+        viewport.style.position = '';
+      }
+      doc.style.transform = 'none';
+      doc.style.transformOrigin = '';
+    }
+
+    if (btn) {
+      btn.className = 'px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-xs flex items-center gap-1.5 transition border border-indigo-700 shadow-xs cursor-pointer';
+      btn.title = 'Kembalikan ukuran dokumen ke 100% normal';
+    }
+    if (icon) icon.setAttribute('data-lucide', 'zoom-in');
+    if (text) text.textContent = '100%';
+  } else {
+    // Mode Normal 100%
+    if (viewport) {
+      viewport.style.width = '';
+      viewport.style.height = '';
+      viewport.style.overflow = '';
+      viewport.style.margin = '';
+      viewport.style.position = '';
+    }
+    doc.style.transform = 'none';
+    doc.style.transformOrigin = '';
+
+    if (btn) {
+      btn.className = 'px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition border border-indigo-200 shadow-2xs cursor-pointer';
+      btn.title = 'Sesuaikan lebar dokumen pas dengan layar (Fit to Screen)';
+    }
+    if (icon) icon.setAttribute('data-lucide', 'scan');
+    if (text) text.textContent = 'Fit Layar';
+  }
+
+  if (window.lucide) lucide.createIcons();
+}
+
+let resizeDocFitTimer = null;
+window.addEventListener('resize', function() {
+  if (AppState.isDocFitActive) {
+    clearTimeout(resizeDocFitTimer);
+    resizeDocFitTimer = setTimeout(function() {
+      applyDocFitScale();
+    }, 150);
+  }
+});
 
 // ==========================================
 // MULTI-PAGE ROUTING & NAVIGATION ENGINE
