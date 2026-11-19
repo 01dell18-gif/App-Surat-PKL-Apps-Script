@@ -336,20 +336,20 @@
   <div class="max-w-[1600px] mx-auto px-3 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4">
     
     <!-- Brand & School Info -->
-    <div class="flex items-center gap-2.5 sm:gap-3 cursor-pointer select-none min-w-0" onclick="navigateTo('surat')">
-      <div id="headerBrandLogoWrapper" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center text-indigo-300 shadow-inner overflow-hidden flex-shrink-0 transition-transform hover:scale-105">
+    <div class="flex items-center gap-2.5 sm:gap-3 select-none min-w-0">
+      <div id="headerBrandLogoWrapper" onclick="navigateTo('surat')" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center text-indigo-300 shadow-inner overflow-hidden flex-shrink-0 transition-transform hover:scale-105 cursor-pointer" title="Kembali ke Halaman Surat">
         <i id="defaultBrandIcon" data-lucide="file-badge" class="w-5 h-5 sm:w-6 sm:h-6"></i>
       </div>
       <div class="min-w-0">
         <div class="flex items-center gap-1.5 sm:gap-2">
-          <h1 class="text-sm sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight truncate">Aplikasi Surat PKL</h1>
-          <button type="button" onclick="openChangelogModal()" class="text-[9px] sm:text-[10px] font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 hover:border-emerald-300 px-1.5 sm:px-2 py-0.5 rounded-full flex items-center gap-1 cursor-pointer transition shadow-xs group flex-shrink-0" title="Klik untuk melihat catatan rilis & pembaruan versi">
+          <h1 onclick="navigateTo('surat')" class="text-sm sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight truncate cursor-pointer hover:text-indigo-200 transition" title="Kembali ke Halaman Surat">Aplikasi Surat PKL</h1>
+          <button type="button" onclick="event.stopPropagation(); openChangelogModal(event);" class="text-[9px] sm:text-[10px] font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 hover:border-emerald-300 px-1.5 sm:px-2 py-0.5 rounded-full flex items-center gap-1 cursor-pointer transition shadow-xs group flex-shrink-0" title="Klik untuk melihat catatan rilis & pembaruan versi">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>v2.4.0</span>
             <i data-lucide="sparkles" class="w-2.5 h-2.5 text-emerald-300/80 group-hover:text-emerald-100 transition-transform group-hover:scale-110"></i>
           </button>
         </div>
-        <p id="headerSchoolSubtitle" class="text-[11px] text-indigo-200/80 truncate max-w-[200px] sm:max-w-md hidden md:block">SMK Negeri 1 Klungkung • Tahun Ajaran 2026/2027</p>
+        <p id="headerSchoolSubtitle" onclick="navigateTo('surat')" class="text-[11px] text-indigo-200/80 truncate max-w-[200px] sm:max-w-md hidden sm:block cursor-pointer hover:text-white transition" title="Kembali ke Halaman Surat">SMK Negeri 1 Klungkung • Tahun Ajaran 2026/2027</p>
       </div>
     </div>
 
@@ -357,7 +357,7 @@
     <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
       
       <!-- NAV TABS (DESKTOP & TABLET SAJA, DI MOBILE DISEMBUNYIKAN KARENA SUDAH ADA DI BOTTOM BAR) -->
-      <nav class="hidden lg:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-indigo-800/40 mr-1 flex-shrink-0">
+      <nav class="flex mobile-hide items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-indigo-800/40 mr-1 flex-shrink-0">
         <!-- 1. Halaman Surat (Dashboard) -->
         <button onclick="navigateTo('surat')" id="navTabSurat" class="nav-page-tab inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-slate-300 hover:text-white hover:bg-white/10" title="Halaman Utama Pembuatan Surat">
           <i data-lucide="file-text" class="w-3.5 h-3.5 text-indigo-400"></i>
@@ -454,7 +454,7 @@
 </header>
 
 <!-- ================= MOBILE BOTTOM NAVIGATION BAR ================= -->
-<nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 z-40 px-2 py-1 flex items-center justify-around text-slate-300 shadow-2xl no-print">
+<nav class="desktop-hide fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 z-40 px-2 py-1 flex items-center justify-around text-slate-300 shadow-2xl no-print">
   <button onclick="navigateTo('surat')" id="mobileNavSurat" class="flex-1 py-1.5 px-1 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white transition">
     <i data-lucide="file-text" class="w-4 h-4"></i>
     <span class="text-[10px] font-medium leading-tight">Surat</span>
@@ -5100,7 +5100,11 @@ function closeBatchPrintModal() {
   document.getElementById('batchPrintModal').classList.add('hidden');
 }
 
-function openChangelogModal() {
+function openChangelogModal(e) {
+  if (e) {
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+  }
   if (typeof closeDatabaseModal === 'function') closeDatabaseModal();
   if (typeof closeSettingsModal === 'function') closeSettingsModal();
   if (typeof closeTemplateModal === 'function') closeTemplateModal();
