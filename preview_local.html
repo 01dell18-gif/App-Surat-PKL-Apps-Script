@@ -1824,6 +1824,8 @@
         </div>
         <p class="text-[11.5px] text-slate-600 leading-relaxed">Pembaruan arsitektur modular multi-page, template kedinasan baru, sistem informasi rilis interaktif, dan optimalisasi presisi margin cetak massal.</p>
         <ul class="space-y-1.5 list-disc list-inside text-slate-600 leading-relaxed text-[11px] bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <li><strong class="text-slate-800">Ubah Nama Jurusan Masal:</strong> Fitur pembaruan dan penggantian nama jurusan secara kolektif di seluruh baris data siswa dan tersinkronisasi otomatis ke Google Sheets.</li>
+          <li><strong class="text-slate-800">Optimalisasi Tombol UI Mobile:</strong> Desain tombol adaptif ringkas pada seluruh menu (khususnya toolbar Database dan navigasi mobile) agar tampilan di layar smartphone tidak penuh dan nyaman digunakan.</li>
           <li><strong class="text-slate-800">Arsitektur Modular Multi-Page (Scriptlet Pattern):</strong> Pemisahan kode menu menjadi file HTML mandiri per modul (Surat, Database, Template, Pengaturan) dengan Query Parameter Routing (?page=...) bebas blank putih.</li>
           <li><strong class="text-slate-800">Format Suket Monitoring & Nilai Otomatis:</strong> Menghilangkan blok Kepada Yth pada Suket Monitoring PKL agar langsung diawali judul Surat Tugas, serta standarisasi tanda '-' otomatis untuk NIP dan Pangkat/Golongan guru yang belum terisi di semua template surat.</li>
           <li><strong class="text-slate-800">Template Suket Monitoring PKL:</strong> Penambahan template resmi Surat Tugas Guru Pembimbing untuk monitoring berkala PKL siswa di lokasi DU/DI binaan.</li>
@@ -5506,7 +5508,7 @@ function highlightActiveNavigation() {
     'surat': { tabId: 'navTabSurat', mobId: 'mobileNavSurat' },
     'database': { tabId: 'navTabDatabase', mobId: 'mobileNavDatabase' },
     'template': { tabId: 'navTabTemplate', mobId: 'mobileNavTemplate' },
-    'pengaturan': { tabId: 'navTabPengaturan', mobId: 'mobileNavPengaturan' }
+    'pengaturan': { tabId: 'navTabPengaturan', mobId: 'mobNavPengaturan' }
   };
 
   Object.keys(navMap).forEach(pageKey => {

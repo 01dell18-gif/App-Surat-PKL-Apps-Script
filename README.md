@@ -43,8 +43,13 @@ Aplikasi web modern berbasis **Google Apps Script** (GAS) yang terintegrasi lang
 ## 📁 Struktur File Proyek
 
 ```text
-├── Kode.js             # Skrip Backend Apps Script (Database Sheets, Drive API, API Endpoint)
-├── Index.html          # Tata letak HTML antarmuka utama (Header, Sidebar, Modal, Preview Kertas)
+├── Kode.js             # Skrip Backend Apps Script (Database Sheets, Drive API, Router, API Endpoint)
+├── Index.html          # Halaman Utama Surat (Sidebar Pemilih, Form Nomor/Jadwal & Preview Kertas)
+├── Database.html       # Halaman Database Siswa PKL (Tabel Siswa, Impor/Ekspor Excel, Ubah Jurusan)
+├── TemplateManager.html# Halaman Manajemen Template & Redaksi Surat (WYSIWYG Rich Text Editor)
+├── Pengaturan.html     # Halaman Pengaturan Sistem, Lembaga & Media (Aset Kop, TTD, Spreadsheet)
+├── Header.html         # Komponen Navbar Atas Bersama & Mobile Bottom Navigation Bar
+├── Modals.html         # Komponen Modal Bersama (Form Siswa, Cetak Batch, Changelog, Ubah Jurusan)
 ├── Styles.html         # Lembar gaya CSS, layout cetak F4/A4, efek glassmorphism, responsive utilities
 ├── Scripts.html        # Skrip Frontend JavaScript (State management, WYSIWYG, filter, impor/ekspor Excel)
 ├── Assets.html         # Aset bawaan base64 SVG (Kop surat, TTD basah, stempel, logo default)
