@@ -1133,11 +1133,7 @@ function openTemplateModal(tab = 'editor') {
 
 function closeTemplateModal() {
   const modalEl = document.getElementById('templateManagerModal');
-  if (modalEl) {
-    modalEl.classList.add('hidden');
-  } else {
-    navigateTo('surat');
-  }
+  if (modalEl) modalEl.classList.add('hidden');
 }
 
 function switchTemplateTab(tab) {
@@ -1629,11 +1625,7 @@ function openDatabaseModal() {
 
 function closeDatabaseModal() {
   const modalEl = document.getElementById('databaseModal');
-  if (modalEl) {
-    modalEl.classList.add('hidden');
-  } else {
-    navigateTo('surat');
-  }
+  if (modalEl) modalEl.classList.add('hidden');
 }
 
 function renderDbTable(filterText = '') {
@@ -2405,11 +2397,7 @@ function openSettingsModal() {
 
 function closeSettingsModal() {
   const modal = document.getElementById('settingsModal');
-  if (modal) {
-    modal.classList.add('hidden');
-  } else {
-    navigateTo('surat');
-  }
+  if (modal) modal.classList.add('hidden');
 }
 
 function saveApplicationSettings() {
@@ -3127,19 +3115,18 @@ function updateBatchPrintModalInfo() {
 }
 
 function openBatchPrintModal() {
-  if (typeof closeDatabaseModal === 'function') closeDatabaseModal();
-  if (typeof closeSettingsModal === 'function') closeSettingsModal();
-  if (typeof closeTemplateModal === 'function') closeTemplateModal();
-  if (typeof closeDriveSuccessModal === 'function') closeDriveSuccessModal();
-  if (typeof closeAllDropdowns === 'function') closeAllDropdowns();
-
-  document.getElementById('batchPrintModal').classList.remove('hidden');
-  updateBatchPrintModalInfo();
-  if (window.lucide) lucide.createIcons();
+  closeAllDropdowns();
+  const modal = document.getElementById('batchPrintModal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    updateBatchPrintModalInfo();
+    if (window.lucide) lucide.createIcons();
+  }
 }
 
 function closeBatchPrintModal() {
-  document.getElementById('batchPrintModal').classList.add('hidden');
+  const modal = document.getElementById('batchPrintModal');
+  if (modal) modal.classList.add('hidden');
 }
 
 function openChangelogModal(e) {
@@ -3147,12 +3134,7 @@ function openChangelogModal(e) {
     if (typeof e.stopPropagation === 'function') e.stopPropagation();
     if (typeof e.preventDefault === 'function') e.preventDefault();
   }
-  if (typeof closeDatabaseModal === 'function') closeDatabaseModal();
-  if (typeof closeSettingsModal === 'function') closeSettingsModal();
-  if (typeof closeTemplateModal === 'function') closeTemplateModal();
-  if (typeof closeDriveSuccessModal === 'function') closeDriveSuccessModal();
-  if (typeof closeBatchPrintModal === 'function') closeBatchPrintModal();
-  if (typeof closeAllDropdowns === 'function') closeAllDropdowns();
+  closeAllDropdowns();
 
   const modal = document.getElementById('changelogModal');
   if (modal) {
@@ -3161,7 +3143,11 @@ function openChangelogModal(e) {
   }
 }
 
-function closeChangelogModal() {
+function closeChangelogModal(e) {
+  if (e) {
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+  }
   const modal = document.getElementById('changelogModal');
   if (modal) modal.classList.add('hidden');
 }
