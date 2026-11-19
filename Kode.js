@@ -118,7 +118,7 @@ function getSpreadsheet() {
   try {
     const active = SpreadsheetApp.getActiveSpreadsheet();
     if (active) return active;
-  } catch (e) {}
+  } catch (e) { }
   return SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
 }
 
@@ -143,7 +143,7 @@ function getDriveFolder() {
         }
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   try {
     return DriveApp.getFolderById(folderId);
@@ -190,7 +190,7 @@ function initDatabaseIfEmpty() {
   if (!sheetSiswa) {
     sheetSiswa = ss.insertSheet(CONFIG.SHEET_SISWA);
   }
-  
+
   if (sheetSiswa.getLastRow() === 0) {
     const siswaHeaders = [
       'id', 'no_urut', 'guru', 'nip', 'guru_pangkat', 'guru_jabatan', 'siswa', 'nis', 'nisn', 'kelas', 'jurusan', 'tempat', 'alamat'
@@ -269,7 +269,7 @@ function initDatabaseIfEmpty() {
   if (defaultSheet && ss.getSheets().length > 1) {
     try {
       ss.deleteSheet(defaultSheet);
-    } catch (e) {}
+    } catch (e) { }
   }
 }
 
@@ -281,14 +281,14 @@ function getDefaultTemplatesList() {
     [
       'tpl_berita_acara',
       'Redaksi Surat (Editor Teks / WYSIWYG)',
-      '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">BERITA ACARA SERAH TERIMA SISWA PRAKTEK KERJA LAPANGAN (PKL)</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 16px;">Nomor: {noSurat}</p>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Pada hari ini, tanggal <strong>{tglPelepasan}</strong>, bertempat di <strong>{tempatPkl}</strong>, kami yang bertanda tangan di bawah ini:</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Guru Pembimbing</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Unit Kerja</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{namaSekolah}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak atas nama Kepala {namaSekolah}, selanjutnya disebut sebagai <strong>PIHAK PERTAMA</strong>.</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Pimpinan / DU-DI</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">Pimpinan {tempatPkl}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Alamat Perusahaan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{alamatPkl}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak sebagai perwakilan industri/dunia kerja, selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.</p>\n\n<p style="text-indent: 30px; margin-bottom: 10px; text-align: justify; line-height: 1.5;">\n  PIHAK PERTAMA secara resmi menyerahkan siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran} kepada PIHAK KEDUA untuk melaksanakan kegiatan Praktek Kerja Lapangan (PKL) terhitung mulai tanggal {periodePkl}.\n</p>\n\n<p style="margin-bottom: 6px;">Adapun daftar siswa yang diserahkan adalah sebagai berikut:</p>\n{tabelSiswaPermohonan}\n\n<p style="text-indent: 30px; margin-top: 10px; margin-bottom: 8px; text-align: justify; line-height: 1.5;">\n  Demikian Berita Acara ini dibuat dalam rangkap 2 (dua) yang masing-masing mempunyai kekuatan hukum yang sama, untuk dipergunakan sebagaimana mestinya.\n</p>',
+      '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">BERITA ACARA SERAH TERIMA SISWA PRAKTEK KERJA LAPANGAN (PKL)</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 16px;">Nomor: {noSurat}</p>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Pada hari ini, tanggal <strong>{tglPelepasan}</strong>, bertempat di <strong>{tempatPkl}</strong>, kami yang bertanda tangan di bawah ini:</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Guru Pembimbing</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Pangkat/Gol</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruPangkat}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Jabatan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruJabatan}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Unit Kerja</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{namaSekolah}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak atas nama Kepala {namaSekolah}, selanjutnya disebut sebagai <strong>PIHAK PERTAMA</strong>.</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Pimpinan / DU-DI</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">Pimpinan {tempatPkl}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Alamat Perusahaan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{alamatPkl}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak sebagai perwakilan industri/dunia kerja, selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.</p>\n\n<p style="text-indent: 30px; margin-bottom: 10px; text-align: justify; line-height: 1.5;">\n  PIHAK PERTAMA secara resmi menyerahkan siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran} kepada PIHAK KEDUA untuk melaksanakan kegiatan Praktek Kerja Lapangan (PKL) terhitung mulai tanggal {periodePkl}.\n</p>\n\n<p style="margin-bottom: 6px;">Adapun daftar siswa yang diserahkan adalah sebagai berikut:</p>\n{tabelSiswaPermohonan}\n\n<p style="text-indent: 30px; margin-top: 10px; margin-bottom: 8px; text-align: justify; line-height: 1.5;">\n  Demikian Berita Acara ini dibuat dalam rangkap 2 (dua) yang masing-masing mempunyai kekuatan hukum yang sama, untuk dipergunakan sebagaimana mestinya.\n</p>',
       1,
       'active'
     ],
     [
       'tpl_standar_resmi',
       'Template Standar Resmi (Surat Pengantar PKL)',
-      '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT PENGANTAR</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 14px;">Nomor: {noSurat}</p>\n\n<table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">\n  <tr>\n    <td style="width: 70px; vertical-align: top;">Kepada:</td>\n    <td></td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Yth.</td>\n    <td>\n      <div style="font-weight: bold;">{tempatPkl}</div>\n      <div style="font-size: 10.5pt; color: #333;">{alamatPkl}</div>\n      <div>di -</div>\n      <div style="text-indent: 20px;">Tempat</div>\n    </td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan hormat,</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Dalam rangka pelaksanaan kegiatan Praktek Kerja Lapangan (PKL) bagi siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran}, bersama ini kami menugaskan guru pembimbing untuk menyerahkan sekaligus mengantarkan siswa/siswi kami melaksanakan PKL di perusahaan/instansi yang Bapak/Ibu pimpin.\n</p>\n<p style="margin-bottom: 4px;">Adapun identitas Guru Pembimbing yang ditugaskan adalah sebagai berikut:</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 10px;">\n  <tr>\n    <td style="width: 130px; vertical-align: top;">Nama</td>\n    <td style="width: 20px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Tempat PKL</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{tempatPkl}</td>\n  </tr>\n</table>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Siswa yang diserahkan berjumlah sebagaimana terlampir, dan kegiatan PKL akan dilaksanakan terhitung mulai tanggal {periodePkl}.\n</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Demikian surat pengantar ini kami sampaikan, atas bantuan dan kerja sama yang baik kami ucapkan terima kasih.\n</p>',
+      '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT PENGANTAR</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 14px;">Nomor: {noSurat}</p>\n\n<table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">\n  <tr>\n    <td style="width: 70px; vertical-align: top;">Kepada:</td>\n    <td></td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Yth.</td>\n    <td>\n      <div style="font-weight: bold;">{tempatPkl}</div>\n      <div style="font-size: 10.5pt; color: #333;">{alamatPkl}</div>\n      <div>di -</div>\n      <div style="text-indent: 20px;">Tempat</div>\n    </td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan hormat,</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Dalam rangka pelaksanaan kegiatan Praktek Kerja Lapangan (PKL) bagi siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran}, bersama ini kami menugaskan guru pembimbing untuk menyerahkan sekaligus mengantarkan siswa/siswi kami melaksanakan PKL di perusahaan/instansi yang Bapak/Ibu pimpin.\n</p>\n<p style="margin-bottom: 4px;">Adapun identitas Guru Pembimbing yang ditugaskan adalah sebagai berikut:</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 10px;">\n  <tr>\n    <td style="width: 130px; vertical-align: top;">Nama</td>\n    <td style="width: 20px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Pangkat/Gol</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruPangkat}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Jabatan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruJabatan}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Tempat PKL</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{tempatPkl}</td>\n  </tr>\n</table>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Siswa yang diserahkan berjumlah sebagaimana terlampir, dan kegiatan PKL akan dilaksanakan terhitung mulai tanggal {periodePkl}.\n</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Demikian surat pengantar ini kami sampaikan, atas bantuan dan kerja sama yang baik kami ucapkan terima kasih.\n</p>',
       0,
       'active'
     ],
@@ -309,7 +309,7 @@ function getDefaultTemplatesList() {
     [
       'tpl_pkl_terpadu',
       'Template PKL Model Terpadu / Fleksibel',
-      '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT PENGANTAR PKL TERPADU</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 14px;">Nomor: {noSurat}</p>\n\n<table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">\n  <tr>\n    <td style="width: 70px; vertical-align: top;">Kepada:</td>\n    <td></td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Yth.</td>\n    <td>\n      <div style="font-weight: bold;">{tempatPkl}</div>\n      <div style="font-size: 10.5pt; color: #333;">{alamatPkl}</div>\n      <div>di -</div>\n      <div style="text-indent: 20px;">Tempat</div>\n    </td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan hormat,</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Sehubungan dengan program kurikulum vokasi {namaSekolah} Tahun Ajaran {tahunAjaran}, kami bermaksud mendelegasikan siswa/siswi kami untuk melaksanakan kegiatan Praktek Kerja Lapangan (PKL) terpadu di perusahaan/instansi yang Bapak/Ibu pimpin.\n</p>\n<p style="margin-bottom: 4px;">Bersama surat ini, kami menugaskan guru pembimbing sebagai narahubung resmi:</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 10px;">\n  <tr>\n    <td style="width: 110px;">Nama</td>\n    <td style="width: 15px;">:</td>\n    <td style="font-weight: bold;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td>NIP</td>\n    <td>:</td>\n    <td>{guruNip}</td>\n  </tr>\n  <tr>\n    <td>Jabatan</td>\n    <td>:</td>\n    <td>Guru Pembimbing PKL</td>\n  </tr>\n</table>\n<p style="margin-bottom: 4px;">Adapun rincian jadwal pelaksanaan program PKL adalah sebagai berikut:</p>\n<ol style="margin-left: 20px; margin-bottom: 10px; list-style-type: decimal;">\n  <li style="padding-left: 4px;">Pelepasan siswa/siswi PKL: <strong>{tglPelepasan}</strong>.</li>\n  <li style="padding-left: 4px;">Masa PKL &amp; Evaluasi Berkala: <strong>{periodePkl}</strong>. Monitoring dilaksanakan secara berkala untuk mengevaluasi perkembangan kompetensi siswa.</li>\n  <li style="padding-left: 4px;">Penarikan resmi siswa: <strong>{tglPenarikan}</strong>.</li>\n</ol>\n<p style="text-indent: 30px; margin-bottom: 14px; text-align: justify;">\n  Rincian nama siswa/siswi terlampir pada Lampiran 2 surat ini. Besar harapan kami agar kerja sama yang baik antara institusi pendidikan dan DU/DI terus terjalin erat. Atas perhatian dan kesediaan Bapak/Ibu, kami haturkan terima kasih.\n</p>',
+      '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT PENGANTAR PKL TERPADU</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 14px;">Nomor: {noSurat}</p>\n\n<table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">\n  <tr>\n    <td style="width: 70px; vertical-align: top;">Kepada:</td>\n    <td></td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Yth.</td>\n    <td>\n      <div style="font-weight: bold;">{tempatPkl}</div>\n      <div style="font-size: 10.5pt; color: #333;">{alamatPkl}</div>\n      <div>di -</div>\n      <div style="text-indent: 20px;">Tempat</div>\n    </td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan hormat,</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Sehubungan dengan program kurikulum vokasi {namaSekolah} Tahun Ajaran {tahunAjaran}, kami bermaksud mendelegasikan siswa/siswi kami untuk melaksanakan kegiatan Praktek Kerja Lapangan (PKL) terpadu di perusahaan/instansi yang Bapak/Ibu pimpin.\n</p>\n<p style="margin-bottom: 4px;">Bersama surat ini, kami menugaskan guru pembimbing sebagai narahubung resmi:</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 10px;">\n  <tr>\n    <td style="width: 110px;">Nama</td>\n    <td style="width: 15px;">:</td>\n    <td style="font-weight: bold;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td>NIP</td>\n    <td>:</td>\n    <td>{guruNip}</td>\n  </tr>\n  <tr>\n    <td>Pangkat/Gol</td>\n    <td>:</td>\n    <td>{guruPangkat}</td>\n  </tr>\n  <tr>\n    <td>Jabatan</td>\n    <td>:</td>\n    <td>{guruJabatan}</td>\n  </tr>\n</table>\n<p style="margin-bottom: 4px;">Adapun rincian jadwal pelaksanaan program PKL adalah sebagai berikut:</p>\n<ol style="margin-left: 20px; margin-bottom: 10px; list-style-type: decimal;">\n  <li style="padding-left: 4px;">Pelepasan siswa/siswi PKL: <strong>{tglPelepasan}</strong>.</li>\n  <li style="padding-left: 4px;">Masa PKL &amp; Evaluasi Berkala: <strong>{periodePkl}</strong>. Monitoring dilaksanakan secara berkala untuk mengevaluasi perkembangan kompetensi siswa.</li>\n  <li style="padding-left: 4px;">Penarikan resmi siswa: <strong>{tglPenarikan}</strong>.</li>\n</ol>\n<p style="text-indent: 30px; margin-bottom: 14px; text-align: justify;">\n  Rincian nama siswa/siswi terlampir pada Lampiran 2 surat ini. Besar harapan kami agar kerja sama yang baik antara institusi pendidikan dan DU/DI terus terjalin erat. Atas perhatian dan kesediaan Bapak/Ibu, kami haturkan terima kasih.\n</p>',
       0,
       'active'
     ],
@@ -346,7 +346,7 @@ function getOrCreateTemplateSheet(ss) {
     const tplHeaders = ['id', 'nama', 'html_content', 'is_default', 'status'];
     sheetTemplate.appendRow(tplHeaders);
     sheetTemplate.getRange(1, 1, 1, tplHeaders.length).setFontWeight('bold').setBackground('#dcfce7');
-    
+
     const defaultTemplates = getDefaultTemplatesList();
     defaultTemplates.forEach(row => {
       sheetTemplate.appendRow(row);
@@ -403,7 +403,7 @@ function getTemplatesFromSheet(ss) {
 function clearInitialDataCache() {
   try {
     CacheService.getScriptCache().remove('app_initial_data');
-  } catch (e) {}
+  } catch (e) { }
 }
 
 /**
@@ -449,7 +449,7 @@ function getInitialData(forceRefresh) {
       if (cached) {
         return JSON.parse(cached);
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const ss = getSpreadsheet();
@@ -531,7 +531,7 @@ function getInitialData(forceRefresh) {
   try {
     spreadsheetUrl = ss.getUrl();
     spreadsheetId = ss.getId();
-  } catch (e) {}
+  } catch (e) { }
 
   let driveFolderUrl = '';
   let driveFolderId = '';
@@ -541,7 +541,7 @@ function getInitialData(forceRefresh) {
       driveFolderUrl = folder.getUrl();
       driveFolderId = folder.getId();
     }
-  } catch (e) {}
+  } catch (e) { }
   if (!driveFolderUrl) {
     driveFolderUrl = 'https://drive.google.com/drive/folders/' + (CONFIG.DRIVE_FOLDER_ID || '');
   }
@@ -549,7 +549,7 @@ function getInitialData(forceRefresh) {
   let webAppUrl = '';
   try {
     webAppUrl = ScriptApp.getService().getUrl() || '';
-  } catch (e) {}
+  } catch (e) { }
 
   if (!settings.spreadsheetUrl) settings.spreadsheetUrl = spreadsheetUrl;
   if (!settings.driveFolderUrl) settings.driveFolderUrl = driveFolderUrl;
@@ -575,7 +575,7 @@ function getInitialData(forceRefresh) {
     if (jsonStr.length < 95000) {
       CacheService.getScriptCache().put('app_initial_data', jsonStr, 1800);
     }
-  } catch (e) {}
+  } catch (e) { }
 
   return result;
 }
@@ -746,8 +746,8 @@ function importStudents(records, mode) {
   }
 
   clearInitialDataCache();
-  return { 
-    success: true, 
+  return {
+    success: true,
     count: rowsToInsert.length,
     students: getInitialData(true).students
   };

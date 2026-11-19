@@ -1476,6 +1476,7 @@
             <li><strong class="text-slate-800">Data Pangkat & Jabatan Pembimbing:</strong> Penambahan atribut Pangkat/Golongan dan Jabatan Guru Pembimbing pada database siswa, form edit, template surat, ekspor-impor Excel, dan cetak massal.</li>
             <li><strong class="text-slate-800">Perbaikan Header Tabel Database:</strong> Mengatasi space kosong dan kebocoran baris data pada sticky header tabel database siswa saat di-scroll.</li>
             <li><strong class="text-slate-800">Template Suket Monitoring PKL:</strong> Penambahan template resmi Surat Tugas Guru Pembimbing untuk monitoring berkala PKL siswa di lokasi DU/DI binaan.</li>
+            <li><strong class="text-slate-800">Format Suket Monitoring & Nilai Otomatis:</strong> Menghilangkan blok Kepada Yth pada Suket Monitoring PKL agar langsung diawali judul Surat Tugas, serta standarisasi tanda '-' otomatis untuk NIP dan Pangkat/Golongan guru yang belum terisi di semua template surat.</li>
             <li><strong class="text-slate-800">Badge Versi & Dialog Changelog:</strong> Indikator status versi sistem interaktif di header utama lengkap dengan riwayat log rilis.</li>
             <li><strong class="text-slate-800">Presisi Margin Cetak Massal:</strong> Mengatasi jarak berlebih pada lembar pertama dokumen cetak massal dan menyelaraskan pemisahan halaman cetak.</li>
             <li><strong class="text-slate-800">Proteksi Format Tabel:</strong> Memastikan tabel daftar siswa lampiran utuh tanpa terpotong baik saat cetak maupun ekspor dokumen Word.</li>
@@ -1711,13 +1712,13 @@ const DEFAULT_TEMPLATES = [
   {
     id: 'tpl_standar_resmi',
     nama: 'Template Standar Resmi (Surat Pengantar PKL)',
-    html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT PENGANTAR</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 14px;">Nomor: {noSurat}</p>\n\n<table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">\n  <tr>\n    <td style="width: 70px; vertical-align: top;">Kepada:</td>\n    <td></td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Yth.</td>\n    <td>\n      <div style="font-weight: bold;">{tempatPkl}</div>\n      <div style="font-size: 10.5pt; color: #333;">{alamatPkl}</div>\n      <div>di -</div>\n      <div style="text-indent: 20px;">Tempat</div>\n    </td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan hormat,</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Dalam rangka pelaksanaan kegiatan Praktek Kerja Lapangan (PKL) bagi siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran}, bersama ini kami menugaskan guru pembimbing untuk menyerahkan sekaligus mengantarkan siswa/siswi kami melaksanakan PKL di perusahaan/instansi yang Bapak/Ibu pimpin.\n</p>\n<p style="margin-bottom: 4px;">Adapun identitas Guru Pembimbing yang ditugaskan adalah sebagai berikut:</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 10px;">\n  <tr>\n    <td style="width: 130px; vertical-align: top;">Nama</td>\n    <td style="width: 20px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Tempat PKL</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{tempatPkl}</td>\n  </tr>\n</table>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Siswa yang diserahkan berjumlah sebagaimana terlampir, dan kegiatan PKL akan dilaksanakan terhitung mulai tanggal {periodePkl}.\n</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Demikian surat pengantar ini kami sampaikan, atas bantuan dan kerja sama yang baik kami ucapkan terima kasih.\n</p>',
+    html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT PENGANTAR</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 14px;">Nomor: {noSurat}</p>\n\n<table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">\n  <tr>\n    <td style="width: 70px; vertical-align: top;">Kepada:</td>\n    <td></td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Yth.</td>\n    <td>\n      <div style="font-weight: bold;">{tempatPkl}</div>\n      <div style="font-size: 10.5pt; color: #333;">{alamatPkl}</div>\n      <div>di -</div>\n      <div style="text-indent: 20px;">Tempat</div>\n    </td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan hormat,</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Dalam rangka pelaksanaan kegiatan Praktek Kerja Lapangan (PKL) bagi siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran}, bersama ini kami menugaskan guru pembimbing untuk menyerahkan sekaligus mengantarkan siswa/siswi kami melaksanakan PKL di perusahaan/instansi yang Bapak/Ibu pimpin.\n</p>\n<p style="margin-bottom: 4px;">Adapun identitas Guru Pembimbing yang ditugaskan adalah sebagai berikut:</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 10px;">\n  <tr>\n    <td style="width: 130px; vertical-align: top;">Nama</td>\n    <td style="width: 20px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Pangkat/Gol</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruPangkat}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Jabatan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruJabatan}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Tempat PKL</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{tempatPkl}</td>\n  </tr>\n</table>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Siswa yang diserahkan berjumlah sebagaimana terlampir, dan kegiatan PKL akan dilaksanakan terhitung mulai tanggal {periodePkl}.\n</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Demikian surat pengantar ini kami sampaikan, atas bantuan dan kerja sama yang baik kami ucapkan terima kasih.\n</p>',
     is_default: 0
   },
   {
     id: 'tpl_berita_acara',
     nama: 'Redaksi Surat (Editor Teks / WYSIWYG)',
-    html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">BERITA ACARA SERAH TERIMA SISWA PRAKTEK KERJA LAPANGAN (PKL)</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 16px;">Nomor: {noSurat}</p>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Pada hari ini, tanggal <strong>{tglPelepasan}</strong>, bertempat di <strong>{tempatPkl}</strong>, kami yang bertanda tangan di bawah ini:</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Guru Pembimbing</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Unit Kerja</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{namaSekolah}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak atas nama Kepala {namaSekolah}, selanjutnya disebut sebagai <strong>PIHAK PERTAMA</strong>.</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Pimpinan / DU-DI</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">Pimpinan {tempatPkl}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Alamat Perusahaan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{alamatPkl}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak sebagai perwakilan industri/dunia kerja, selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.</p>\n\n<p style="text-indent: 30px; margin-bottom: 10px; text-align: justify; line-height: 1.5;">\n  PIHAK PERTAMA secara resmi menyerahkan siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran} kepada PIHAK KEDUA untuk melaksanakan kegiatan Praktek Kerja Lapangan (PKL) terhitung mulai tanggal {periodePkl}.\n</p>\n\n<p style="margin-bottom: 6px;">Adapun daftar siswa yang diserahkan adalah sebagai berikut:</p>\n{tabelSiswaPermohonan}\n\n<p style="text-indent: 30px; margin-top: 10px; margin-bottom: 8px; text-align: justify; line-height: 1.5;">\n  Demikian Berita Acara ini dibuat dalam rangkap 2 (dua) yang masing-masing mempunyai kekuatan hukum yang sama, untuk dipergunakan sebagaimana mestinya.\n</p>',
+    html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">BERITA ACARA SERAH TERIMA SISWA PRAKTEK KERJA LAPANGAN (PKL)</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 16px;">Nomor: {noSurat}</p>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Pada hari ini, tanggal <strong>{tglPelepasan}</strong>, bertempat di <strong>{tempatPkl}</strong>, kami yang bertanda tangan di bawah ini:</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Guru Pembimbing</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">NIP</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruNip}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Pangkat/Gol</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruPangkat}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Jabatan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{guruJabatan}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Unit Kerja</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{namaSekolah}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak atas nama Kepala {namaSekolah}, selanjutnya disebut sebagai <strong>PIHAK PERTAMA</strong>.</p>\n\n<table style="width: 100%; margin-left: 15px; margin-bottom: 12px; font-size: 11pt;">\n  <tr>\n    <td style="width: 140px; vertical-align: top;">Nama Pimpinan / DU-DI</td>\n    <td style="width: 15px; vertical-align: top;">:</td>\n    <td style="font-weight: bold; vertical-align: top;">Pimpinan {tempatPkl}</td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Alamat Perusahaan</td>\n    <td style="vertical-align: top;">:</td>\n    <td style="vertical-align: top;">{alamatPkl}</td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px; text-align: justify; line-height: 1.5;">Dalam hal ini bertindak sebagai perwakilan industri/dunia kerja, selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.</p>\n\n<p style="text-indent: 30px; margin-bottom: 10px; text-align: justify; line-height: 1.5;">\n  PIHAK PERTAMA secara resmi menyerahkan siswa/siswi {namaSekolah} Tahun Ajaran {tahunAjaran} kepada PIHAK KEDUA untuk melaksanakan kegiatan Praktek Kerja Lapangan (PKL) terhitung mulai tanggal {periodePkl}.\n</p>\n\n<p style="margin-bottom: 6px;">Adapun daftar siswa yang diserahkan adalah sebagai berikut:</p>\n{tabelSiswaPermohonan}\n\n<p style="text-indent: 30px; margin-top: 10px; margin-bottom: 8px; text-align: justify; line-height: 1.5;">\n  Demikian Berita Acara ini dibuat dalam rangkap 2 (dua) yang masing-masing mempunyai kekuatan hukum yang sama, untuk dipergunakan sebagaimana mestinya.\n</p>',
     is_default: 1
   },
   {
@@ -1735,7 +1736,7 @@ const DEFAULT_TEMPLATES = [
   {
     id: 'tpl_pkl_terpadu',
     nama: 'Template PKL Model Terpadu / Fleksibel',
-    html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT PENGANTAR PKL TERPADU</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 14px;">Nomor: {noSurat}</p>\n\n<table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">\n  <tr>\n    <td style="width: 70px; vertical-align: top;">Kepada:</td>\n    <td></td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Yth.</td>\n    <td>\n      <div style="font-weight: bold;">{tempatPkl}</div>\n      <div style="font-size: 10.5pt; color: #333;">{alamatPkl}</div>\n      <div>di -</div>\n      <div style="text-indent: 20px;">Tempat</div>\n    </td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan hormat,</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Sehubungan dengan program kurikulum vokasi {namaSekolah} Tahun Ajaran {tahunAjaran}, kami bermaksud mendelegasikan siswa/siswi kami untuk melaksanakan kegiatan Praktek Kerja Lapangan (PKL) terpadu di perusahaan/instansi yang Bapak/Ibu pimpin.\n</p>\n<p style="margin-bottom: 4px;">Bersama surat ini, kami menugaskan guru pembimbing sebagai narahubung resmi:</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 10px;">\n  <tr>\n    <td style="width: 110px;">Nama</td>\n    <td style="width: 15px;">:</td>\n    <td style="font-weight: bold;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td>NIP</td>\n    <td>:</td>\n    <td>{guruNip}</td>\n  </tr>\n  <tr>\n    <td>Jabatan</td>\n    <td>:</td>\n    <td>Guru Pembimbing PKL</td>\n  </tr>\n</table>\n<p style="margin-bottom: 4px;">Adapun rincian jadwal pelaksanaan program PKL adalah sebagai berikut:</p>\n<ol style="margin-left: 20px; margin-bottom: 10px; list-style-type: decimal;">\n  <li style="padding-left: 4px;">Pelepasan siswa/siswi PKL: <strong>{tglPelepasan}</strong>.</li>\n  <li style="padding-left: 4px;">Masa PKL &amp; Evaluasi Berkala: <strong>{periodePkl}</strong>. Monitoring dilaksanakan secara berkala untuk mengevaluasi perkembangan kompetensi siswa.</li>\n  <li style="padding-left: 4px;">Penarikan resmi siswa: <strong>{tglPenarikan}</strong>.</li>\n</ol>\n<p style="text-indent: 30px; margin-bottom: 14px; text-align: justify;">\n  Rincian nama siswa/siswi terlampir pada Lampiran 2 surat ini. Besar harapan kami agar kerja sama yang baik antara institusi pendidikan dan DU/DI terus terjalin erat. Atas perhatian dan kesediaan Bapak/Ibu, kami haturkan terima kasih.\n</p>',
+    html_content: '<p style="text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 4px;">SURAT PENGANTAR PKL TERPADU</p>\n<p style="text-align: center; font-size: 11pt; margin-bottom: 14px;">Nomor: {noSurat}</p>\n\n<table style="width: 100%; margin-bottom: 14px; font-size: 11pt;">\n  <tr>\n    <td style="width: 70px; vertical-align: top;">Kepada:</td>\n    <td></td>\n  </tr>\n  <tr>\n    <td style="vertical-align: top;">Yth.</td>\n    <td>\n      <div style="font-weight: bold;">{tempatPkl}</div>\n      <div style="font-size: 10.5pt; color: #333;">{alamatPkl}</div>\n      <div>di -</div>\n      <div style="text-indent: 20px;">Tempat</div>\n    </td>\n  </tr>\n</table>\n\n<p style="margin-bottom: 8px;">Dengan hormat,</p>\n<p style="text-indent: 30px; margin-bottom: 8px; text-align: justify;">\n  Sehubungan dengan program kurikulum vokasi {namaSekolah} Tahun Ajaran {tahunAjaran}, kami bermaksud mendelegasikan siswa/siswi kami untuk melaksanakan kegiatan Praktek Kerja Lapangan (PKL) terpadu di perusahaan/instansi yang Bapak/Ibu pimpin.\n</p>\n<p style="margin-bottom: 4px;">Bersama surat ini, kami menugaskan guru pembimbing sebagai narahubung resmi:</p>\n<table style="width: 100%; margin-left: 20px; margin-bottom: 10px;">\n  <tr>\n    <td style="width: 110px;">Nama</td>\n    <td style="width: 15px;">:</td>\n    <td style="font-weight: bold;">{guruNama}</td>\n  </tr>\n  <tr>\n    <td>NIP</td>\n    <td>:</td>\n    <td>{guruNip}</td>\n  </tr>\n  <tr>\n    <td>Pangkat/Gol</td>\n    <td>:</td>\n    <td>{guruPangkat}</td>\n  </tr>\n  <tr>\n    <td>Jabatan</td>\n    <td>:</td>\n    <td>{guruJabatan}</td>\n  </tr>\n</table>\n<p style="margin-bottom: 4px;">Adapun rincian jadwal pelaksanaan program PKL adalah sebagai berikut:</p>\n<ol style="margin-left: 20px; margin-bottom: 10px; list-style-type: decimal;">\n  <li style="padding-left: 4px;">Pelepasan siswa/siswi PKL: <strong>{tglPelepasan}</strong>.</li>\n  <li style="padding-left: 4px;">Masa PKL &amp; Evaluasi Berkala: <strong>{periodePkl}</strong>. Monitoring dilaksanakan secara berkala untuk mengevaluasi perkembangan kompetensi siswa.</li>\n  <li style="padding-left: 4px;">Penarikan resmi siswa: <strong>{tglPenarikan}</strong>.</li>\n</ol>\n<p style="text-indent: 30px; margin-bottom: 14px; text-align: justify;">\n  Rincian nama siswa/siswi terlampir pada Lampiran 2 surat ini. Besar harapan kami agar kerja sama yang baik antara institusi pendidikan dan DU/DI terus terjalin erat. Atas perhatian dan kesediaan Bapak/Ibu, kami haturkan terima kasih.\n</p>',
     is_default: 0
   },
   {
@@ -1760,6 +1761,40 @@ function getDirectImageUrl(url, fallback) {
     return 'https://drive.google.com/thumbnail?id=' + driveMatch[1] + '&sz=w1200';
   }
   return trimmed;
+}
+
+// Helper membersihkan nilai data kosong / null / spasi menjadi '-'
+function cleanFieldValue(val, defaultVal = '-') {
+  if (val === null || val === undefined) return defaultVal;
+  const str = String(val).trim();
+  if (!str || str.toLowerCase() === 'null' || str.toLowerCase() === 'undefined') return defaultVal;
+  return str;
+}
+
+// Helper menyelaraskan template bawaan agar selalu menyertakan placeholder terbaru
+function mergeDefaultTemplates(loadedList) {
+  if (!Array.isArray(loadedList) || loadedList.length === 0) {
+    return JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+  }
+  const defaultMap = {};
+  DEFAULT_TEMPLATES.forEach(dt => { defaultMap[dt.id] = dt; });
+
+  const result = loadedList.map(t => {
+    const dt = defaultMap[t.id];
+    if (dt && t.id.startsWith('tpl_') && (!t.html_content || !t.html_content.includes('{guruPangkat}'))) {
+      return { ...dt, ...t, html_content: dt.html_content };
+    }
+    return t;
+  });
+
+  const existingIds = result.map(t => t.id);
+  DEFAULT_TEMPLATES.forEach(dt => {
+    if (!existingIds.includes(dt.id)) {
+      result.push(JSON.parse(JSON.stringify(dt)));
+    }
+  });
+
+  return result;
 }
 
 // ================= FORMAT TANGGAL INDONESIA (dd MMMM yyyy) =================
@@ -2011,15 +2046,9 @@ function onInitialDataLoaded(res, fromCache = false) {
     AppState.driveFolderUrl = res.driveFolderUrl || (res.settings && res.settings.driveFolderUrl) || '';
     AppState.webAppUrl = res.webAppUrl || (res.settings && res.settings.webAppUrl) || '';
     
-    // Pastikan template dari database selalu dipertahankan
+    // Pastikan template dari database selalu dipertahankan dan diselaraskan
     const loadedTemplates = res.templates || [];
-    if (loadedTemplates.length > 0) {
-      const existingIds = loadedTemplates.map(t => t.id);
-      const missingTemplates = DEFAULT_TEMPLATES.filter(dt => !existingIds.includes(dt.id));
-      AppState.templates = [...loadedTemplates, ...missingTemplates];
-    } else {
-      AppState.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
-    }
+    AppState.templates = mergeDefaultTemplates(loadedTemplates);
 
     syncTemplatesCache(AppState.templates);
 
@@ -2108,13 +2137,7 @@ function loadFallbackData() {
     const localSaved = localStorage.getItem('surat_pkl_saved_templates');
     if (localSaved) {
       const parsed = JSON.parse(localSaved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        const existingIds = parsed.map(t => t.id);
-        const missingTemplates = DEFAULT_TEMPLATES.filter(dt => !existingIds.includes(dt.id));
-        AppState.templates = [...parsed, ...missingTemplates];
-      } else {
-        AppState.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
-      }
+      AppState.templates = mergeDefaultTemplates(parsed);
     } else {
       AppState.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
     }
@@ -2305,7 +2328,7 @@ function updateInfoCard() {
     const curGuru = AppState.gurus[AppState.selectedGuruIdx];
     if (curGuru) {
       document.getElementById('infoGuruNama').textContent = curGuru.guru;
-      document.getElementById('infoNip').textContent = curGuru.nip || '-';
+      document.getElementById('infoNip').textContent = cleanFieldValue(curGuru.nip, '-');
       const tempatList = Array.from(new Set(activeStudents.map(s => s.tempat)));
       document.getElementById('infoTempatTujuan').textContent = tempatList.length === 1 ? tempatList[0] : `${tempatList.length} Tempat DU/DI Berbeda`;
     }
@@ -2320,7 +2343,7 @@ function updateInfoCard() {
     const curSiswa = AppState.records[AppState.selectedSiswaIdx];
     if (curSiswa) {
       document.getElementById('infoGuruNama').textContent = curSiswa.guru;
-      document.getElementById('infoNip').textContent = curSiswa.nip || '-';
+      document.getElementById('infoNip').textContent = cleanFieldValue(curSiswa.nip, '-');
       document.getElementById('infoTempatTujuan').textContent = curSiswa.tempat;
     }
   }
@@ -2381,17 +2404,22 @@ function renderDocumentPreview() {
 
   // 2. Judul & Nomor Surat
   const activeTemplate = AppState.templates.find(t => t.id === AppState.activeTemplateId) || AppState.templates[0] || {};
+  let rawHtml = activeTemplate.html_content || '<p>Redaksi template belum disetel.</p>';
+
   const isBeritaAcara = (activeTemplate.id === 'tpl_berita_acara' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('berita acara')));
   const isPermohonanMurid = (activeTemplate.id === 'tpl_surat_permohonan_pkl_murid' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('permohonan')));
   const isKeterangan = (activeTemplate.id === 'tpl_surat_keterangan_pkl' || (activeTemplate.nama && activeTemplate.nama.toLowerCase().includes('keterangan')));
+  const isTugasOrMonitoring = (
+    activeTemplate.id === 'tpl_suket_monitoring_pkl' || 
+    (activeTemplate.nama && (activeTemplate.nama.toLowerCase().includes('monitoring') || activeTemplate.nama.toLowerCase().includes('tugas'))) || 
+    rawHtml.toLowerCase().includes('surat tugas')
+  );
   
   const docJudulContainer = document.getElementById('docJudulContainer');
   const docJudulSurat = document.getElementById('docJudulSurat');
   const docNoSurat = document.getElementById('docNoSurat');
   
   if (docNoSurat) docNoSurat.textContent = s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA';
-  
-  let rawHtml = activeTemplate.html_content || '<p>Redaksi template belum disetel.</p>';
 
   // Sembunyikan container statis jika template sudah menyertakan nomor atau judul surat sendiri
   const hasEmbeddedHeader = rawHtml.includes('{noSurat}') || rawHtml.includes('Nomor:') || rawHtml.includes('Perihal:');
@@ -2399,15 +2427,15 @@ function renderDocumentPreview() {
     docJudulContainer.style.display = hasEmbeddedHeader ? 'none' : 'block';
     if (!hasEmbeddedHeader && docJudulSurat) {
       docJudulSurat.style.textDecoration = 'none';
-      docJudulSurat.textContent = isKeterangan ? 'SURAT KETERANGAN' : 'SURAT PENGANTAR';
+      docJudulSurat.textContent = isKeterangan ? 'SURAT KETERANGAN' : (isTugasOrMonitoring ? 'SURAT TUGAS' : 'SURAT PENGANTAR');
     }
   }
 
-  // 3. Tujuan Surat
+  // 3. Tujuan Surat (Sembunyikan untuk Surat Tugas / Monitoring, Keterangan, Berita Acara, atau yang sudah memuat tujuan)
   const tujuanContainer = document.getElementById('docTujuanSuratContainer');
   const docNamaTempat = document.getElementById('docNamaTempat');
   const docAlamatTempat = document.getElementById('docAlamatTempat');
-  const hasEmbeddedTujuan = rawHtml.includes('Kepada') || rawHtml.includes('{tempatPkl}');
+  const hasEmbeddedTujuan = rawHtml.includes('Kepada') || rawHtml.includes('{tempatPkl}') || rawHtml.includes('{daftarTempatPkl}') || isTugasOrMonitoring || isKeterangan || isBeritaAcara;
 
   if (tujuanContainer) {
     tujuanContainer.style.display = hasEmbeddedTujuan ? 'none' : 'block';
@@ -2470,21 +2498,21 @@ function renderDocumentPreview() {
     '{tglPenarikan}': formatIndonesianDate(firstStudent.tgl_penarikan || s.tglPenarikan || '30 April 2027'),
     '{tglSurat}': formatIndonesianDate(s.tglSurat || '06 Oktober 2026'),
     '{noSurat}': s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA',
-    '{guruNama}': firstStudent.guru || '-',
-    '{guruNip}': firstStudent.nip || '-',
-    '{guruPangkat}': firstStudent.guru_pangkat || firstStudent.pangkat || '-',
-    '{guruJabatan}': firstStudent.guru_jabatan || firstStudent.jabatan || 'Guru Pembimbing PKL',
+    '{guruNama}': cleanFieldValue(firstStudent.guru, '-'),
+    '{guruNip}': cleanFieldValue(firstStudent.nip, '-'),
+    '{guruPangkat}': cleanFieldValue(firstStudent.guru_pangkat || firstStudent.pangkat, '-'),
+    '{guruJabatan}': cleanFieldValue(firstStudent.guru_jabatan || firstStudent.jabatan, 'Guru Pembimbing PKL'),
     '{tempatPkl}': firstStudent.tempat || 'Dunia Usaha / Dunia Industri',
     '{daftarTempatPkl}': daftarTempatHtml,
-    '{alamatPkl}': firstStudent.alamat || '-',
-    '{siswaNama}': firstStudent.siswa || '-',
-    '{siswaNisNisn}': `${firstStudent.nis || '-'}/${firstStudent.nisn || '-'}`,
+    '{alamatPkl}': cleanFieldValue(firstStudent.alamat, '-'),
+    '{siswaNama}': cleanFieldValue(firstStudent.siswa, '-'),
+    '{siswaNisNisn}': `${cleanFieldValue(firstStudent.nis, '-')}/${cleanFieldValue(firstStudent.nisn, '-')}`,
     '{tingkatKelas}': firstStudent.kelas ? firstStudent.kelas.split(' ')[0] : 'XII',
-    '{jurusanPkl}': firstStudent.jurusan || '-',
-    '{siswaJurusan}': firstStudent.jurusan || '-',
+    '{jurusanPkl}': cleanFieldValue(firstStudent.jurusan, '-'),
+    '{siswaJurusan}': cleanFieldValue(firstStudent.jurusan, '-'),
     '{kepsekNama}': s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.',
-    '{kepsekPangkat}': s.kepsekPangkat || 'Pembina (IV/a)',
-    '{kepsekNip}': s.kepsekNip || '19770309 200903 2 010',
+    '{kepsekPangkat}': cleanFieldValue(s.kepsekPangkat, 'Pembina (IV/a)'),
+    '{kepsekNip}': cleanFieldValue(s.kepsekNip, '19770309 200903 2 010'),
     '{tabelSiswaPermohonan}': tabelSiswaHtml
   };
 
@@ -3971,12 +3999,18 @@ function buildSingleSuratHtml(studentList, activeTemplate, s) {
 
   let rawHtml = activeTemplate.html_content || '<p>Redaksi template belum disetel.</p>';
 
+  const isTugasOrMonitoring = (
+    activeTemplate.id === 'tpl_suket_monitoring_pkl' || 
+    (activeTemplate.nama && (activeTemplate.nama.toLowerCase().includes('monitoring') || activeTemplate.nama.toLowerCase().includes('tugas'))) || 
+    rawHtml.toLowerCase().includes('surat tugas')
+  );
+
   rawHtml = rawHtml.replace(/font-size:\s*13pt;\s*margin-bottom:\s*4px;\s*text-decoration:\s*underline;/gi, 'font-size: 13pt; margin-bottom: 4px;');
   rawHtml = rawHtml.replace(/text-decoration:\s*underline;\s*font-size:\s*13pt;/gi, 'font-size: 13pt;');
   rawHtml = rawHtml.replace(/(<p[^>]*font-size:\s*13pt[^>]*)text-decoration:\s*underline;?([^>]*>)/gi, '$1$2');
 
   const hasEmbeddedHeader = rawHtml.includes('{noSurat}') || rawHtml.includes('Nomor:') || rawHtml.includes('Perihal:');
-  const hasEmbeddedTujuan = rawHtml.includes('Kepada') || rawHtml.includes('{tempatPkl}');
+  const hasEmbeddedTujuan = rawHtml.includes('Kepada') || rawHtml.includes('{tempatPkl}') || rawHtml.includes('{daftarTempatPkl}') || isTugasOrMonitoring || isKeterangan || isBeritaAcara;
 
   // 1. Kop Surat
   let kopHtml = '';
@@ -3991,7 +4025,7 @@ function buildSingleSuratHtml(studentList, activeTemplate, s) {
   // 2. Judul Surat Luar
   let judulHtml = '';
   if (!hasEmbeddedHeader) {
-    const judulText = isKeterangan ? 'SURAT KETERANGAN' : 'SURAT PENGANTAR';
+    const judulText = isKeterangan ? 'SURAT KETERANGAN' : (isTugasOrMonitoring ? 'SURAT TUGAS' : 'SURAT PENGANTAR');
     const noSuratText = s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA';
     judulHtml = `
       <div style="text-align: center; margin-top: 10px; margin-bottom: 14px;">
@@ -4067,21 +4101,21 @@ function buildSingleSuratHtml(studentList, activeTemplate, s) {
     '{tglPenarikan}': formatIndonesianDate(firstStudent.tgl_penarikan || s.tglPenarikan || '30 April 2027'),
     '{tglSurat}': formatIndonesianDate(s.tglSurat || '06 Oktober 2026'),
     '{noSurat}': s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA',
-    '{guruNama}': firstStudent.guru || '-',
-    '{guruNip}': firstStudent.nip || '-',
-    '{guruPangkat}': firstStudent.guru_pangkat || firstStudent.pangkat || '-',
-    '{guruJabatan}': firstStudent.guru_jabatan || firstStudent.jabatan || 'Guru Pembimbing PKL',
+    '{guruNama}': cleanFieldValue(firstStudent.guru, '-'),
+    '{guruNip}': cleanFieldValue(firstStudent.nip, '-'),
+    '{guruPangkat}': cleanFieldValue(firstStudent.guru_pangkat || firstStudent.pangkat, '-'),
+    '{guruJabatan}': cleanFieldValue(firstStudent.guru_jabatan || firstStudent.jabatan, 'Guru Pembimbing PKL'),
     '{tempatPkl}': firstStudent.tempat || 'Dunia Usaha / Dunia Industri',
     '{daftarTempatPkl}': daftarTempatHtml,
-    '{alamatPkl}': firstStudent.alamat || '-',
-    '{siswaNama}': firstStudent.siswa || '-',
-    '{siswaNisNisn}': `${firstStudent.nis || '-'}/${firstStudent.nisn || '-'}`,
+    '{alamatPkl}': cleanFieldValue(firstStudent.alamat, '-'),
+    '{siswaNama}': cleanFieldValue(firstStudent.siswa, '-'),
+    '{siswaNisNisn}': `${cleanFieldValue(firstStudent.nis, '-')}/${cleanFieldValue(firstStudent.nisn, '-')}`,
     '{tingkatKelas}': firstStudent.kelas ? firstStudent.kelas.split(' ')[0] : 'XII',
-    '{jurusanPkl}': firstStudent.jurusan || '-',
-    '{siswaJurusan}': firstStudent.jurusan || '-',
+    '{jurusanPkl}': cleanFieldValue(firstStudent.jurusan, '-'),
+    '{siswaJurusan}': cleanFieldValue(firstStudent.jurusan, '-'),
     '{kepsekNama}': s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.',
-    '{kepsekPangkat}': s.kepsekPangkat || 'Pembina (IV/a)',
-    '{kepsekNip}': s.kepsekNip || '19770309 200903 2 010',
+    '{kepsekPangkat}': cleanFieldValue(s.kepsekPangkat, 'Pembina (IV/a)'),
+    '{kepsekNip}': cleanFieldValue(s.kepsekNip, '19770309 200903 2 010'),
     '{tabelSiswaPermohonan}': tabelSiswaHtml
   };
 
@@ -4198,13 +4232,19 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
 
   let rawHtml = activeTemplate.html_content || '<p>Redaksi template belum disetel.</p>';
 
+  const isTugasOrMonitoring = (
+    activeTemplate.id === 'tpl_suket_monitoring_pkl' || 
+    (activeTemplate.nama && (activeTemplate.nama.toLowerCase().includes('monitoring') || activeTemplate.nama.toLowerCase().includes('tugas'))) || 
+    rawHtml.toLowerCase().includes('surat tugas')
+  );
+
   rawHtml = rawHtml.replace(/font-size:\s*13pt;\s*margin-bottom:\s*4px;\s*text-decoration:\s*underline;/gi, 'font-size: 13pt; margin-bottom: 4px;');
   rawHtml = rawHtml.replace(/text-decoration:\s*underline;\s*font-size:\s*13pt;/gi, 'font-size: 13pt;');
   rawHtml = rawHtml.replace(/(<p[^>]*font-size:\s*13pt[^>]*)text-decoration:\s*underline;?([^>]*>)/gi, '$1$2');
 
   const hasEmbeddedHeader = rawHtml.includes('{noSurat}') || rawHtml.includes('Nomor:') || rawHtml.includes('Perihal:');
-  const hasEmbeddedTujuan = rawHtml.includes('Kepada') || rawHtml.includes('{tempatPkl}');
-  const hasEmbeddedTable = rawHtml.includes('Konsentrasi Keahlian') || rawHtml.includes('Konsentrasi') || rawHtml.includes('NIS/NISN') || isBeritaAcara || isPermohonanMurid || isKeterangan;
+  const hasEmbeddedTujuan = rawHtml.includes('Kepada') || rawHtml.includes('{tempatPkl}') || rawHtml.includes('{daftarTempatPkl}') || isTugasOrMonitoring || isKeterangan || isBeritaAcara;
+  const hasEmbeddedTable = rawHtml.includes('Konsentrasi Keahlian') || rawHtml.includes('Konsentrasi') || rawHtml.includes('NIS/NISN') || isBeritaAcara || isPermohonanMurid || isKeterangan || isTugasOrMonitoring;
 
   // 1. Kop Surat
   let kopHtml = '';
@@ -4219,7 +4259,7 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
   // 2. Judul Surat Luar
   let judulHtml = '';
   if (!hasEmbeddedHeader) {
-    const judulText = isKeterangan ? 'SURAT KETERANGAN' : 'SURAT PENGANTAR';
+    const judulText = isKeterangan ? 'SURAT KETERANGAN' : (isTugasOrMonitoring ? 'SURAT TUGAS' : 'SURAT PENGANTAR');
     const noSuratText = s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA';
     judulHtml = `
       <div style="text-align: center; margin-top: 10pt; margin-bottom: 14pt;">
@@ -4293,21 +4333,21 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
     '{tglPenarikan}': formatIndonesianDate(firstStudent.tgl_penarikan || s.tglPenarikan || '30 April 2027'),
     '{tglSurat}': formatIndonesianDate(s.tglSurat || '06 Oktober 2026'),
     '{noSurat}': s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA',
-    '{guruNama}': firstStudent.guru || '-',
-    '{guruNip}': firstStudent.nip || '-',
-    '{guruPangkat}': firstStudent.guru_pangkat || firstStudent.pangkat || '-',
-    '{guruJabatan}': firstStudent.guru_jabatan || firstStudent.jabatan || 'Guru Pembimbing PKL',
+    '{guruNama}': cleanFieldValue(firstStudent.guru, '-'),
+    '{guruNip}': cleanFieldValue(firstStudent.nip, '-'),
+    '{guruPangkat}': cleanFieldValue(firstStudent.guru_pangkat || firstStudent.pangkat, '-'),
+    '{guruJabatan}': cleanFieldValue(firstStudent.guru_jabatan || firstStudent.jabatan, 'Guru Pembimbing PKL'),
     '{tempatPkl}': firstStudent.tempat || 'Dunia Usaha / Dunia Industri',
     '{daftarTempatPkl}': daftarTempatHtml,
-    '{alamatPkl}': firstStudent.alamat || '-',
-    '{siswaNama}': firstStudent.siswa || '-',
-    '{siswaNisNisn}': `${firstStudent.nis || '-'}/${firstStudent.nisn || '-'}`,
+    '{alamatPkl}': cleanFieldValue(firstStudent.alamat, '-'),
+    '{siswaNama}': cleanFieldValue(firstStudent.siswa, '-'),
+    '{siswaNisNisn}': `${cleanFieldValue(firstStudent.nis, '-')}/${cleanFieldValue(firstStudent.nisn, '-')}`,
     '{tingkatKelas}': firstStudent.kelas ? firstStudent.kelas.split(' ')[0] : 'XII',
-    '{jurusanPkl}': firstStudent.jurusan || '-',
-    '{siswaJurusan}': firstStudent.jurusan || '-',
+    '{jurusanPkl}': cleanFieldValue(firstStudent.jurusan, '-'),
+    '{siswaJurusan}': cleanFieldValue(firstStudent.jurusan, '-'),
     '{kepsekNama}': s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.',
-    '{kepsekPangkat}': s.kepsekPangkat || 'Pembina (IV/a)',
-    '{kepsekNip}': s.kepsekNip || '19770309 200903 2 010',
+    '{kepsekPangkat}': cleanFieldValue(s.kepsekPangkat, 'Pembina (IV/a)'),
+    '{kepsekNip}': cleanFieldValue(s.kepsekNip, '19770309 200903 2 010'),
     '{tabelSiswaPermohonan}': tabelSiswaHtml
   };
 
