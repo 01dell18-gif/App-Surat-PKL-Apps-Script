@@ -113,7 +113,7 @@
 
             <!-- Preview Box -->
             <div class="bg-white border border-dashed border-slate-300 rounded-lg p-2 flex items-center justify-center min-h-[70px] max-h-24 overflow-hidden shadow-2xs">
-              <img id="previewSettingsTtd" src="" alt="Pratinjau TTD Barcode" class="max-h-20 max-w-full object-contain">
+              <img id="previewSettingsTtd" src="" alt="Pratinjau TTD Barcode" class="max-h-20 max-w-full object-contain" onerror="if(typeof ASSETS !== 'undefined' && ASSETS.ttd && this.src !== ASSETS.ttd){ this.src = ASSETS.ttd; }">
             </div>
 
             <div class="space-y-2 pt-1">

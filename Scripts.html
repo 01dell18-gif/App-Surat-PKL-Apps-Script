@@ -762,38 +762,6 @@ function getActiveFilteredStudents() {
   }
 }
 
-// Membangun Badge Tanda Tangan Elektronik (BSrE) Sesuai Standar Resmi Pemprov Bali & SMKN 1 Klungkung
-// Format persis seperti contoh gambar: Logo Lambang Bali di kiri + 5 baris identitas pejabat di kanan dalam kotak berbingkai
-function buildTtdElektronikHtml(s, isForWord = false) {
-  s = s || AppState.settings || {};
-  const logoSrc = typeof ASSETS !== 'undefined' ? ASSETS.logoBali : '';
-  const rawSchool = s.namaSekolah || 'SMK Negeri 1 Klungkung';
-  const cleanSchool = rawSchool.replace(/^kepala\s+/i, '').trim();
-  const namaSekolahUpper = cleanSchool.toUpperCase();
-  const kepsekNama = s.kepsekNama || 'Sri Rejeki, S.Pd., M.Pd.';
-  const kepsekPangkat = s.kepsekPangkat || 'Pembina (IV/a)';
-  const kepsekNip = s.kepsekNip || '19770309 200903 2 010';
-
-  const tableWidth = isForWord ? 'width="310"' : '';
-
-  return `
-    <table ${tableWidth} border="1" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 310px; border: 1px solid #000; border-collapse: collapse; margin-top: 4px; margin-bottom: 2px; background-color: #ffffff;" class="ttd-elektronik-box">
-      <tr>
-        <td style="width: 68px; text-align: center; vertical-align: middle; padding: 6px 4px 6px 6px; border: none;">
-          ${logoSrc ? `<img src="${logoSrc}" alt="Lambang Bali" width="54" height="66" style="height: 66px; width: 54px; max-width: 54px; object-fit: contain; display: block; margin: 0 auto;">` : ''}
-        </td>
-        <td style="vertical-align: middle; padding: 6px 8px 6px 4px; border: none; font-family: Arial, Helvetica, sans-serif; font-size: 8pt; line-height: 1.25; color: #000; text-align: left;">
-          <div style="font-size: 7.5pt; text-decoration: underline; margin-bottom: 2px; white-space: nowrap;">Ditandatangani secara elektronik oleh :</div>
-          <div style="font-size: 8pt; font-weight: bold; text-transform: uppercase; margin-bottom: 1px;">KEPALA ${namaSekolahUpper}</div>
-          <div style="font-size: 8.5pt; font-weight: bold; margin-bottom: 1px;">${kepsekNama}</div>
-          <div style="font-size: 7.5pt; margin-bottom: 1px;">${kepsekPangkat}</div>
-          <div style="font-size: 7.5pt;">NIP. ${kepsekNip}</div>
-        </td>
-      </tr>
-    </table>
-  `;
-}
-
 // Render Pratinjau Dokumen Nyata (WYSIWYG Live Canvas)
 function renderDocumentPreview() {
   const activeStudents = getActiveFilteredStudents();
@@ -959,8 +927,14 @@ function renderDocumentPreview() {
   const docTtdArea = document.getElementById('docTtdArea');
   if (docTtdArea) {
     if (AppState.showTtd) {
-      // TTD Elektronik: Format resmi Pemprov Bali / BSrE sesuai media_1795065225414_04f3df72.png
-      docTtdArea.innerHTML = buildTtdElektronikHtml(s);
+      // TTD Elektronik: Menampilkan berkas gambar dari s.ttdUrl (Drive/Upload) dengan ukuran proporsional (tinggi 85px, maks 280px)
+      const rawTtd = s.ttdUrl || DEFAULT_ASSET_URLS.ttd;
+      const ttdSrc = getDirectImageUrl(rawTtd, typeof ASSETS !== 'undefined' ? ASSETS.ttd : '');
+      docTtdArea.innerHTML = `
+        <div style="margin-top: 4px; margin-bottom: 2px;">
+          ${ttdSrc ? `<img src="${ttdSrc}" alt="TTD Elektronik" style="max-width: 280px; height: 85px; object-fit: contain; display: block;" onerror="if(typeof ASSETS !== 'undefined' && ASSETS.ttd && this.src !== ASSETS.ttd){ this.src = ASSETS.ttd; }">` : '<div style="height: 85px;"></div>'}
+        </div>
+      `;
     } else {
       // TTD Basah Otomatis (Cap Stempel Bulat + TTD Basah) Sesuai media_1794809351021_0ce943ca.png
       const rawTtdBasah = s.ttdBasahUrl || DEFAULT_ASSET_URLS.ttd_basah;
@@ -2735,7 +2709,13 @@ function buildSingleSuratHtml(studentList, activeTemplate, s) {
   // 6. Area Tanda Tangan
   let ttdMediaHtml = '';
   if (AppState.showTtd) {
-    ttdMediaHtml = buildTtdElektronikHtml(s);
+    const rawTtd = s.ttdUrl || DEFAULT_ASSET_URLS.ttd;
+    const ttdSrc = getDirectImageUrl(rawTtd, typeof ASSETS !== 'undefined' ? ASSETS.ttd : '');
+    ttdMediaHtml = `
+      <div style="margin-top: 4px; margin-bottom: 2px;">
+        ${ttdSrc ? `<img src="${ttdSrc}" alt="TTD Elektronik" style="max-width: 280px; height: 85px; object-fit: contain; display: block;" onerror="if(typeof ASSETS !== 'undefined' && ASSETS.ttd && this.src !== ASSETS.ttd){ this.src = ASSETS.ttd; }">` : '<div style="height: 85px;"></div>'}
+      </div>
+    `;
   } else {
     const rawTtdBasah = s.ttdBasahUrl || DEFAULT_ASSET_URLS.ttd_basah;
     const ttdBasahSrc = getDirectImageUrl(rawTtdBasah, typeof ASSETS !== 'undefined' ? ASSETS.ttdBasah : '');
@@ -2964,7 +2944,9 @@ function buildWordHtml(studentList, activeTemplate, s, filename = 'Dokumen_PKL')
   // 6. Area Tanda Tangan Khusus Word (Tabel 2 Kolom untuk memastikan rata kanan di Word)
   let ttdMediaWord = '';
   if (AppState.showTtd) {
-    ttdMediaWord = buildTtdElektronikHtml(s, true);
+    const rawTtd = s.ttdUrl || DEFAULT_ASSET_URLS.ttd;
+    const ttdSrc = getDirectImageUrl(rawTtd, typeof ASSETS !== 'undefined' ? ASSETS.ttd : '');
+    ttdMediaWord = ttdSrc ? `<img src="${ttdSrc}" alt="TTD Elektronik" width="260" height="85" style="width: 260px; height: 85px; max-width: 260px; object-fit: contain; display: block; margin: 4pt 0;">` : '<div style="height: 85px;"></div>';
   } else {
     const rawTtdBasah = s.ttdBasahUrl || DEFAULT_ASSET_URLS.ttd_basah;
     const ttdBasahSrc = getDirectImageUrl(rawTtdBasah, typeof ASSETS !== 'undefined' ? ASSETS.ttdBasah : '');
