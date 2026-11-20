@@ -474,6 +474,14 @@ function clearInitialDataCache() {
 }
 
 /**
+ * Membersihkan cache server dan mengambil data baru langsung tanpa race condition
+ */
+function clearCacheAndGetFreshData() {
+  clearInitialDataCache();
+  return getInitialData(true);
+}
+
+/**
  * Helper memformat objek Date Google Sheets menjadi format tanggal Indonesia 'dd MMMM yyyy'
  */
 function formatAppDate(val) {

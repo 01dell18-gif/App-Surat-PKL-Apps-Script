@@ -3607,7 +3607,9 @@ function openFolderDrive() {
 }
 
 function clearCacheAndReload() {
-  showToast('Membersihkan cache web & memuat ulang...', 'info');
+  showToast('Membersihkan seluruh cache & memuat ulang data...', 'info');
+
+  // 1. Bersihkan seluruh penyimpanan lokal browser
   try {
     localStorage.clear();
     sessionStorage.clear();
@@ -3615,18 +3617,56 @@ function clearCacheAndReload() {
     console.warn('Error clearing storage:', e);
   }
 
+  // 2. Reset form pencarian cepat jika ada
+  const searchInput = document.getElementById('quickSearchInput');
+  if (searchInput) searchInput.value = '';
+  const searchResults = document.getElementById('quickSearchResults');
+  if (searchResults) searchResults.classList.add('hidden');
+
+  // 3. Reset opsi tampilan default
+  AppState.paperSize = 'f4';
+  AppState.showKop = true;
+  AppState.showTtd = true;
+  AppState.showAlamat = true;
+  AppState.isDocFitActive = window.innerWidth < 768;
+
+  const toggleKop = document.getElementById('toggleKop');
+  if (toggleKop) toggleKop.checked = true;
+  const toggleTtd = document.getElementById('toggleTtd');
+  if (toggleTtd) toggleTtd.checked = true;
+  const toggleAlamat = document.getElementById('toggleAlamat');
+  if (toggleAlamat) toggleAlamat.checked = true;
+  const paperSizeSelect = document.getElementById('paperSizeSelect');
+  if (paperSizeSelect) paperSizeSelect.value = 'f4';
+
+  // 4. Reset pilihan mode navigasi ke mode awal (per-guru) jika elemen tersedia
+  if (typeof setSelectionMode === 'function' && document.getElementById('btnModePerGuru')) {
+    setSelectionMode('per-guru');
+  }
+
+  // 5. Muat ulang data segar dari server tanpa memanggil window.location.reload() agar iframe Web App tidak blank putih
   if (typeof google !== 'undefined' && google.script && google.script.run) {
     google.script.run
-      .withSuccessHandler(function() {
-        window.location.reload();
+      .withSuccessHandler(function(res) {
+        AppState.selectedGuruIdx = 0;
+        AppState.selectedDuDiIdx = 0;
+        AppState.selectedSiswaIdx = 0;
+        AppState.selectedTempatFilter = 'all';
+        AppState.selectedSiswaFilterPerGuru = 'all';
+        AppState.selectedSiswaFilterPerDuDi = 'all';
+
+        onInitialDataLoaded(res, false);
+        showToast('Cache web berhasil dibersihkan & data aplikasi dimuat ulang!', 'success');
       })
-      .withFailureHandler(function() {
-        window.location.reload();
+      .withFailureHandler(function(err) {
+        showToast('Gagal memuat ulang data dari server: ' + err, 'error');
       })
-      .clearInitialDataCache();
+      .clearCacheAndGetFreshData();
   } else {
     setTimeout(function() {
-      window.location.reload();
+      loadFallbackData();
+      renderAll();
+      showToast('Cache lokal berhasil dibersihkan!', 'success');
     }, 400);
   }
 }
