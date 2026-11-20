@@ -760,15 +760,21 @@
 
           <div class="grid grid-cols-2 gap-2.5">
             <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Dikeluarkan di (Kota)</label>
+              <input type="text" id="inputTitimangsaTempat" oninput="onSettingsInputChange()" placeholder="Klungkung"
+                class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
               <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tanggal Surat</label>
               <input type="text" id="inputTglSurat" oninput="onSettingsInputChange()"
                 class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
             </div>
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tahun Ajaran</label>
-              <input type="text" id="inputTahunAjaran" oninput="onSettingsInputChange()"
-                class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
-            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tahun Ajaran</label>
+            <input type="text" id="inputTahunAjaran" oninput="onSettingsInputChange()"
+              class="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
           </div>
 
           <div>
@@ -1854,6 +1860,7 @@ function populateSettingsInputs() {
   if (!s.ttdBasahUrl || !s.ttdBasahUrl.trim()) s.ttdBasahUrl = DEFAULT_ASSET_URLS.ttd_basah;
 
   if (document.getElementById('inputNoSurat')) document.getElementById('inputNoSurat').value = s.noSurat || 'B.10.000/9546/SMKN1KLK/DIKPORA';
+  if (document.getElementById('inputTitimangsaTempat')) document.getElementById('inputTitimangsaTempat').value = s.titimangsaTempat || 'Klungkung';
   if (document.getElementById('inputTglSurat')) document.getElementById('inputTglSurat').value = formatIndonesianDate(s.tglSurat || '06 Oktober 2026');
   if (document.getElementById('inputTahunAjaran')) document.getElementById('inputTahunAjaran').value = s.tahunAjaran || '2026/2027';
   if (document.getElementById('inputTglPelepasan')) document.getElementById('inputTglPelepasan').value = formatIndonesianDate(s.tglPelepasan || '13 November 2026');
@@ -1912,6 +1919,7 @@ function populateSettingsInputs() {
   if (document.getElementById('settingKepsekPangkat')) document.getElementById('settingKepsekPangkat').value = s.kepsekPangkat || '';
   if (document.getElementById('settingKepsekNip')) document.getElementById('settingKepsekNip').value = s.kepsekNip || '';
   if (document.getElementById('settingTahunAjaran')) document.getElementById('settingTahunAjaran').value = s.tahunAjaran || '2026/2027';
+  if (document.getElementById('settingTitimangsaTempat')) document.getElementById('settingTitimangsaTempat').value = s.titimangsaTempat || 'Klungkung';
 }
 
 // Render Seluruh Elemen Tampilan dengan Aman Sesuai Halaman Aktif
@@ -2515,12 +2523,13 @@ function onToggleOptionChange() {
 }
 
 function onSettingsInputChange() {
-  AppState.settings.noSurat = document.getElementById('inputNoSurat').value;
-  AppState.settings.tglSurat = document.getElementById('inputTglSurat').value;
-  AppState.settings.tahunAjaran = document.getElementById('inputTahunAjaran').value;
-  AppState.settings.tglPelepasan = document.getElementById('inputTglPelepasan').value;
-  AppState.settings.periodePkl = document.getElementById('inputPeriodePkl').value;
-  AppState.settings.tglPenarikan = document.getElementById('inputTglPenarikan').value;
+  if (document.getElementById('inputNoSurat')) AppState.settings.noSurat = document.getElementById('inputNoSurat').value;
+  if (document.getElementById('inputTitimangsaTempat')) AppState.settings.titimangsaTempat = document.getElementById('inputTitimangsaTempat').value;
+  if (document.getElementById('inputTglSurat')) AppState.settings.tglSurat = document.getElementById('inputTglSurat').value;
+  if (document.getElementById('inputTahunAjaran')) AppState.settings.tahunAjaran = document.getElementById('inputTahunAjaran').value;
+  if (document.getElementById('inputTglPelepasan')) AppState.settings.tglPelepasan = document.getElementById('inputTglPelepasan').value;
+  if (document.getElementById('inputPeriodePkl')) AppState.settings.periodePkl = document.getElementById('inputPeriodePkl').value;
+  if (document.getElementById('inputTglPenarikan')) AppState.settings.tglPenarikan = document.getElementById('inputTglPenarikan').value;
   renderDocumentPreview();
 }
 
@@ -3900,6 +3909,7 @@ function saveApplicationSettings() {
   s.kepsekPangkat = getVal('settingKepsekPangkat', '');
   s.kepsekNip = getVal('settingKepsekNip', '');
   s.tahunAjaran = getVal('settingTahunAjaran', '');
+  s.titimangsaTempat = getVal('settingTitimangsaTempat', s.titimangsaTempat || 'Klungkung');
 
   AppState.driveFolderUrl = s.driveFolderUrl;
 
