@@ -208,6 +208,12 @@
             <button type="button" onclick="insertEditorVariable('{namaSekolah}')"
               class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer"
               title="Nama Resmi Sekolah">+{namaSekolah}</button>
+            <button type="button" onclick="insertEditorVariable('{subJudulSekolah}')"
+              class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer"
+              title="Sub Judul / Moto Sekolah">+{subJudulSekolah}</button>
+            <button type="button" onclick="insertEditorVariable('{alamatSekolah}')"
+              class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer"
+              title="Alamat Lengkap Sekolah">+{alamatSekolah}</button>
             <button type="button" onclick="insertEditorVariable('{tglPelepasan}')"
               class="px-2 py-0.5 rounded-md bg-white hover:bg-indigo-100 border border-indigo-200 font-mono text-indigo-800 transition font-medium cursor-pointer"
               title="Tanggal Pelepasan Siswa">+{tglPelepasan}</button>
@@ -245,6 +251,9 @@
             <button type="button" onclick="insertEditorVariable('{guruJabatan}')"
               class="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 border border-blue-300 font-mono text-blue-900 transition font-medium cursor-pointer"
               title="Jabatan Guru Pembimbing">+{guruJabatan}</button>
+            <button type="button" onclick="insertEditorVariable('{guruUnitKerja}')"
+              class="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 border border-blue-300 font-mono text-blue-900 transition font-medium cursor-pointer"
+              title="Unit Kerja Guru Pembimbing">+{guruUnitKerja}</button>
 
             <!-- Siswa PKL -->
             <button type="button" onclick="insertEditorVariable('{siswaNama}')"
@@ -270,9 +279,12 @@
               title="Jurusan Siswa">+{siswaJurusan}</button>
             <button type="button" onclick="insertEditorVariable('{tabelSiswaPermohonan}')"
               class="px-2 py-0.5 rounded-md bg-amber-50 hover:bg-amber-100 border border-amber-300 font-mono text-amber-900 transition font-medium cursor-pointer"
-              title="Tabel Daftar Siswa Khusus Surat Permohonan">+{tabelSiswaPermohonan}</button>
+              title="Tabel Daftar Siswa Ringkas (Halaman 1)">+{tabelSiswaPermohonan}</button>
+            <button type="button" onclick="insertEditorVariable('{tabelLampiranSiswa}')"
+              class="px-2 py-0.5 rounded-md bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 font-mono text-emerald-900 transition font-medium cursor-pointer"
+              title="Tabel Daftar Siswa Lengkap (Lampiran Halaman 2)">+{tabelLampiranSiswa}</button>
 
-            <!-- Kepala Sekolah -->
+            <!-- Kepala Sekolah & Tanda Tangan -->
             <button type="button" onclick="insertEditorVariable('{kepsekNama}')"
               class="px-2 py-0.5 rounded-md bg-violet-50 hover:bg-violet-100 border border-violet-300 font-mono text-violet-900 transition font-medium cursor-pointer"
               title="Nama Kepala Sekolah & Gelar">+{kepsekNama}</button>
@@ -282,6 +294,19 @@
             <button type="button" onclick="insertEditorVariable('{kepsekPangkat}')"
               class="px-2 py-0.5 rounded-md bg-violet-50 hover:bg-violet-100 border border-violet-300 font-mono text-violet-900 transition font-medium cursor-pointer"
               title="Pangkat / Golongan Kepala Sekolah">+{kepsekPangkat}</button>
+            <button type="button" onclick="insertEditorVariable('{kepsekJabatan}')"
+              class="px-2 py-0.5 rounded-md bg-violet-50 hover:bg-violet-100 border border-violet-300 font-mono text-violet-900 transition font-medium cursor-pointer"
+              title="Jabatan Kepala Sekolah">+{kepsekJabatan}</button>
+            <button type="button" onclick="insertEditorVariable('{tandaTangan}')"
+              class="px-2 py-0.5 rounded-md bg-rose-50 hover:bg-rose-100 border border-rose-300 font-mono text-rose-900 transition font-medium cursor-pointer"
+              title="Blok Titimangsa & Tanda Tangan Kepala Sekolah (Otomatis Barcode/Basah)">+{tandaTangan}</button>
+
+            <!-- Multi-Halaman / Batas Halaman 2 -->
+            <button type="button" onclick="insertEditorPageBreak()"
+              class="px-2 py-0.5 rounded-md bg-purple-100 hover:bg-purple-200 border border-purple-300 font-mono text-purple-900 transition font-bold cursor-pointer"
+              title="Sisipkan Pembatas Halaman Baru (Pindah ke Lembar 2 / Lampiran)">
+              📄 +Batas Halaman 2
+            </button>
           </div>
         </div>
 

@@ -21,11 +21,57 @@
     <aside id="sidebarControls"
       class="w-full lg:w-96 flex-shrink-0 flex flex-col gap-3.5 no-print transition-all duration-300">
 
-      <!-- 1. PEMILIHAN SURAT ACCORDION CARD -->
+      <!-- 1. TEMPLATE SURAT ACCORDION CARD -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
+        <button type="button" id="accordionHeader_template" onclick="toggleSidebarAccordion('template')"
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer border-b border-slate-100 bg-amber-50/40">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+              <i data-lucide="layout-template" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Template Surat</h2>
+              <p class="text-[10.5px] text-slate-400 truncate">Pilih format & naskah redaksi</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <i id="accordionChevron_template" data-lucide="chevron-down"
+              class="w-4 h-4 text-slate-400 transition-transform duration-200 rotate-180"></i>
+          </div>
+        </button>
+
+        <div id="accordionBody_template" class="p-4 sm:p-5 space-y-3.5">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+            <span class="text-xs font-semibold text-slate-700">Daftar Pilihan Template</span>
+            <button onclick="event.stopPropagation(); navigateTo('template');"
+              class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 px-2 py-0.5 rounded-lg transition cursor-pointer">
+              <i data-lucide="list" class="w-3.5 h-3.5"></i>
+              <span>Kelola Template</span>
+            </button>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Template Aktif Digunakan</label>
+            <select id="sidebarTemplateSelect" onchange="onSidebarTemplateChange()"
+              class="w-full p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-950 focus:ring-2 focus:ring-indigo-500">
+              <!-- Injected by JS -->
+            </select>
+          </div>
+
+          <button onclick="navigateTo('template')"
+            class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+            <i data-lucide="file-pen" class="w-4 h-4 text-indigo-600"></i>
+            <span>Edit Redaksi di Editor Teks (WYSIWYG)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. PEMILIHAN SURAT ACCORDION CARD -->
       <div
         class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
         <button type="button" id="accordionHeader_pemilihan" onclick="toggleSidebarAccordion('pemilihan')"
-          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer border-b border-slate-100 bg-indigo-50/40">
+          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
           <div class="flex items-center gap-2.5 min-w-0">
             <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
               <i data-lucide="sliders" class="w-4 h-4"></i>
@@ -38,11 +84,11 @@
           <div class="flex items-center gap-2 shrink-0">
             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">Utama</span>
             <i id="accordionChevron_pemilihan" data-lucide="chevron-down"
-              class="w-4 h-4 text-slate-400 transition-transform duration-200 rotate-180"></i>
+              class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
           </div>
         </button>
 
-        <div id="accordionBody_pemilihan" class="p-4 sm:p-5">
+        <div id="accordionBody_pemilihan" class="hidden p-4 sm:p-5">
           <!-- Mode Segmented Buttons -->
           <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl mb-4">
             <button id="btnModePerGuru" onclick="setSelectionMode('per-guru')"
@@ -117,7 +163,7 @@
               <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Filter Nama
                 Siswa</label>
               <select id="siswaFilterSelectPerDuDi" onchange="onSiswaFilterChange('per-du-di')"
-                class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-900 focus:ring-2 focus:ring-indigo-500">
+                class="w-full p-2.5 bg-indigo-50/60 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-950 focus:ring-2 focus:ring-indigo-500">
                 <!-- Injected by JS -->
               </select>
             </div>
@@ -165,52 +211,6 @@
                   class="font-semibold text-slate-900">-</span></div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- 2. TEMPLATE SURAT ACCORDION CARD -->
-      <div
-        class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden transition-all duration-200">
-        <button type="button" id="accordionHeader_template" onclick="toggleSidebarAccordion('template')"
-          class="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-              <i data-lucide="layout-template" class="w-4 h-4"></i>
-            </div>
-            <div>
-              <h2 class="text-xs sm:text-sm font-bold text-slate-800 leading-tight">Template Surat</h2>
-              <p class="text-[10.5px] text-slate-400 truncate">Pilih format & naskah redaksi</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <i id="accordionChevron_template" data-lucide="chevron-down"
-              class="w-4 h-4 text-slate-400 transition-transform duration-200"></i>
-          </div>
-        </button>
-
-        <div id="accordionBody_template" class="hidden p-4 sm:p-5 space-y-3.5">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-            <span class="text-xs font-semibold text-slate-700">Daftar Pilihan Template</span>
-            <button onclick="event.stopPropagation(); navigateTo('template');"
-              class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 px-2 py-0.5 rounded-lg transition cursor-pointer">
-              <i data-lucide="list" class="w-3.5 h-3.5"></i>
-              <span>Kelola Template</span>
-            </button>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">Template Aktif Digunakan</label>
-            <select id="sidebarTemplateSelect" onchange="onSidebarTemplateChange()"
-              class="w-full p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-950 focus:ring-2 focus:ring-indigo-500">
-              <!-- Injected by JS -->
-            </select>
-          </div>
-
-          <button onclick="navigateTo('template')"
-            class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-            <i data-lucide="file-pen" class="w-4 h-4 text-indigo-600"></i>
-            <span>Edit Redaksi di Editor Teks (WYSIWYG)</span>
-          </button>
         </div>
       </div>
 
@@ -418,7 +418,7 @@
               <div id="docIsiSuratContainer" style="text-align: justify; line-height: 1.35; font-size: 11pt;"></div>
 
               <!-- TANDA TANGAN KEPALA SEKOLAH -->
-              <div
+              <div id="docTtdAreaWrapper"
                 style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px; page-break-inside: avoid;">
                 <div style="width: 310px; max-width: 100%; text-align: left; position: relative;">
                   <div id="docTitimangsaHeader">
