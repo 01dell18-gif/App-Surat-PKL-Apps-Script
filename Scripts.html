@@ -3606,6 +3606,31 @@ function openFolderDrive() {
   }
 }
 
+function clearCacheAndReload() {
+  showToast('Membersihkan cache web & memuat ulang...', 'info');
+  try {
+    localStorage.clear();
+    sessionStorage.clear();
+  } catch (e) {
+    console.warn('Error clearing storage:', e);
+  }
+
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(function() {
+        window.location.reload();
+      })
+      .withFailureHandler(function() {
+        window.location.reload();
+      })
+      .clearInitialDataCache();
+  } else {
+    setTimeout(function() {
+      window.location.reload();
+    }, 400);
+  }
+}
+
 function refreshDataFromSheets() {
   showToast('Memuat ulang data terbaru dari Google Sheets...', 'info');
   if (typeof google !== 'undefined' && google.script && google.script.run) {
